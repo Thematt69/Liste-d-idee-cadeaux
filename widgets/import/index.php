@@ -11,7 +11,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<!-- <link rel="icon" href="https://family.matthieudevilliers.fr/images/SpaLogo.webp"> -->
+<link rel="icon" href="https://family.matthieudevilliers.fr/images/logo.webp">
 
 <!-- Normalize CSS -->
 <link href="https://family.matthieudevilliers.fr/css/normalize.css" rel="stylesheet">
