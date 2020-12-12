@@ -17,6 +17,8 @@
         <div class="row  justify-content-center">
             <div class="col-sm-12 col-md-9 col-lg-6">
                 <br>
+                <h1 class="text-center">Connexion</h1>
+                <br>
                 <div class="card">
                     <div class="card-body">
                         <form action="" method="post">
