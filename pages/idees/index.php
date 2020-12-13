@@ -27,7 +27,7 @@ include('../../scripts/verif/index.php');
                 <br>
 
                 <div class="card text-dark bg-light">
-                    <div class="card-body">
+                    <div class="card-body text-center">
                         <div class="table-responsive">
                             <table class="table table-light text-center align-middle">
                                 <thead>
@@ -64,6 +64,7 @@ include('../../scripts/verif/index.php');
                                 </tbody>
                             </table>
                         </div>
+                        <a class="btn btn-primary" href="https://family.matthieudevilliers.fr/pages/modif-idees/">Ajouter une idée</a>
                     </div>
                 </div>
 
