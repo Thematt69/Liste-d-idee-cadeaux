@@ -1,4 +1,10 @@
-<?php include('script.php'); ?>
+<?php
+
+session_start();
+
+include('../../scripts/verif/index.php');
+
+?>
 <!DOCTYPE html>
 <html lang="fr">
 
