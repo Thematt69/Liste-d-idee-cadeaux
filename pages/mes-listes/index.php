@@ -29,43 +29,33 @@
                         </div>
                         <br>
                     </div>
-                    <div class="col-md-4">
-                        <div class="card text-dark bg-light" style="min-height: 6rem;">
-                            <a href="https://family.matthieudevilliers.fr/pages/idees/?liste=123456" class="stretched-link"></a>
-                            <div class="card-body d-flex align-items-center justify-content-center">
-                                <p class="card-text">Liste Noël 2020</p>
+                    <?php
+
+                    $sql = "SELECT nom, lien_partage
+                            FROM lic_liste
+                            INNER JOIN lic_autorisation ON lic_autorisation.id_liste = lic_liste.id
+                            WHERE lic_autorisation.id_compte = 1 AND lic_autorisation.type = 'proprietaire'";
+
+                    $response = $bdd->prepare($sql);
+                    $response->execute();
+
+                    while ($donnees = $response->fetch()) {
+                    ?>
+                        <div class="col-md-4">
+                            <div class="card text-dark bg-light" style="min-height: 6rem;">
+                                <a href="https://family.matthieudevilliers.fr/pages/idees/?liste=<?php echo $donnees['lien_partage'] ?>" class="stretched-link"></a>
+                                <div class="card-body d-flex align-items-center justify-content-center">
+                                    <p class="card-text"><?php echo $donnees['nom'] ?></p>
+                                </div>
                             </div>
+                            <br>
                         </div>
-                        <br>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card text-dark bg-light" style="min-height: 6rem;">
-                            <a href="https://family.matthieudevilliers.fr/pages/idees/?liste=123456" class="stretched-link"></a>
-                            <div class="card-body d-flex align-items-center justify-content-center">
-                                <p class="card-text">Liste Anniversaire 2020</p>
-                            </div>
-                        </div>
-                        <br>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card text-dark bg-light" style="min-height: 6rem;">
-                            <a href="https://family.matthieudevilliers.fr/pages/idees/?liste=123456" class="stretched-link"></a>
-                            <div class="card-body d-flex align-items-center justify-content-center">
-                                <p class="card-text">Liste Noël 2019</p>
-                            </div>
-                        </div>
-                        <br>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card text-dark bg-light" style="min-height: 6rem;">
-                            <a href="https://family.matthieudevilliers.fr/pages/idees/?liste=123456" class="stretched-link"></a>
-                            <div class="card-body d-flex align-items-center justify-content-center">
-                                <p class="card-text">Liste Anniversaire 2019</p>
-                            </div>
-                        </div>
-                        <br>
-                    </div>
-                    <div class="col-md-4">
+                    <?php
+                    }
+                    $response->closeCursor();
+                    ?>
+
+                    <!-- <div class="col-md-4">
                         <div class="card text-dark bg-light" style="min-height: 6rem;">
                             <a href="https://family.matthieudevilliers.fr/pages/idees/?liste=123456" class="stretched-link"></a>
                             <div class="card-body d-flex align-items-center justify-content-center">
@@ -77,7 +67,7 @@
                             </div>
                         </div>
                         <br>
-                    </div>
+                    </div> -->
                 </div>
                 <br>
             </div>
