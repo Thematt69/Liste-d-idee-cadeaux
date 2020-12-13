@@ -47,7 +47,7 @@ include('../../scripts/verif/index.php');
                                     <div class="form-floating">
                                         <input name="MDP" type="password" class="form-control" id="LabelMDP" aria-describedby="DescriptionMDP" placeholder="Mot de passe" required>
                                         <label for="LabelMDP">Mot de passe</label>
-                                        <small id="DescriptionMDP" class="form-text text-muted">Votre mot de passe est enregistré dans un format crypté.</small>
+                                        <small id="DescriptionMDP" class="form-text text-muted">Votre mot de passe est enregistré dans un format crypté, il est impossible pour nous de le récupérer.</small>
                                     </div>
                                     <br>
                                 </div>
@@ -55,7 +55,7 @@ include('../../scripts/verif/index.php');
                                     <div class="form-floating">
                                         <input name="Naissance" type="date" class="form-control" id="LabelNaissance" aria-describedby="DescriptionNaissance" placeholder="Date de naissance" required>
                                         <label for="LabelNaissance">Date de naissance</label>
-                                        <small id="DescriptionNaissance" class="form-text text-muted">Votre date de naissance est demandée au personne qui souhaitent accéder à vos listes partagées en lien sécurisé.</small>
+                                        <small id="DescriptionNaissance" class="form-text text-muted">Votre date de naissance est un moyen de sécuriser les listes que vous partagez.</small>
                                     </div>
                                     <br>
                                 </div>
