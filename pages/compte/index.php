@@ -28,17 +28,29 @@ include('../../scripts/verif/index.php');
                 <div class="card">
                     <div class="card-body">
                         <form action="" method="post">
+                            <?php
+
+                            $sql = 'SELECT prenom,nom,date_naissance,mail
+                                    FROM lic_compte
+                                    WHERE id = 1';
+
+                            $response = $bdd->prepare($sql);
+                            $response->execute();
+
+                            $donnees = $response->fetch();
+
+                            ?>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-floating">
-                                        <input name="Prénom" type="text" class="form-control" id="LabelPrénom" placeholder="Prénom" required>
+                                        <input name="Prénom" type="text" class="form-control" id="LabelPrénom" placeholder="Prénom" value="<?php echo $donnees['prenom'] ?>" required>
                                         <label for="LabelPrénom">Prénom</label>
                                     </div>
                                     <br>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating">
-                                        <input name="Nom" type="text" class="form-control" id="LabelNom" placeholder="Nom" required>
+                                        <input name="Nom" type="text" class="form-control" id="LabelNom" placeholder="Nom" value="<?php echo $donnees['nom'] ?>" required>
                                         <label for="LabelNom">Nom</label>
                                     </div>
                                     <br>
@@ -47,7 +59,7 @@ include('../../scripts/verif/index.php');
                                     <div class="form-floating">
                                         <input name="MDP" type="password" class="form-control" id="LabelMDP" aria-describedby="DescriptionMDP" placeholder="Mot de passe" required>
                                         <label for="LabelMDP">Mot de passe</label>
-                                        <small id="DescriptionMDP" class="form-text text-muted">Votre mot de passe est enregistré dans un format crypté.</small>
+                                        <small id="DescriptionMDP" class="form-text text-muted">Votre mot de passe est enregistré dans un format crypté, il est impossible pour nous de le récupérer.</small>
                                     </div>
                                     <br>
                                 </div>
@@ -60,15 +72,15 @@ include('../../scripts/verif/index.php');
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating">
-                                        <input name="Naissance" type="date" class="form-control" id="LabelNaissance" aria-describedby="DescriptionNaissance" placeholder="Date de naissance" required>
+                                        <input name="Naissance" type="date" class="form-control" id="LabelNaissance" aria-describedby="DescriptionNaissance" placeholder="Date de naissance" value="<?php echo $donnees['date_naissance'] ?>" required>
                                         <label for="LabelNaissance">Date de naissance</label>
-                                        <small id="DescriptionNaissance" class="form-text text-muted">Votre date de naissance est demandée au personne qui souhaitent accéder à vos listes partagées en lien sécurisé.</small>
+                                        <small id="DescriptionNaissance" class="form-text text-muted">Votre date de naissance est un moyen de sécuriser les listes que vous partagez.</small>
                                     </div>
                                     <br>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating">
-                                        <input name="Mail" type="email" class="form-control" id="LabelMail" aria-describedby="DescriptionMail" placeholder="Adresse mail" required>
+                                        <input name="Mail" type="email" class="form-control" id="LabelMail" aria-describedby="DescriptionMail" placeholder="Adresse mail" value="<?php echo $donnees['mail'] ?>" required>
                                         <label for="LabelMail">Adresse mail</label>
                                         <small id="DescriptionMail" class="form-text text-muted">Votre adresse mail nous permet de vous transmet toutes les informations vous concernant.</small>
                                     </div>
@@ -78,6 +90,7 @@ include('../../scripts/verif/index.php');
                                     <button type="submit" class="btn btn-primary">Enregistrer</button>
                                 </div>
                             </div>
+                            <?php $response->closeCursor(); ?>
                         </form>
                     </div>
                 </div>
