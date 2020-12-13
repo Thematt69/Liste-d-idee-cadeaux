@@ -28,6 +28,7 @@
                                         <input name="Prénom" type="text" class="form-control" id="LabelPrénom" placeholder="Prénom" required>
                                         <label for="LabelPrénom">Prénom</label>
                                     </div>
+                                    <br>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating">
@@ -42,6 +43,7 @@
                                         <label for="LabelMDP">Mot de passe</label>
                                         <small id="DescriptionMDP" class="form-text text-muted">Votre mot de passe est enregistré dans un format crypté.</small>
                                     </div>
+                                    <br>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating">
@@ -56,6 +58,7 @@
                                         <label for="LabelNaissance">Date de naissance</label>
                                         <small id="DescriptionNaissance" class="form-text text-muted">Votre date de naissance est demandée au personne qui souhaitent accéder à vos listes partagées en lien sécurisé.</small>
                                     </div>
+                                    <br>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating">
