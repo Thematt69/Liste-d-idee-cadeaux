@@ -74,7 +74,18 @@ include('../../scripts/verif/index.php');
                                         <tr>
                                             <td><?php echo ($donnees['nom']) ?></td>
                                             <td class="lien"><a href="<?php echo ($donnees['lien']) ?>"><?php if ($donnees['lien'] != '') echo (substr($donnees['lien'], 0, 40) . '...') ?></a></td>
-                                            <td class="image"><?php echo ($donnees['image']) ?></td>
+                                            <td class="image">
+                                                <?php if ($donnees['image'] == null) {
+                                                    echo ('Aucune');
+                                                } else {
+                                                ?>
+                                                    <a href="https://family.matthieudevilliers.fr/images/<?php echo ($donnees['image']) ?>">
+                                                        <?php echo ($donnees['image']) ?>
+                                                    </a>
+                                                <?php
+                                                }
+                                                ?>
+                                            </td>
                                             <td><input class="form-check-input" type="checkbox" <?php if ($donnees['is_buy']) echo ('checked') ?> disabled></td>
                                             <td><a class="btn btn-outline-secondary" href="https://family.matthieudevilliers.fr/pages/modif-idees/?idee=<?php echo ($donnees['id']) ?>">Modifier</a></td>
                                         </tr>
