@@ -17,13 +17,32 @@ include('../../scripts/verif/index.php');
 
 <body>
 
-    <?php include('../../widgets/navbar/index.php'); ?>
+    <?php
+    include('../../widgets/navbar/index.php');
+
+    $sql = 'SELECT id,nom
+            FROM lic_liste
+            WHERE lien_partage = "' . $_GET['liste'] . '"';
+
+    $response = $bdd->prepare($sql);
+    $response->execute();
+
+    $donnee = $response->fetch();
+
+    if ($donnee == null) {
+        $donnee['nom'] = 'Liste introuvable';
+        $donnee['id'] = 0;
+    }
+
+    $response->closeCursor();
+
+    ?>
 
     <div class="container">
         <div class="row  justify-content-center">
             <div class="col-sm-12">
                 <br>
-                <h1 class="text-center">Liste Noël 2020</h1>
+                <h1 class="text-center"><?php echo $donnee['nom'] ?></h1>
                 <br>
 
                 <div class="card text-dark bg-light">
@@ -33,34 +52,37 @@ include('../../scripts/verif/index.php');
                                 <thead>
                                     <tr>
                                         <th class="col-4">Nom</th>
-                                        <th>Lien</th>
-                                        <th>Image</th>
-                                        <th>Déja acheté</th>
-                                        <th></th>
+                                        <th class="col-2">Lien</th>
+                                        <th class="col-2">Image</th>
+                                        <th class="col-2">Déja acheté</th>
+                                        <th class="col-2"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>Casque audio</td>
-                                        <td><a href="https://moncasque.fr">https://moncasque.fr</a></td>
-                                        <td>Aucune</td>
-                                        <td><input class="form-check-input" type="checkbox" checked disabled></td>
-                                        <td><button class="btn btn-outline-secondary" type="button">Modifier</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Casque audio</td>
-                                        <td><a href="https://moncasque.fr">https://moncasque.fr</a></td>
-                                        <td>Aucune</td>
-                                        <td><input class="form-check-input" type="checkbox" disabled></td>
-                                        <td><button class="btn btn-outline-secondary" type="button">Modifier</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Casque audio</td>
-                                        <td><a href="https://moncasque.fr">https://moncasque.fr</a></td>
-                                        <td>Aucune</td>
-                                        <td><input class="form-check-input" type="checkbox" checked disabled></td>
-                                        <td><button class="btn btn-outline-secondary" type="button" disabled>Modifier</button></td>
-                                    </tr>
+                                    <?php
+
+                                    // FIXME - Faire la vérification des droits
+                                    $sql1 = 'SELECT id,nom,lien,image,is_buy
+                                            FROM lic_idee
+                                            WHERE id_liste = ' . $donnee['id'] . '';
+
+                                    $response1 = $bdd->prepare($sql1);
+                                    $response1->execute();
+
+                                    while ($donnees = $response1->fetch()) {
+                                    ?>
+                                        <tr>
+                                            <td><?php echo ($donnees['nom']) ?></td>
+                                            <td><a href="<?php echo ($donnees['lien']) ?>"><?php if ($donnees['lien'] != '') echo (substr($donnees['lien'], 0, 50) . '...') ?></a></td>
+                                            <td><?php echo ($donnees['image']) ?></td>
+                                            <td><input class="form-check-input" type="checkbox" <?php if ($donnees['is_buy']) echo ('checked') ?> disabled></td>
+                                            <td><a class="btn btn-outline-secondary" href="https://family.matthieudevilliers.fr/pages/modif-idees/?idee=<?php echo ($donnees['id']) ?>">Modifier</a></td>
+                                        </tr>
+                                    <?php
+                                    }
+
+                                    $response1->closeCursor();
+                                    ?>
                                 </tbody>
                             </table>
                         </div>
