@@ -45,7 +45,7 @@ include('../../scripts/verif/index.php');
                                     <br>
                                 </div>
                                 <div class="col-6 col-md-4 text-center">
-                                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                                    <button type="button" class="btn btn-danger">Supprimer</button>
                                     <br>
                                 </div>
                                 <div class="col-6 col-md-4 text-center">
