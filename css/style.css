@@ -1,0 +1,16 @@
+/* tablettes et mobiles */
+
+@media only screen and (max-width:989px) {
+    .lien {
+        display: none;
+    }
+}
+
+
+/* mobiles */
+
+@media only screen and (max-width:500px) {
+    .image {
+        display: none;
+    }
+}

@@ -51,11 +51,11 @@ include('../../scripts/verif/index.php');
                             <table class="table table-light text-center align-middle">
                                 <thead>
                                     <tr>
-                                        <th class="col-4">Nom</th>
-                                        <th class="col-2">Lien</th>
-                                        <th class="col-2">Image</th>
-                                        <th class="col-2">Déja acheté</th>
-                                        <th class="col-2"></th>
+                                        <th class="col">Nom</th>
+                                        <th class="col lien">Lien</th>
+                                        <th class="col image">Image</th>
+                                        <th class="col">Déja acheté</th>
+                                        <th class="col"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -73,8 +73,8 @@ include('../../scripts/verif/index.php');
                                     ?>
                                         <tr>
                                             <td><?php echo ($donnees['nom']) ?></td>
-                                            <td><a href="<?php echo ($donnees['lien']) ?>"><?php if ($donnees['lien'] != '') echo (substr($donnees['lien'], 0, 50) . '...') ?></a></td>
-                                            <td><?php echo ($donnees['image']) ?></td>
+                                            <td class="lien"><a href="<?php echo ($donnees['lien']) ?>"><?php if ($donnees['lien'] != '') echo (substr($donnees['lien'], 0, 40) . '...') ?></a></td>
+                                            <td class="image"><?php echo ($donnees['image']) ?></td>
                                             <td><input class="form-check-input" type="checkbox" <?php if ($donnees['is_buy']) echo ('checked') ?> disabled></td>
                                             <td><a class="btn btn-outline-secondary" href="https://family.matthieudevilliers.fr/pages/modif-idees/?idee=<?php echo ($donnees['id']) ?>">Modifier</a></td>
                                         </tr>

@@ -27,7 +27,7 @@
 <script src="https://family.matthieudevilliers.fr/js/45afd6dbfc.js"></script>
 
 <!-- Style CSS -->
-<!-- <link href="https://family.matthieudevilliers.fr/css/style.css" rel="stylesheet"> -->
+<link href="https://family.matthieudevilliers.fr/css/style.css" rel="stylesheet">
 
 <!-- BDD -->
 <?php include('../../sql/bdd.php'); ?>
