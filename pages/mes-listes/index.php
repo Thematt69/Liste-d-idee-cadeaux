@@ -28,7 +28,7 @@ include('../../scripts/verif/index.php');
                 <div class="row">
                     <div class="col-md-4">
                         <div class="card text-dark bg-light" style="min-height: 6rem;">
-                            <a href="https://family.matthieudevilliers.fr/pages/modifListe/" class="stretched-link"></a>
+                            <a href="https://family.matthieudevilliers.fr/pages/modif-listes/" class="stretched-link"></a>
                             <div class="card-body d-flex align-items-center justify-content-center">
                                 <p class="card-text">Créer une nouvelle liste</p>
                             </div>
