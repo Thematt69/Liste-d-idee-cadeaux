@@ -20,7 +20,7 @@ include('../../scripts/verif/index.php');
     <?php
     include('../../widgets/navbar/index.php');
 
-    $sql = 'SELECT id,nom
+    $sql = 'SELECT id,nom,partage
             FROM lic_liste
             WHERE lien_partage = "' . $_GET['liste'] . '"';
 
@@ -39,10 +39,30 @@ include('../../scripts/verif/index.php');
     ?>
 
     <div class="container">
-        <div class="row  justify-content-center">
+        <div class="row justify-content-center">
             <div class="col-sm-12">
                 <br>
-                <h1 class="text-center"><?php echo $donnee['nom'] ?></h1>
+                <h1 class="text-center">
+                    <?php
+                    switch ($donnee['partage']) {
+                        case 'lien':
+                            echo ('<i class="fas fa-users fa-2x" style="font-size: 1.5rem;"></i>');
+                            break;
+
+                        case 'secure':
+                            echo ('<i class="fas fa-user-lock fa-2x" style="font-size: 1.5rem;"></i>');
+                            break;
+
+                        default:
+                            echo ('<i class="fas fa-lock fa-2x" style="font-size: 1.5rem;"></i>');
+                            break;
+                    }
+                    ?>
+                    <?php echo $donnee['nom'] ?>
+                    <a href="https://family.matthieudevilliers.fr/pages/modif-listes/?liste=<?php echo ($_GET['liste']) ?>" class="link-dark">
+                        <i class="fas fa-pen fa-2x" style="font-size: 1.5rem;"></i>
+                    </a>
+                </h1>
                 <br>
 
                 <div class="card text-dark bg-light">
@@ -61,7 +81,6 @@ include('../../scripts/verif/index.php');
                                 <tbody>
                                     <?php
 
-                                    // FIXME - Faire la vérification des droits
                                     $sql1 = 'SELECT id,nom,lien,image,is_buy
                                             FROM lic_idee
                                             WHERE id_liste = ' . $donnee['id'] . '';
