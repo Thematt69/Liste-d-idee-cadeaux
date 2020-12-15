@@ -28,17 +28,29 @@ include('../../scripts/verif/index.php');
                 <div class="card">
                     <div class="card-body">
                         <form action="" method="post" enctype="multipart/form-data">
+                            <?php
+
+                            $sql = 'SELECT nom,lien,image,is_buy
+                                    FROM lic_idee
+                                    WHERE id = "' . $_GET['idee'] . '"';
+
+                            $response = $bdd->prepare($sql);
+                            $response->execute();
+
+                            $donnees = $response->fetch();
+
+                            ?>
                             <div class="row">
                                 <div class="col-md-8">
                                     <div class="form-floating">
-                                        <input name="Nom de l'idée" type="text" class="form-control" id="LabelNom" placeholder="Nom de l'idée" required>
+                                        <input name="Nom de l'idée" type="text" value="<?php echo ($donnees['nom']) ?>" class="form-control" id="LabelNom" placeholder="Nom de l'idée" required>
                                         <label for="LabelNom">Nom de l'idée</label>
                                     </div>
                                     <br>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-floating">
-                                        <input name="Lien de l'idée" type="url" class="form-control" id="LabelLien" placeholder="Lien de l'idée">
+                                        <input name="Lien de l'idée" type="url" value="<?php echo ($donnees['lien']) ?>" class="form-control" id="LabelLien" placeholder="Lien de l'idée">
                                         <label for="LabelLien">Lien de l'idée</label>
                                     </div>
                                     <br>
@@ -49,7 +61,7 @@ include('../../scripts/verif/index.php');
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-check">
-                                        <input name="Achat" class="form-check-input" type="checkbox" id="LabelAchat">
+                                        <input name="Achat" class="form-check-input" type="checkbox" id="LabelAchat" <?php if ($donnees['is_buy']) echo 'checked' ?>>
                                         <label class="form-check-label" for="LabelAchat">
                                             Déjà acheté l'idée
                                         </label>
@@ -57,14 +69,21 @@ include('../../scripts/verif/index.php');
                                     <br>
                                 </div>
                                 <div class="col-6 col-md-4 text-center">
-                                    <button type="button" class="btn btn-danger">Supprimer</button>
-                                    <br>
-                                </div>
-                                <div class="col-6 col-md-4 text-center">
                                     <button type="submit" class="btn btn-primary">Enregistrer</button>
                                     <br>
                                 </div>
+                                <?php
+                                if (isset($_GET['idee']) && $donnees != null) {
+                                ?>
+                                    <div class="col-6 col-md-4 text-center">
+                                        <button type="button" class="btn btn-danger">Supprimer</button>
+                                        <br>
+                                    </div>
+                                <?php
+                                }
+                                ?>
                             </div>
+                            <?php $response->closeCursor(); ?>
                         </form>
                     </div>
                 </div>
