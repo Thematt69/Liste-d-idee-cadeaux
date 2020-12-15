@@ -61,7 +61,7 @@ include('../../scripts/verif/index.php');
                                     <br>
                                 </div>
                                 <?php
-                                if (isset($_GET['liste'])) {
+                                if (isset($_GET['liste']) && $donnees != null) {
                                 ?>
                                     <div class="col-6 col-md-4 text-center">
                                         <button type="button" class="btn btn-danger">Supprimer</button>
