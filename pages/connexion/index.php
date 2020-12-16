@@ -6,27 +6,48 @@ include('../../scripts/verif/index.php');
 
 $alert = false;
 
-if ($_POST['Mail']) {
+if (isset($_POST['Mail'])) {
 
-    $sql = 'SELECT id,motdepasse
+    $url = 'https://www.google.com/recaptcha/api/siteverify';
+    $data = array('secret' => '6Lc-ZgkaAAAAAAcf5v9GqcfTfm2o6lzOq1Y6kftU', 'response' => $_POST['g-recaptcha-response']);
+
+    $options = array(
+        'http' => array(
+            'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+            'method'  => 'POST',
+            'content' => http_build_query($data)
+        )
+    );
+    $context  = stream_context_create($options);
+    $result = file_get_contents($url, false, $context);
+    if ($result !== FALSE) {
+        $response = json_decode($result);
+    }
+
+    if ($response->success) {
+
+        $sql = 'SELECT id,motdepasse
             FROM lic_compte
             WHERE mail = ?';
 
-    $response = $bdd->prepare($sql);
-    $response->execute(array($_POST['Mail']));
+        $response = $bdd->prepare($sql);
+        $response->execute(array($_POST['Mail']));
 
-    $donnee = $response->fetch();
+        $donnee = $response->fetch();
 
-    if (password_verify($_POST['MDP'], $donnee['motdepasse'])) {
-        // Le mot de passe correspond
-        $_SESSION['id_compte'] = $donnee['id'];
-        header('Location: https://family.matthieudevilliers.fr/pages/mes-listes/');
+        if (password_verify($_POST['MDP'], $donnee['motdepasse'])) {
+            // Le mot de passe correspond
+            $_SESSION['id_compte'] = $donnee['id'];
+            header('Location: https://family.matthieudevilliers.fr/pages/mes-listes/');
+        } else {
+            // Le mot de passe ne correspond pas
+            $alert = 'Mot de passe incorrect !';
+        }
+
+        $response->closeCursor();
     } else {
-        // Le mot de passe ne correspond pas
-        $alert = true;
+        $alert = 'CAPTCHA invalide !';
     }
-
-    $response->closeCursor();
 }
 
 ?>
@@ -38,6 +59,8 @@ if ($_POST['Mail']) {
 
     <!-- Import -->
     <?php include('../../widgets/import/index.php'); ?>
+
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 
 <body>
@@ -52,8 +75,7 @@ if ($_POST['Mail']) {
                 if ($alert) {
                 ?>
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <strong>Mot de passe incorrect !</strong>
-                        Votre mail ou votre mot de passe est incorrect, merci de réessayer.
+                        <strong><?php echo $alert; ?></strong>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 <?php
@@ -74,6 +96,10 @@ if ($_POST['Mail']) {
                                     <div class="form-floating">
                                         <input name="MDP" type="password" class="form-control" id="LabelMDP" placeholder="Mot de passe" required>
                                         <label for="LabelMDP">Mot de passe</label>
+                                    </div>
+                                    <br>
+                                    <div class="d-flex justify-content-center">
+                                        <div class="g-recaptcha" data-sitekey="6Lc-ZgkaAAAAAEoCEsUwvVPygJPyhxGDtPIvkppO"></div>
                                     </div>
                                     <br>
                                     <div class="text-center">
