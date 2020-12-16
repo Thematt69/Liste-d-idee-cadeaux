@@ -32,10 +32,10 @@ include('../../scripts/verif/index.php');
 
                             $sql = 'SELECT nom,partage
                                     FROM lic_liste
-                                    WHERE lien_partage = "' . $_GET['liste'] . '"';
+                                    WHERE lien_partage = ?';
 
                             $response = $bdd->prepare($sql);
-                            $response->execute();
+                            $response->execute(array($_GET['liste']));
 
                             $donnees = $response->fetch();
 

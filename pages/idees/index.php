@@ -22,10 +22,10 @@ include('../../scripts/verif/index.php');
 
     $sql = 'SELECT id,nom,partage
             FROM lic_liste
-            WHERE lien_partage = "' . $_GET['liste'] . '"';
+            WHERE lien_partage = ?';
 
     $response = $bdd->prepare($sql);
-    $response->execute();
+    $response->execute(array($_GET['liste']));
 
     $donnee = $response->fetch();
 
@@ -91,10 +91,10 @@ include('../../scripts/verif/index.php');
 
                                         $sql1 = 'SELECT id,nom,lien,image,is_buy
                                             FROM lic_idee
-                                            WHERE id_liste = ' . $donnee['id'] . '';
+                                            WHERE id_liste = ?';
 
                                         $response1 = $bdd->prepare($sql1);
-                                        $response1->execute();
+                                        $response1->execute(array($donnee['id']));
 
                                         while ($donnees = $response1->fetch()) {
                                         ?>

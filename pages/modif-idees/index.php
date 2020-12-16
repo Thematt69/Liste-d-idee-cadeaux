@@ -32,10 +32,10 @@ include('../../scripts/verif/index.php');
 
                             $sql = 'SELECT nom,lien,image,is_buy
                                     FROM lic_idee
-                                    WHERE id = "' . $_GET['idee'] . '"';
+                                    WHERE id = ?';
 
                             $response = $bdd->prepare($sql);
-                            $response->execute();
+                            $response->execute(array($_GET['idee']));
 
                             $donnees = $response->fetch();
 

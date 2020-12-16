@@ -32,10 +32,10 @@ include('../../scripts/verif/index.php');
 
                             $sql = 'SELECT prenom,nom,date_naissance,mail
                                     FROM lic_compte
-                                    WHERE id = 1';
+                                    WHERE id = ?';
 
                             $response = $bdd->prepare($sql);
-                            $response->execute();
+                            $response->execute(array(1));
 
                             $donnees = $response->fetch();
 
