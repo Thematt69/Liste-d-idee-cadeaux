@@ -100,14 +100,25 @@ include('../../scripts/verif/index.php');
                                         ?>
                                             <tr>
                                                 <td><?php echo ($donnees['nom']) ?></td>
-                                                <td class="lien"><a href="<?php echo ($donnees['lien']) ?>"><?php if ($donnees['lien'] != '') echo (substr($donnees['lien'], 0, 40) . '...') ?></a></td>
+                                                <td class="lien">
+                                                    <a href="<?php echo ($donnees['lien']) ?>">
+                                                        <?php
+                                                        if ($donnees['lien'] != '') echo (substr($donnees['lien'], 0, 40));
+                                                        if (strlen($donnees['lien']) > 40) echo '...';
+                                                        ?>
+                                                    </a>
+                                                </td>
                                                 <td class="image">
-                                                    <?php if ($donnees['image'] == null) {
+                                                    <?php
+                                                    if ($donnees['image'] == null) {
                                                         echo ('Aucune');
                                                     } else {
                                                     ?>
                                                         <a href="https://family.matthieudevilliers.fr/images/<?php echo ($donnees['image']) ?>">
-                                                            <?php echo ($donnees['image']) ?>
+                                                            <?php
+                                                            if ($donnees['image'] != '') echo (substr($donnees['image'], 0, 20));
+                                                            if (strlen($donnees['image']) > 20) echo '...';
+                                                            ?>
                                                         </a>
                                                     <?php
                                                     }
