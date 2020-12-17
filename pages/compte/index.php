@@ -4,6 +4,36 @@ session_start();
 
 include('../../scripts/verif/index.php');
 
+$alert = false;
+$info = false;
+
+if (isset($_POST['Mail'])) {
+
+    if ($_POST['ConfirmationMDP'] == $_POST['MDP']) {
+
+        $mail = $_SESSION['mail'];
+        $_SESSION['prenom'] = htmlentities($_POST['Prénom']);
+        $_SESSION['nom'] = htmlentities($_POST['Nom']);
+        $_SESSION['motdepasse'] = password_hash(htmlentities($_POST['MDP']), PASSWORD_DEFAULT);
+        $date = new DateTime(htmlentities($_POST['Naissance']));
+        $_SESSION['date_naissance'] = $date->format('Y-m-d');
+        $_SESSION['mail'] = htmlentities($_POST['Mail']);
+
+        $sql = 'UPDATE lic_compte
+            SET prenom = ?, nom = ?, motdepasse = ?, date_naissance = ?, mail = ?
+            WHERE mail = ?';
+
+        $response = $bdd->prepare($sql);
+        $response->execute(array($_SESSION['prenom'], $_SESSION['nom'], $_SESSION['motdepasse'], $_SESSION['date_naissance'], $_SESSION['mail'], $mail));
+
+        $info = 'Vos informations ont bien été modifiées.';
+
+        $response->closeCursor();
+    } else {
+        $alert = 'Les deux mots de passe ne correspondent pas !';
+    }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -23,6 +53,23 @@ include('../../scripts/verif/index.php');
         <div class="row">
             <div class="col-md-12">
                 <br>
+                <?php
+                if ($alert) {
+                ?>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong><?php echo $alert; ?></strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                <?php
+                } else if ($info) {
+                ?>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <?php echo $info; ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                <?php
+                }
+                ?>
                 <h1 class="text-center">Matthieu DEVILLIERS</h1>
                 <br>
                 <div class="card">
