@@ -39,9 +39,11 @@ if (isset($_POST['Mail'])) {
             // Le mot de passe correspond
             $_SESSION['id_compte'] = $donnee['id'];
             header('Location: https://family.matthieudevilliers.fr/pages/mes-listes/');
-        } else {
+        } elseif (isset($donnee['motdepasse'])) {
             // Le mot de passe ne correspond pas
             $alert = 'Mot de passe incorrect !';
+        } else {
+            header('Location: https://family.matthieudevilliers.fr/pages/inscription/');
         }
 
         $response->closeCursor();
