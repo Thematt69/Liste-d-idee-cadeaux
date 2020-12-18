@@ -8,22 +8,57 @@ if (!isset($_SESSION['id_compte'])) {
     header('Location: https://family.matthieudevilliers.fr/pages/connexion/');
 }
 
-if (isset($_POST['delete']) && isset($_GET['liste'])) {
+if (isset($_POST['delete'])) {
 
+    // Enregistrement de la suppresion
     $sql = 'UPDATE lic_liste
             SET deleted_to = ?
-            WHERE id = ?;';
+            WHERE id = ?';
 
     $date = new DateTime();
 
     $response = $bdd->prepare($sql);
-    $response->execute(array($date->format('Y-m-d H:m:i'), $_GET['liste']));
+    $response->execute(array($date->format('Y-m-d H:m:i'), $_POST['delete']));
+
+    $response->closeCursor();
+
+    //Récupération de l'id le plus récent supprimée
+    $sql = 'SELECT id FROM lic_liste ORDER BY deleted_to DESC LIMIT 1';
+
+    $response = $bdd->prepare($sql);
+    $response->execute();
+
+    $donnee = $response->fetch();
+
+    // Enregistrement de la suppresion des autorisations
+    $sql1 = 'UPDATE lic_autorisation
+            SET deleted_to = ?
+            WHERE id_liste = ?';
+
+    $date = new DateTime();
+
+    $response1 = $bdd->prepare($sql1);
+    $response1->execute(array($date->format('Y-m-d H:m:i'), $donnee['id']));
+
+    $response1->closeCursor();
 
     $response->closeCursor();
     header('Location: https://family.matthieudevilliers.fr/pages/mes-lites/');
-} elseif (isset($_POST['Nom']) && isset($_GET['liste'])) {
-    # code...
+} elseif (isset($_POST['Nom']) && $_POST['save'] != "") {
+
+    // Modification de la liste
+    $sql = 'UPDATE lic_liste
+            SET nom = ?,partage = ?
+            WHERE id = ?;';
+
+    $response = $bdd->prepare($sql);
+    $response->execute(array(htmlentities($_POST['Nom']), htmlentities($_POST['Partage']), $_POST['save']));
+
+    $response->closeCursor();
+    header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $_GET['liste']);
 } elseif (isset($_POST['Nom'])) {
+
+    // Création de la liste
     $sql = 'INSERT INTO lic_liste (nom, partage, lien_partage)
             VALUES (?,?,?)';
 
@@ -34,6 +69,26 @@ if (isset($_POST['delete']) && isset($_GET['liste'])) {
     $response->execute(array(htmlentities($_POST['Nom']), htmlentities($_POST['Partage']), $rand));
 
     $response->closeCursor();
+
+    //Récupération de l'id le plus récent
+    $sql = 'SELECT id FROM lic_liste ORDER BY created_to DESC LIMIT 1';
+
+    $response = $bdd->prepare($sql);
+    $response->execute();
+
+    $donnee = $response->fetch();
+
+    // Création de l'autorisation 'propriétaire'
+    $sql1 = 'INSERT INTO lic_autorisation (id_compte, id_liste, `type`)
+            VALUES (?,?,"proprietaire")';
+
+    $response1 = $bdd->prepare($sql1);
+    $response1->execute(array($_SESSION['id_compte'], $donnee['id']));
+
+    $response1->closeCursor();
+
+    $response->closeCursor();
+
     header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $rand);
 }
 
@@ -56,23 +111,27 @@ if (isset($_POST['delete']) && isset($_GET['liste'])) {
         <div class="row  justify-content-center">
             <div class="col-md-12 col-lg-8">
                 <br>
-                <h1 class="text-center">Création / Modification de liste</h1>
+                <?php
+
+                $sql = 'SELECT id,nom,partage
+                                    FROM lic_liste
+                                    WHERE lien_partage = ?';
+
+                $response = $bdd->prepare($sql);
+                $response->execute(array($_GET['liste']));
+
+                $donnees = $response->fetch();
+
+                if (isset($_GET['liste']) && $donnees != null) {
+                    echo ('<h1 class="text-center">Modification de liste</h1>');
+                } else {
+                    echo ('<h1 class="text-center">Création de liste</h1>');
+                }
+                ?>
                 <br>
                 <div class="card">
                     <div class="card-body">
                         <form action="" method="post">
-                            <?php
-
-                            $sql = 'SELECT id,nom,partage
-                                    FROM lic_liste
-                                    WHERE lien_partage = ?';
-
-                            $response = $bdd->prepare($sql);
-                            $response->execute(array($_GET['liste']));
-
-                            $donnees = $response->fetch();
-
-                            ?>
                             <div class="row">
                                 <div class="col-md-8">
                                     <div class="form-floating">
@@ -90,7 +149,7 @@ if (isset($_POST['delete']) && isset($_GET['liste'])) {
                                     <br>
                                 </div>
                                 <div class="col-6 col-md-4 text-center">
-                                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                                    <button type="submit" name="save" value="<?php echo $donnees['id'] ?>" class="btn btn-primary">Enregistrer</button>
                                     <br>
                                 </div>
                                 <?php
@@ -106,10 +165,10 @@ if (isset($_POST['delete']) && isset($_GET['liste'])) {
                                 }
                                 ?>
                             </div>
-                            <?php $response->closeCursor(); ?>
                         </form>
                     </div>
                 </div>
+                <?php $response->closeCursor(); ?>
                 <br>
             </div>
         </div>
