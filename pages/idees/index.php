@@ -4,6 +4,10 @@ session_start();
 
 include('../../scripts/verif/index.php');
 
+if (!isset($_SESSION['id_compte'])) {
+    header('Location: https://family.matthieudevilliers.fr/pages/connexion/');
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
