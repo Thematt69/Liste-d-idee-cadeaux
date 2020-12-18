@@ -10,14 +10,31 @@ if (!isset($_SESSION['id_compte'])) {
 
 if (isset($_POST['delete']) && isset($_GET['liste'])) {
 
-    $sql = 'DELETE FROM lic_liste
-            WHERE id = ?';
+    $sql = 'UPDATE lic_liste
+            SET deleted_to = ?
+            WHERE id = ?;';
+
+    $date = new DateTime();
 
     $response = $bdd->prepare($sql);
-    $response->execute(array($_GET['liste']));
+    $response->execute(array($date->format('Y-m-d H:m:i'), $_GET['liste']));
 
     $response->closeCursor();
-    
+    header('Location: https://family.matthieudevilliers.fr/pages/mes-lites/');
+} elseif (isset($_POST['Nom']) && isset($_GET['liste'])) {
+    # code...
+} elseif (isset($_POST['Nom'])) {
+    $sql = 'INSERT INTO lic_liste (nom, partage, lien_partage)
+            VALUES (?,?,?)';
+
+    $str = rand();
+    $rand = md5($str);
+
+    $response = $bdd->prepare($sql);
+    $response->execute(array(htmlentities($_POST['Nom']), htmlentities($_POST['Partage']), $rand));
+
+    $response->closeCursor();
+    header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $rand);
 }
 
 ?>
@@ -59,13 +76,13 @@ if (isset($_POST['delete']) && isset($_GET['liste'])) {
                             <div class="row">
                                 <div class="col-md-8">
                                     <div class="form-floating">
-                                        <input name="Nom de la liste" value="<?php echo $donnees['nom'] ?>" type="text" class="form-control" id="LabelNom" placeholder="Nom de la liste" required>
+                                        <input name="Nom" value="<?php echo $donnees['nom'] ?>" type="text" class="form-control" id="LabelNom" placeholder="Nom de la liste" required>
                                         <label for="LabelNom">Nom de la liste</label>
                                     </div>
                                     <br>
                                 </div>
                                 <div class="col-md-4">
-                                    <select class="form-select" name="partage" aria-label="Paramètres de partage">
+                                    <select class="form-select" name="Partage" aria-label="Paramètres de partage">
                                         <option <?php if ($donnees['partage'] == 'prive') echo ('selected') ?> value="prive">Privé</option>
                                         <option <?php if ($donnees['partage'] == 'lien') echo ('selected') ?> value="lien">Partagée par lien</option>
                                         <option <?php if ($donnees['partage'] == 'secure') echo ('selected') ?> value="secure">Partagée par lien (sécurisé)</option>
