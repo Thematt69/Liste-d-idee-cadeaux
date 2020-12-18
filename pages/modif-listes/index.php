@@ -8,6 +8,18 @@ if (!isset($_SESSION['id_compte'])) {
     header('Location: https://family.matthieudevilliers.fr/pages/connexion/');
 }
 
+if (isset($_POST['delete']) && isset($_GET['liste'])) {
+
+    $sql = 'DELETE FROM lic_liste
+            WHERE id = ?';
+
+    $response = $bdd->prepare($sql);
+    $response->execute(array($_GET['liste']));
+
+    $response->closeCursor();
+    
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -34,7 +46,7 @@ if (!isset($_SESSION['id_compte'])) {
                         <form action="" method="post">
                             <?php
 
-                            $sql = 'SELECT nom,partage
+                            $sql = 'SELECT id,nom,partage
                                     FROM lic_liste
                                     WHERE lien_partage = ?';
 
@@ -67,10 +79,12 @@ if (!isset($_SESSION['id_compte'])) {
                                 <?php
                                 if (isset($_GET['liste']) && $donnees != null) {
                                 ?>
-                                    <div class="col-6 col-md-4 text-center">
-                                        <button type="button" class="btn btn-danger">Supprimer</button>
-                                        <br>
-                                    </div>
+                                    <form action="" method="post">
+                                        <div class="col-6 col-md-4 text-center">
+                                            <button type="submit" name="delete" value="<?php echo $donnees['id'] ?>" class="btn btn-danger">Supprimer</button>
+                                            <br>
+                                        </div>
+                                    </form>
                                 <?php
                                 }
                                 ?>
