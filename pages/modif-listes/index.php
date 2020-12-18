@@ -43,7 +43,7 @@ if (isset($_POST['delete'])) {
     $response1->closeCursor();
 
     $response->closeCursor();
-    header('Location: https://family.matthieudevilliers.fr/pages/mes-lites/');
+    header('Location: https://family.matthieudevilliers.fr/pages/mes-listes/');
 } elseif (isset($_POST['Nom']) && $_POST['save'] != "") {
 
     // Modification de la liste
