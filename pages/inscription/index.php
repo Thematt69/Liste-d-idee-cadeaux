@@ -32,7 +32,7 @@ if (isset($_POST['Mail'])) {
 
         $sql = 'SELECT mail
             FROM lic_compte
-            WHERE mail = ? AND deleted_to = null';
+            WHERE mail = ? AND deleted_to IS NULL';
 
         $response = $bdd->prepare($sql);
         $response->execute(array(htmlentities($_POST['Mail'])));
