@@ -140,10 +140,19 @@ if (!isset($_SESSION['id_compte'])) {
                                 </table>
                             </div>
                             <a class="btn btn-primary" href="https://family.matthieudevilliers.fr/pages/modif-idees/">Ajouter une idée</a>
+                            <?php
+                            if ($donnee['partage'] != 'prive') {
+                            ?>
+                                <p>Lien de partage :
+                                    <a class="link-primary" target="_blank" href="https://family.matthieudevilliers.fr/pages/idees/?liste=<?php echo $_GET['liste']; ?>">
+                                        https://family.matthieudevilliers.fr/pages/idees/?liste=<?php echo $_GET['liste']; ?>
+                                    </a>
+                                </p>
+                            <?php
+                            }
+                            ?>
                         </div>
-                    </div>
-
-                    <br>
+                    </div> <br>
                 </div>
             </div>
         </div>
