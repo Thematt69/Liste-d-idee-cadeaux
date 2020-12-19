@@ -32,7 +32,7 @@ if (isset($_POST['Mail'])) {
 
         $sql = 'SELECT id,motdepasse
             FROM lic_compte
-            WHERE mail = ?';
+            WHERE mail = ? AND deleted_to = null';
 
         $response = $bdd->prepare($sql);
         $response->execute(array($_POST['Mail']));

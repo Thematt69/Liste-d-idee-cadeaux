@@ -114,8 +114,8 @@ if (isset($_POST['delete'])) {
                 <?php
 
                 $sql = 'SELECT id,nom,partage
-                                    FROM lic_liste
-                                    WHERE lien_partage = ?';
+                        FROM lic_liste
+                        WHERE lien_partage = ? AND deleted_to = null';
 
                 $response = $bdd->prepare($sql);
                 $response->execute(array($_GET['liste']));

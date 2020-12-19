@@ -36,7 +36,7 @@ if (!isset($_SESSION['id_compte'])) {
 
                             $sql = 'SELECT nom,lien,image,is_buy
                                     FROM lic_idee
-                                    WHERE id = ?';
+                                    WHERE id = ? AND deleted_to = null';
 
                             $response = $bdd->prepare($sql);
                             $response->execute(array($_GET['idee']));
