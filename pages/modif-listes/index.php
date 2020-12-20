@@ -52,7 +52,7 @@ if (isset($_POST['delete'])) {
             WHERE id = ?;';
 
     $response = $bdd->prepare($sql);
-    $response->execute(array(htmlentities($_POST['Nom']), htmlentities($_POST['Partage']), $_POST['save']));
+    $response->execute(array(htmlentities($_POST['Nom']), htmlentities($_POST['Partage']), htmlentities($_POST['save'])));
 
     $response->closeCursor();
     header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $_GET['liste']);
