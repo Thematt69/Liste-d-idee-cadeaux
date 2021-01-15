@@ -13,28 +13,43 @@ $info = false;
 
 if (isset($_POST['Mail'])) {
 
-    if ($_POST['ConfirmationMDP'] == $_POST['MDP']) {
+    if (($_POST['NewMDP'] != $_POST['MDP'])) {
 
-        $mail = $_SESSION['mail'];
-        $_SESSION['prenom'] = htmlentities($_POST['Prénom']);
-        $_SESSION['nom'] = htmlentities($_POST['Nom']);
-        $_SESSION['motdepasse'] = password_hash(htmlentities($_POST['MDP']), PASSWORD_DEFAULT);
-        $date = new DateTime(htmlentities($_POST['Naissance']));
-        $_SESSION['date_naissance'] = $date->format('Y-m-d');
-        $_SESSION['mail'] = htmlentities($_POST['Mail']);
+        $sql = 'SELECT motdepasse
+                FROM lic_compte
+                WHERE id = ?';
 
-        $sql = 'UPDATE lic_compte
+        $response = $bdd->prepare($sql);
+        $response->execute(array($_SESSION['id_compte']));
+
+        $donnee = $response->fetch();
+
+        $response->closeCursor();
+
+        if (password_verify($_POST['MDP'], $donnee['motdepasse'])) {
+            $mail = $mail;
+            $prenom = htmlentities($_POST['Prénom']);
+            $nom = htmlentities($_POST['Nom']);
+            $motDePasse = password_hash(htmlentities($_POST['NewMDP']), PASSWORD_DEFAULT);
+            $date = new DateTime(htmlentities($_POST['Naissance']));
+            $dateNaissance = $date->format('Y-m-d');
+            $mail = htmlentities($_POST['Mail']);
+
+            $sql = 'UPDATE lic_compte
             SET prenom = ?, nom = ?, motdepasse = ?, date_naissance = ?, mail = ?
             WHERE mail = ?';
 
-        $response = $bdd->prepare($sql);
-        $response->execute(array($_SESSION['prenom'], $_SESSION['nom'], $_SESSION['motdepasse'], $_SESSION['date_naissance'], $_SESSION['mail'], $mail));
+            $response = $bdd->prepare($sql);
+            $response->execute(array($prenom, $nom, $motDePasse, $dateNaissance, $mail, $mail));
 
-        $info = 'Vos informations ont bien été modifiées.';
+            $info = 'Vos informations ont bien été modifiées.';
 
-        $response->closeCursor();
+            $response->closeCursor();
+        } else {
+            $alert = 'Mot de passe incorrect !';
+        }
     } else {
-        $alert = 'Les deux mots de passe ne correspondent pas !';
+        $alert = 'Mot de passe identique !';
     }
 }
 
@@ -109,15 +124,15 @@ if (isset($_POST['Mail'])) {
                                 <div class="col-md-6">
                                     <div class="form-floating">
                                         <input name="MDP" type="password" class="form-control" id="LabelMDP" aria-describedby="DescriptionMDP" placeholder="Mot de passe" required>
-                                        <label for="LabelMDP">Mot de passe</label>
+                                        <label for="LabelMDP">Mot de passe actuel</label>
                                         <small id="DescriptionMDP" class="form-text text-muted">Votre mot de passe est enregistré dans un format crypté, il est impossible pour nous de le récupérer.</small>
                                     </div>
                                     <br>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating">
-                                        <input name="ConfirmationMDP" type="password" class="form-control" id="LabelConfirmationMDP" aria-describedby="DescriptionMDP" placeholder="Confirmer mot de passe" required>
-                                        <label for="LabelConfirmationMDP">Confirmer mot de passe</label>
+                                        <input name="NewMDP" type="password" class="form-control" id="LabelNewMDP" aria-describedby="DescriptionMDP" placeholder="Confirmer mot de passe" required>
+                                        <label for="LabelNewMDP">Nouveau mot de passe</label>
                                     </div>
                                     <br>
                                 </div>
