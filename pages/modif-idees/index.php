@@ -11,7 +11,7 @@ if (!isset($_SESSION['id_compte'])) {
 if (isset($_POST['delete'])) {
 
     // Enregistrement de la suppresion
-    $sql = 'UPDATE lid_idee
+    $sql = 'UPDATE lic_idee
             SET deleted_to = ?
             WHERE id = ?';
 
@@ -25,7 +25,7 @@ if (isset($_POST['delete'])) {
     $sql = 'SELECT lic_liste.lien_partage
             FROM lic_liste
             INNER JOIN lic_idee ON lic_idee.id_liste = lic_liste.id
-            WHERE lic_idee.id = ?';
+            WHERE lic_idee.id = ? AND deleted_to IS NULL';
 
     $response = $bdd->prepare($sql);
     $response->execute(array($_POST['delete']));
@@ -37,7 +37,7 @@ if (isset($_POST['delete'])) {
     $response->closeCursor();
 } elseif (isset($_POST['Nom']) && $_POST['save'] != "") {
 
-    // Modification de la liste
+    // Modification de l'idée
     $sql = 'UPDATE lic_idee
             SET nom = ?, lien = ?, image = ?, is_buy = ?
             WHERE id = ?;';
@@ -46,11 +46,43 @@ if (isset($_POST['delete'])) {
     $response->execute(array(htmlentities($_POST['Nom']), htmlentities($_POST['Lien']), '', htmlentities($_POST['Achat'], htmlentities($_POST['save']))));
 
     $response->closeCursor();
-    header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $_GET['liste']);
+
+    $sql = 'SELECT lic_liste.lien_partage
+            FROM lic_liste
+            INNER JOIN lic_idee ON lic_idee.id_liste = lic_liste.id
+            WHERE lic_idee.nom = ? AND deleted_to IS NULL';
+
+    $response = $bdd->prepare($sql);
+    $response->execute(array($_POST['Nom']));
+
+    $donnee = $response->fetch();
+
+    header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $donnee['lien_partage']);
+
+    $response->closeCursor();
 } elseif (isset($_POST['Nom'])) {
 
+    // Création de l'idée
+    $sql = 'INSERT INTO lic_idee (id_liste, nom, lien, image, is_buy)
+            VALUES (?,?,?,?,?)';
 
-    
+    $sql1 = 'SELECT id
+            FROM lic_liste
+            WHERE lien_partage = ? AND deleted_to IS NULL';
+
+    $response1 = $bdd->prepare($sql1);
+    $response1->execute(array($_GET['liste']));
+
+    $donnee1 = $response1->fetch();
+
+    $response = $bdd->prepare($sql);
+    $response->execute(array($donnee1['id'], htmlentities($_POST['Nom']), htmlentities($_POST['Lien']), htmlentities($_POST['Image']), htmlentities($_POST['Achat'])));
+
+    $response1->closeCursor();
+
+    $response->closeCursor();
+
+    header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $_GET['liste']);
 }
 
 ?>

@@ -95,7 +95,7 @@ if (!isset($_SESSION['id_compte'])) {
 
                                         $sql1 = 'SELECT id,nom,lien,image,is_buy
                                             FROM lic_idee
-                                            WHERE id_liste = ?';
+                                            WHERE id_liste = ? AND deleted_to IS NULL';
 
                                         $response1 = $bdd->prepare($sql1);
                                         $response1->execute(array($donnee['id']));
@@ -129,7 +129,7 @@ if (!isset($_SESSION['id_compte'])) {
                                                     ?>
                                                 </td>
                                                 <td><input class="form-check-input" type="checkbox" <?php if ($donnees['is_buy']) echo ('checked') ?> disabled></td>
-                                                <td><a class="btn btn-outline-secondary" href="https://family.matthieudevilliers.fr/pages/modif-idees/?idee=<?php echo ($donnees['id']) ?>">Modifier</a></td>
+                                                <td><a class="btn btn-outline-secondary" href="https://family.matthieudevilliers.fr/pages/modif-idees/?idee=<?php echo $donnees['id']; ?>">Modifier</a></td>
                                             </tr>
                                         <?php
                                         }
@@ -139,7 +139,7 @@ if (!isset($_SESSION['id_compte'])) {
                                     </tbody>
                                 </table>
                             </div>
-                            <a class="btn btn-primary" href="https://family.matthieudevilliers.fr/pages/modif-idees/">Ajouter une idée</a>
+                            <a class="btn btn-primary" href="https://family.matthieudevilliers.fr/pages/modif-idees/?liste=<?php echo $_GET['liste']; ?>">Ajouter une idée</a>
                             <?php
                             if ($donnee['partage'] != 'prive') {
                             ?>
