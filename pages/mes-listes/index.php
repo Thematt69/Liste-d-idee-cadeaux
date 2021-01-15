@@ -48,7 +48,7 @@ if (!isset($_SESSION['id_compte'])) {
                             ORDER BY lic_liste.created_to DESC';
 
                     $response = $bdd->prepare($sql);
-                    $response->execute(array(1));
+                    $response->execute(array($_SESSION['id_compte']));
 
                     while ($donnees = $response->fetch()) {
                         if ($donnees['roles'] == 'proprietaire') {

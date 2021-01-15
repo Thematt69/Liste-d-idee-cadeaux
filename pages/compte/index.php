@@ -17,7 +17,7 @@ if (isset($_POST['Mail'])) {
 
         $sql = 'SELECT motdepasse
                 FROM lic_compte
-                WHERE id = ?';
+                WHERE id = ? AND deleted_to IS NULL';
 
         $response = $bdd->prepare($sql);
         $response->execute(array($_SESSION['id_compte']));
@@ -98,7 +98,7 @@ if (isset($_POST['Mail'])) {
 
                             $sql = 'SELECT prenom,nom,date_naissance,mail
                                     FROM lic_compte
-                                    WHERE id = ?';
+                                    WHERE id = ? AND deleted_to IS NULL';
 
                             $response = $bdd->prepare($sql);
                             $response->execute(array(1));

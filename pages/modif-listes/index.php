@@ -62,6 +62,7 @@ if (isset($_POST['delete'])) {
     $sql = 'INSERT INTO lic_liste (nom, partage, lien_partage)
             VALUES (?,?,?)';
 
+    // Lien random de partage
     $str = rand();
     $rand = md5($str);
 
@@ -71,7 +72,7 @@ if (isset($_POST['delete'])) {
     $response->closeCursor();
 
     //Récupération de l'id le plus récent
-    $sql = 'SELECT id FROM lic_liste ORDER BY created_to DESC LIMIT 1';
+    $sql = 'SELECT id FROM lic_liste WHERE deleted_to IS NULL ORDER BY created_to DESC LIMIT 1';
 
     $response = $bdd->prepare($sql);
     $response->execute();
