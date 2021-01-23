@@ -24,12 +24,13 @@ if (!isset($_SESSION['id_compte'])) {
     <?php
     include('../../widgets/navbar/index.php');
 
-    $sql = 'SELECT id,nom,partage
+    $sql = 'SELECT lic_liste.id as id, lic_liste.nom as nom, lic_liste.partage as partage, lic_autorisation.type as droit
             FROM lic_liste
-            WHERE lien_partage = ? AND deleted_to IS NULL';
+            INNER JOIN lic_autorisation ON lic_autorisation.id_liste = lic_liste.id AND lic_autorisation.id_compte = ?
+            WHERE lic_liste.lien_partage = ? AND lic_liste.deleted_to IS NULL';
 
     $response = $bdd->prepare($sql);
-    $response->execute(array($_GET['liste']));
+    $response->execute(array($_SESSION['id_compte'], $_GET['liste']));
 
     $donnee = $response->fetch();
 
@@ -46,7 +47,6 @@ if (!isset($_SESSION['id_compte'])) {
                 </div>
             </div>
         </div>
-
     <?php
     } else {
     ?>
@@ -71,9 +71,15 @@ if (!isset($_SESSION['id_compte'])) {
                         }
                         ?>
                         <?php echo $donnee['nom'] ?>
-                        <a href="https://family.matthieudevilliers.fr/pages/modif-listes/?liste=<?php echo ($_GET['liste']) ?>" class="link-dark">
-                            <i class="fas fa-pen fa-2x" style="font-size: 1.5rem;"></i>
-                        </a>
+                        <?php
+                        if ($donnee['droit'] == "proprietaire") {
+                        ?>
+                            <a href="https://family.matthieudevilliers.fr/pages/modif-listes/?liste=<?php echo ($_GET['liste']) ?>" class="link-dark">
+                                <i class="fas fa-pen fa-2x" style="font-size: 1.5rem;"></i>
+                            </a>
+                        <?php
+                        }
+                        ?>
                     </h1>
                     <br>
 
@@ -93,7 +99,7 @@ if (!isset($_SESSION['id_compte'])) {
                                     <tbody>
                                         <?php
 
-                                        $sql1 = 'SELECT id,nom,lien,image,is_buy
+                                        $sql1 = 'SELECT  id, nom, lien, image, is_buy
                                             FROM lic_idee
                                             WHERE id_liste = ? AND deleted_to IS NULL';
 
@@ -129,7 +135,17 @@ if (!isset($_SESSION['id_compte'])) {
                                                     ?>
                                                 </td>
                                                 <td><input class="form-check-input" type="checkbox" <?php if ($donnees['is_buy']) echo ('checked') ?> disabled></td>
-                                                <td><a class="btn btn-outline-secondary" href="https://family.matthieudevilliers.fr/pages/modif-idees/?idee=<?php echo $donnees['id']; ?>">Modifier</a></td>
+                                                <?php
+                                                if ($donnee['droit'] != "lecteur") {
+                                                ?>
+                                                    <td>
+                                                        <a class="btn btn-outline-secondary" href="https://family.matthieudevilliers.fr/pages/modif-idees/?idee=<?php echo $donnees['id']; ?>">
+                                                            Modifier
+                                                        </a>
+                                                    </td>
+                                                <?php
+                                                }
+                                                ?>
                                             </tr>
                                         <?php
                                         }
@@ -139,7 +155,15 @@ if (!isset($_SESSION['id_compte'])) {
                                     </tbody>
                                 </table>
                             </div>
-                            <a class="btn btn-primary" href="https://family.matthieudevilliers.fr/pages/modif-idees/?liste=<?php echo $_GET['liste']; ?>">Ajouter une idée</a>
+                            <?php
+                            if ($donnee['droit'] == "proprietaire") {
+                            ?>
+                                <a class="btn btn-primary" href="https://family.matthieudevilliers.fr/pages/modif-idees/?liste=<?php echo $_GET['liste']; ?>">
+                                    Ajouter une idée
+                                </a>
+                            <?php
+                            }
+                            ?>
                             <?php
                             if ($donnee['partage'] != 'prive') {
                             ?>

@@ -114,62 +114,96 @@ if (isset($_POST['delete'])) {
                 <br>
                 <?php
 
-                $sql = 'SELECT id,nom,partage
-                        FROM lic_liste
-                        WHERE lien_partage = ? AND deleted_to IS NULL';
+                $sql = 'SELECT lic_autorisation.type as droit, lic_liste.id as id, lic_liste.nom as nom, lic_liste.partage as partage
+                        FROM lic_autorisation
+                        INNER JOIN lic_liste ON lic_liste.id = lic_autorisation.id_liste
+                        WHERE lic_autorisation.id_compte = ? AND lic_liste.lien_partage = ? AND lic_autorisation.deleted_to IS NULL';
 
-                $response = $bdd->prepare($sql);
-                $response->execute(array($_GET['liste']));
+                $response1 = $bdd->prepare($sql);
+                $response1->execute(array($_SESSION['id_compte'], $_GET['liste']));
 
-                $donnees = $response->fetch();
+                $donnees = $response1->fetch();
 
-                if (isset($_GET['liste']) && $donnees != null) {
-                    echo ('<h1 class="text-center">Modification de liste</h1>');
-                } else {
-                    echo ('<h1 class="text-center">Création de liste</h1>');
-                }
+                if (isset($_GET['liste']) && ($donnees == null || $donnees['droit'] != "proprietaire")) {
                 ?>
-                <br>
-                <div class="card">
-                    <div class="card-body">
-                        <form action="" method="post">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div class="form-floating">
-                                        <input name="Nom" value="<?php echo $donnees['nom'] ?>" type="text" class="form-control" id="LabelNom" placeholder="Nom de la liste" required>
-                                        <label for="LabelNom">Nom de la liste</label>
-                                    </div>
-                                    <br>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <br>
+                                <div class="alert alert-danger" role="alert">
+                                    <strong>Vous n'avez pas les droits !</strong> Nous sommes désolées, mais il semblerai que vous n'avez pas les droits pour cette idée. Merci de revenir à <a href="https://family.matthieudevilliers.fr/pages/mes-listes/" class="alert-link">vos listes</a>.
                                 </div>
-                                <div class="col-md-4">
-                                    <select class="form-select" name="Partage" aria-label="Paramètres de partage">
-                                        <option <?php if ($donnees['partage'] == 'prive') echo ('selected') ?> value="prive">Privé</option>
-                                        <option <?php if ($donnees['partage'] == 'lien') echo ('selected') ?> value="lien">Partagée par lien</option>
-                                        <option <?php if ($donnees['partage'] == 'secure') echo ('selected') ?> value="secure">Partagée par lien (sécurisé)</option>
-                                    </select>
-                                    <br>
-                                </div>
-                                <div class="col-6 col-md-4 text-center">
-                                    <button type="submit" name="save" value="<?php echo $donnees['id'] ?>" class="btn btn-primary">Enregistrer</button>
-                                    <br>
-                                </div>
-                                <?php
-                                if (isset($_GET['liste']) && $donnees != null) {
-                                ?>
-                                    <form action="" method="post">
-                                        <div class="col-6 col-md-4 text-center">
-                                            <button type="submit" name="delete" value="<?php echo $donnees['id'] ?>" class="btn btn-danger">Supprimer</button>
-                                            <br>
-                                        </div>
-                                    </form>
-                                <?php
-                                }
-                                ?>
+                                <br>
                             </div>
-                        </form>
+                        </div>
                     </div>
-                </div>
-                <?php $response->closeCursor(); ?>
+
+                <?php
+                } elseif (!isset($_GET['liste'])) {
+                ?>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <br>
+                                <div class="alert alert-danger" role="alert">
+                                    <strong>Liste introuvable !</strong> Nous sommes désolées, mais nous n'avons pas trouvé votre liste. Merci de revenir à <a href="https://family.matthieudevilliers.fr/pages/mes-listes/" class="alert-link">vos listes</a>.
+                                </div>
+                                <br>
+                            </div>
+                        </div>
+                    </div>
+                <?php
+                } else {
+                    if (isset($_GET['liste'])) {
+                        echo ('<h1 class="text-center">Modification de liste</h1>');
+                    } else {
+                        echo ('<h1 class="text-center">Création de liste</h1>');
+                    }
+                ?>
+                    <br>
+                    <div class="card">
+                        <div class="card-body">
+                            <form action="" method="post">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="form-floating">
+                                            <input name="Nom" value="<?php echo $donnees['nom'] ?>" type="text" class="form-control" id="LabelNom" placeholder="Nom de la liste" required>
+                                            <label for="LabelNom">Nom de la liste</label>
+                                        </div>
+                                        <br>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <select class="form-select" name="Partage" aria-label="Paramètres de partage">
+                                            <option <?php if ($donnees['partage'] == 'prive') echo ('selected') ?> value="prive">Privé</option>
+                                            <option <?php if ($donnees['partage'] == 'lien') echo ('selected') ?> value="lien">Partagée par lien</option>
+                                            <option <?php if ($donnees['partage'] == 'secure') echo ('selected') ?> value="secure">Partagée par lien (sécurisé)</option>
+                                        </select>
+                                        <br>
+                                    </div>
+                                    <div class="col-6 col-md-4 text-center">
+                                        <button type="submit" name="save" value="<?php echo $donnees['id'] ?>" class="btn btn-primary">Enregistrer</button>
+                                        <br>
+                                    </div>
+                                    <?php
+                                    if (isset($_GET['liste']) && $donnees != null) {
+                                    ?>
+                                        <form action="" method="post">
+                                            <div class="col-6 col-md-4 text-center">
+                                                <button type="submit" name="delete" value="<?php echo $donnees['id'] ?>" class="btn btn-danger">Supprimer</button>
+                                                <br>
+                                            </div>
+                                        </form>
+                                    <?php
+                                    }
+                                    ?>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                <?php
+                }
+                $response1->closeCursor();
+                ?>
                 <br>
             </div>
         </div>
