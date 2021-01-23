@@ -26,8 +26,8 @@ if (!isset($_SESSION['id_compte'])) {
 
     $sql = 'SELECT lic_liste.id as id, lic_liste.nom as nom, lic_liste.partage as partage, lic_autorisation.type as droit
             FROM lic_liste
-            INNER JOIN lic_autorisation ON lic_autorisation.id_liste = lic_liste.id AND lic_autorisation.id_compte = ?
-            WHERE lic_liste.lien_partage = ? AND lic_liste.deleted_to IS NULL';
+            INNER JOIN lic_autorisation ON lic_autorisation.id_liste = lic_liste.id
+            WHERE lic_autorisation.id_compte = ? AND lic_liste.lien_partage = ? AND lic_liste.deleted_to IS NULL';
 
     $response = $bdd->prepare($sql);
     $response->execute(array($_SESSION['id_compte'], $_GET['liste']));
