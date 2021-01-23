@@ -27,3 +27,7 @@
     </FilesMatch>
 
 </IfModule> 
+
+ErrorDocument 401 /pages/erreur/403.php
+ErrorDocument 403 /pages/erreur/403.php
+ErrorDocument 404 /pages/erreur/404.php
