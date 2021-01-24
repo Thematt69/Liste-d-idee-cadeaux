@@ -139,20 +139,6 @@ if (isset($_POST['delete'])) {
                     </div>
 
                 <?php
-                } elseif (!isset($_GET['liste'])) {
-                ?>
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <br>
-                                <div class="alert alert-danger" role="alert">
-                                    <strong>Liste introuvable !</strong> Nous sommes désolées, mais nous n'avons pas trouvé votre liste. Merci de revenir à <a href="https://family.matthieudevilliers.fr/pages/mes-listes/" class="alert-link">vos listes</a>.
-                                </div>
-                                <br>
-                            </div>
-                        </div>
-                    </div>
-                <?php
                 } else {
                     if (isset($_GET['liste'])) {
                         echo ('<h1 class="text-center">Modification de liste</h1>');
