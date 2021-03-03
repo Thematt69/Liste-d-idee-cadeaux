@@ -41,7 +41,7 @@ if (!isset($_SESSION['id_compte'])) {
                 <div class="col-sm-12">
                     <br>
                     <div class="alert alert-danger" role="alert">
-                        <strong>Liste introuvable !</strong> Nous sommes désolées, mais nous n'avons pas trouvé votre liste. Merci de revenir à <a href="https://family.matthieudevilliers.fr/pages/mes-listes/" class="alert-link">vos listes</a>.
+                        <strong>Liste introuvable !</strong> Nous sommes désolées, mais nous n'avons pas trouvé votre liste. Merci de revenir à <a href="https://family.matthieudevilliers.fr/pages/listes/" class="alert-link">vos listes</a>.
                     </div>
                     <br>
                 </div>
@@ -91,7 +91,7 @@ if (!isset($_SESSION['id_compte'])) {
                                         <tr>
                                             <th class="col">Nom</th>
                                             <th class="col lien">Lien</th>
-                                            <th class="col image">Image</th>
+                                            <!-- <th class="col image">Image</th> -->
                                             <th class="col">Déja acheté</th>
                                             <th class="col"></th>
                                         </tr>
@@ -111,29 +111,37 @@ if (!isset($_SESSION['id_compte'])) {
                                             <tr>
                                                 <td><?php echo ($donnees['nom']) ?></td>
                                                 <td class="lien">
-                                                    <a href="<?php echo ($donnees['lien']) ?>">
-                                                        <?php
-                                                        if ($donnees['lien'] != '') echo (substr($donnees['lien'], 0, 40));
-                                                        if (strlen($donnees['lien']) > 40) echo '...';
-                                                        ?>
-                                                    </a>
-                                                </td>
-                                                <td class="image">
                                                     <?php
-                                                    if ($donnees['image'] == null) {
-                                                        echo ('Aucune');
+                                                    if ($donnees['lien'] == null) {
+                                                        echo ('Aucun');
                                                     } else {
                                                     ?>
-                                                        <a href="https://family.matthieudevilliers.fr/images/<?php echo ($donnees['image']) ?>">
+                                                        <a href="<?php echo ($donnees['lien']) ?>">
                                                             <?php
-                                                            if ($donnees['image'] != '') echo (substr($donnees['image'], 0, 20));
-                                                            if (strlen($donnees['image']) > 20) echo '...';
+                                                            if ($donnees['lien'] != '') echo (substr($donnees['lien'], 0, 40));
+                                                            if (strlen($donnees['lien']) > 40) echo '...';
                                                             ?>
                                                         </a>
                                                     <?php
                                                     }
                                                     ?>
                                                 </td>
+                                                <!-- <td class="image">
+                                                    <?php
+                                                    // if ($donnees['image'] == null) {
+                                                    //     echo ('Aucune');
+                                                    // } else {
+                                                    ?>
+                                                        <a href="https://family.matthieudevilliers.fr/images/<?php /* echo ($donnees['image']) */ ?>">
+                                                            <?php
+                                                            // if ($donnees['image'] != '') echo (substr($donnees['image'], 0, 20));
+                                                            // if (strlen($donnees['image']) > 20) echo '...';
+                                                            ?>
+                                                        </a>
+                                                    <?php
+                                                    // }
+                                                    ?>
+                                                </td> -->
                                                 <td><input class="form-check-input" type="checkbox" <?php if ($donnees['is_buy']) echo ('checked') ?> disabled></td>
                                                 <?php
                                                 if ($donnee['droit'] != "lecteur") {

@@ -11,7 +11,7 @@
             <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="https://family.matthieudevilliers.fr/pages/mes-listes/">Mes listes</a>
+                    <a class="nav-link" href="https://family.matthieudevilliers.fr/pages/listes/">Mes listes</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="https://family.matthieudevilliers.fr/pages/compte/">Mon compte</a>

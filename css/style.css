@@ -1,7 +1,7 @@
 /* tablettes et mobiles */
 
 @media only screen and (max-width:989px) {
-    .lien {
+    .image {
         display: none;
     }
 }
@@ -10,7 +10,7 @@
 /* mobiles */
 
 @media only screen and (max-width:500px) {
-    .image {
+    .lien {
         display: none;
     }
 }

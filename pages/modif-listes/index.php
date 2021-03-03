@@ -43,7 +43,7 @@ if (isset($_POST['delete'])) {
     $response1->closeCursor();
 
     $response->closeCursor();
-    header('Location: https://family.matthieudevilliers.fr/pages/mes-listes/');
+    header('Location: https://family.matthieudevilliers.fr/pages/listes/');
 } elseif (isset($_POST['Nom']) && $_POST['save'] != "") {
 
     // Modification de la liste
@@ -131,7 +131,7 @@ if (isset($_POST['delete'])) {
                             <div class="col-sm-12">
                                 <br>
                                 <div class="alert alert-danger" role="alert">
-                                    <strong>Vous n'avez pas les droits !</strong> Nous sommes désolées, mais il semblerai que vous n'avez pas les droits pour cette idée. Merci de revenir à <a href="https://family.matthieudevilliers.fr/pages/mes-listes/" class="alert-link">vos listes</a>.
+                                    <strong>Vous n'avez pas les droits !</strong> Nous sommes désolées, mais il semblerai que vous n'avez pas les droits pour cette idée. Merci de revenir à <a href="https://family.matthieudevilliers.fr/pages/listes/" class="alert-link">vos listes</a>.
                                 </div>
                                 <br>
                             </div>
@@ -146,6 +146,15 @@ if (isset($_POST['delete'])) {
                         echo ('<h1 class="text-center">Création de liste</h1>');
                     }
                 ?>
+                    <br>
+                    <!-- TODO - A enlever une fois le partage via lien effectif -->
+                    <div class="alert alert-warning alert-dismissible fade show" role="warning">
+                        <strong>
+                            Le partage d'une liste n'est pas encore disponible.
+                            Veuillez contacter le support pour pouvoir partager votre liste.
+                        </strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
                     <br>
                     <div class="card">
                         <div class="card-body">

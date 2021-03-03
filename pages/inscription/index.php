@@ -5,7 +5,7 @@ session_start();
 include('../../scripts/verif/index.php');
 
 if (isset($_SESSION['id_compte'])) {
-    header('Location: https://family.matthieudevilliers.fr/pages/mes-listes/');
+    header('Location: https://family.matthieudevilliers.fr/pages/listes/');
 }
 
 $alert = false;
@@ -55,7 +55,7 @@ if (isset($_POST['Mail'])) {
             $response1->execute(array($_SESSION['prenom'], $_SESSION['nom'], $_SESSION['motdepasse'], $_SESSION['date_naissance'], $_SESSION['mail']));
             $response1->closeCursor();
 
-            header('Location: https://family.matthieudevilliers.fr/pages/mes-listes/');
+            header('Location: https://family.matthieudevilliers.fr/pages/listes/');
         } else {
             $alert = "L'adresse mail est déja utilisé !";
         }

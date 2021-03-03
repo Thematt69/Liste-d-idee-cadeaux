@@ -43,17 +43,17 @@ if (isset($_POST['delete'])) {
             WHERE id = ?;';
 
     $response = $bdd->prepare($sql);
-    $response->execute(array(htmlentities($_POST['Nom']), htmlentities($_POST['Lien']), '', htmlentities($_POST['Achat'], htmlentities($_POST['save']))));
+    $response->execute(array(htmlentities($_POST['Nom']), htmlentities($_POST['Lien']), '', htmlentities($_POST['Achat']) ?? 0, htmlentities($_POST['save'])));
 
     $response->closeCursor();
 
     $sql = 'SELECT lic_liste.lien_partage
             FROM lic_liste
             INNER JOIN lic_idee ON lic_idee.id_liste = lic_liste.id
-            WHERE lic_idee.nom = ? AND deleted_to IS NULL';
+            WHERE lic_idee.nom = ? AND lic_liste.deleted_to IS NULL';
 
     $response = $bdd->prepare($sql);
-    $response->execute(array($_POST['Nom']));
+    $response->execute(array(htmlentities($_POST['Nom'])));
 
     $donnee = $response->fetch();
 
@@ -76,7 +76,7 @@ if (isset($_POST['delete'])) {
     $donnee1 = $response1->fetch();
 
     $response = $bdd->prepare($sql);
-    $response->execute(array($donnee1['id'], htmlentities($_POST['Nom']), htmlentities($_POST['Lien']), htmlentities($_POST['Image']), htmlentities($_POST['Achat'])));
+    $response->execute(array($donnee1['id'], htmlentities($_POST['Nom']), htmlentities($_POST['Lien']), '', htmlentities($_POST['Achat'])));
 
     $response1->closeCursor();
 
@@ -124,7 +124,7 @@ if (isset($_POST['delete'])) {
                             <div class="col-sm-12">
                                 <br>
                                 <div class="alert alert-danger" role="alert">
-                                    <strong>Vous n'avez pas les droits !</strong> Nous sommes désolées, mais il semblerai que vous n'avez pas les droits pour cette idée. Merci de revenir à <a href="https://family.matthieudevilliers.fr/pages/mes-listes/" class="alert-link">vos listes</a>.
+                                    <strong>Vous n'avez pas les droits !</strong> Nous sommes désolées, mais il semblerai que vous n'avez pas les droits pour cette idée. Merci de revenir à <a href="https://family.matthieudevilliers.fr/pages/listes/" class="alert-link">vos listes</a>.
                                 </div>
                                 <br>
                             </div>
@@ -139,7 +139,7 @@ if (isset($_POST['delete'])) {
                             <div class="col-sm-12">
                                 <br>
                                 <div class="alert alert-danger" role="alert">
-                                    <strong>Idée introuvable !</strong> Nous sommes désolées, mais nous n'avons pas trouvé votre idée. Merci de revenir à <a href="https://family.matthieudevilliers.fr/pages/mes-listes/" class="alert-link">vos listes</a>.
+                                    <strong>Idée introuvable !</strong> Nous sommes désolées, mais nous n'avons pas trouvé votre idée. Merci de revenir à <a href="https://family.matthieudevilliers.fr/pages/listes/" class="alert-link">vos listes</a>.
                                 </div>
                                 <br>
                             </div>
@@ -183,12 +183,12 @@ if (isset($_POST['delete'])) {
                                         <br>
                                     </div>
                                     <div class="col-md-8">
-                                        <input name="Image" class="form-control" type="file" accept="image/*">
-                                        <br>
+                                        <!-- <input name="Image" class="form-control" type="file" accept="image/*"> -->
+                                        <!-- <br> -->
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-check">
-                                            <input name="Achat" class="form-check-input" type="checkbox" id="LabelAchat" <?php if ($donnees['is_buy']) echo 'checked' ?>>
+                                            <input name="Achat" value="1" class="form-check-input" type="checkbox" id="LabelAchat" <?php if ($donnees['is_buy']) echo 'checked' ?>>
                                             <label class="form-check-label" for="LabelAchat">
                                                 Déjà acheté l'idée
                                             </label>
