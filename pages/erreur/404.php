@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="h-100">
 
 <head>
     <title>Liste d'idée cadeaux - Mon compte</title>
@@ -8,7 +8,7 @@
     <?php include('../../widgets/import/index.php'); ?>
 </head>
 
-<body>
+<body class="d-flex flex-column h-100">
 
     <?php include('../../widgets/navbar/index.php'); ?>
 
@@ -37,5 +37,7 @@
     </div>
 
 </body>
+
+<?php include('../../widgets/footer/index.php'); ?>
 
 </html>

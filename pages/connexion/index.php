@@ -58,7 +58,7 @@ if (isset($_POST['Mail'])) {
 
 ?>
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="h-100">
 
 <head>
     <title>Liste d'idée cadeaux - Connexion</title>
@@ -69,7 +69,7 @@ if (isset($_POST['Mail'])) {
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 
-<body>
+<body class="d-flex flex-column h-100">
 
     <?php include('../../widgets/navbar/index.php'); ?>
 
@@ -128,5 +128,7 @@ if (isset($_POST['Mail'])) {
     </div>
 
 </body>
+
+<?php include('../../widgets/footer/index.php'); ?>
 
 </html>

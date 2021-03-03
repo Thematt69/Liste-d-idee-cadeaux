@@ -29,9 +29,6 @@
 <!-- Style CSS -->
 <link href="https://family.matthieudevilliers.fr/css/style.css" rel="stylesheet">
 
-<!-- BDD -->
-<?php include('../../sql/bdd.php'); ?>
-
 <!--[if IE]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->

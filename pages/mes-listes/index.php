@@ -10,7 +10,7 @@ if (!isset($_SESSION['id_compte'])) {
 
 ?>
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="h-100">
 
 <head>
     <title>Liste d'idée cadeaux - Mes listes</title>
@@ -19,7 +19,7 @@ if (!isset($_SESSION['id_compte'])) {
     <?php include('../../widgets/import/index.php'); ?>
 </head>
 
-<body>
+<body class="d-flex flex-column h-100">
 
     <?php include('../../widgets/navbar/index.php'); ?>
 
@@ -102,5 +102,7 @@ if (!isset($_SESSION['id_compte'])) {
     </div>
 
 </body>
+
+<?php include('../../widgets/footer/index.php'); ?>
 
 </html>
