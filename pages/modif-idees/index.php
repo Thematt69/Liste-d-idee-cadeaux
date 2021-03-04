@@ -25,7 +25,7 @@ if (isset($_POST['delete'])) {
     $sql = 'SELECT lic_liste.lien_partage
             FROM lic_liste
             INNER JOIN lic_idee ON lic_idee.id_liste = lic_liste.id
-            WHERE lic_idee.id = ? AND deleted_to IS NULL';
+            WHERE lic_idee.id = ? AND lic_liste.deleted_to IS NULL AND lic_idee.deleted_to IS NULL';
 
     $response = $bdd->prepare($sql);
     $response->execute(array($_POST['delete']));
@@ -50,7 +50,7 @@ if (isset($_POST['delete'])) {
     $sql = 'SELECT lic_liste.lien_partage
             FROM lic_liste
             INNER JOIN lic_idee ON lic_idee.id_liste = lic_liste.id
-            WHERE lic_idee.nom = ? AND lic_liste.deleted_to IS NULL';
+            WHERE lic_idee.nom = ? AND lic_liste.deleted_to IS NULL AND lic_idee.deleted_to IS NULL';
 
     $response = $bdd->prepare($sql);
     $response->execute(array(htmlentities($_POST['Nom'])));
@@ -110,7 +110,7 @@ if (isset($_POST['delete'])) {
                         FROM lic_autorisation
                         INNER JOIN lic_idee ON lic_idee.id_liste = lic_autorisation.id_liste
                         INNER JOIN lic_liste ON lic_liste.id = lic_autorisation.id_liste
-                        WHERE lic_autorisation.id_compte = ? AND lic_idee.id = ? AND lic_autorisation.deleted_to IS NULL';
+                        WHERE lic_autorisation.id_compte = ? AND lic_idee.id = ? AND lic_autorisation.deleted_to IS NULL AND lic_idee.deleted_to IS NULL AND lic_liste.deleted_to IS NULL';
 
                 $response1 = $bdd->prepare($sql);
                 $response1->execute(array($_SESSION['id_compte'], $_GET['idee']));
