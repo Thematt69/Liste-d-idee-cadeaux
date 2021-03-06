@@ -49,7 +49,7 @@ if (isset($_POST['Mail'])) {
             $alert = 'Mot de passe incorrect !';
         }
     } else {
-        $alert = 'Mot de passe identique !';
+        $alert = 'Mots de passe identiques !';
     }
 }
 
@@ -107,21 +107,21 @@ if (isset($_POST['Mail'])) {
 
                             ?>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-6 col-xl-4">
                                     <div class="form-floating">
                                         <input name="Prénom" type="text" class="form-control" id="LabelPrénom" placeholder="Prénom" value="<?php echo $donnees['prenom'] ?>" required>
                                         <label for="LabelPrénom">Prénom</label>
                                     </div>
                                     <br>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 col-xl-4">
                                     <div class="form-floating">
                                         <input name="Nom" type="text" class="form-control" id="LabelNom" placeholder="Nom" value="<?php echo $donnees['nom'] ?>" required>
                                         <label for="LabelNom">Nom</label>
                                     </div>
                                     <br>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 col-xl-4">
                                     <div class="form-floating">
                                         <input name="MDP" type="password" class="form-control" id="LabelMDP" aria-describedby="DescriptionMDP" placeholder="Mot de passe" required>
                                         <label for="LabelMDP">Mot de passe actuel</label>
@@ -129,14 +129,14 @@ if (isset($_POST['Mail'])) {
                                     </div>
                                     <br>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 col-xl-4">
                                     <div class="form-floating">
                                         <input name="NewMDP" type="password" class="form-control" id="LabelNewMDP" aria-describedby="DescriptionMDP" placeholder="Confirmer mot de passe" required>
                                         <label for="LabelNewMDP">Nouveau mot de passe</label>
                                     </div>
                                     <br>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 col-xl-4">
                                     <div class="form-floating">
                                         <input name="Naissance" type="date" class="form-control" id="LabelNaissance" aria-describedby="DescriptionNaissance" placeholder="Date de naissance" value="<?php echo $donnees['date_naissance'] ?>" required>
                                         <label for="LabelNaissance">Date de naissance</label>
@@ -144,7 +144,7 @@ if (isset($_POST['Mail'])) {
                                     </div>
                                     <br>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 col-xl-4">
                                     <div class="form-floating">
                                         <input name="Mail" type="email" class="form-control" id="LabelMail" aria-describedby="DescriptionMail" placeholder="Adresse mail" value="<?php echo $donnees['mail'] ?>" required>
                                         <label for="LabelMail">Adresse mail</label>
