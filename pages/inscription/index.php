@@ -10,6 +10,8 @@ if (isset($_SESSION['id_compte'])) {
 
 $alert = false;
 
+$dateTimeNow = new DateTime();
+
 if (isset($_POST['Mail'])) {
 
     $url = 'https://www.google.com/recaptcha/api/siteverify';
@@ -127,7 +129,7 @@ if (isset($_POST['Mail'])) {
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating">
-                                        <input name="Naissance" type="date" class="form-control" id="LabelNaissance" aria-describedby="DescriptionNaissance" placeholder="Date de naissance" required>
+                                        <input name="Naissance" type="date" class="form-control" id="LabelNaissance" aria-describedby="DescriptionNaissance" placeholder="Date de naissance" max="<?php echo $dateTimeNow->format('Y-m-d') ?>" required>
                                         <label for="LabelNaissance">Date de naissance</label>
                                         <small id="DescriptionNaissance" class="form-text text-muted">Votre date de naissance est un moyen de sécuriser les listes que vous partagez.</small>
                                     </div>

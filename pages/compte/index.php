@@ -140,7 +140,7 @@ if (isset($_POST['Mail'])) {
                                 </div>
                                 <div class="col-md-6 col-xl-4">
                                     <div class="form-floating">
-                                        <input name="Naissance" type="date" class="form-control" id="LabelNaissance" aria-describedby="DescriptionNaissance" placeholder="Date de naissance" value="<?php echo $donnees['date_naissance'] ?>" min="<?php echo $dateTimeSub1Year->format('Y-m-d') ?>" max="<?php echo $dateTimeNow->format('Y-m-d') ?>" required>
+                                        <input name="Naissance" type="date" class="form-control" id="LabelNaissance" aria-describedby="DescriptionNaissance" placeholder="Date de naissance" value="<?php echo $donnees['date_naissance'] ?>" max="<?php echo $dateTimeNow->format('Y-m-d') ?>" required>
                                         <label for="LabelNaissance">Date de naissance</label>
                                         <small id="DescriptionNaissance" class="form-text text-muted">Votre date de naissance est un moyen de sécuriser les listes que vous partagez.</small>
                                     </div>
