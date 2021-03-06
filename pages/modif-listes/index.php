@@ -170,22 +170,22 @@ if (isset($_POST['delete'])) {
                                     <div class="col-md-4">
                                         <select class="form-select" name="Partage" aria-label="Paramètres de partage">
                                             <option <?php if ($donnees['partage'] == 'prive') echo ('selected') ?> value="prive">Privé</option>
-                                            <option <?php if ($donnees['partage'] == 'lien') echo ('selected') ?> value="lien">Partagée par lien</option>
-                                            <option <?php if ($donnees['partage'] == 'secure') echo ('selected') ?> value="secure">Partagée par lien (sécurisé)</option>
+                                            <option <?php if ($donnees['partage'] == 'secure') echo ('selected') ?> value="lien">Partagée</option>
+                                            <option <?php if ($donnees['partage'] == 'lien') echo ('selected') ?> value="secure">Partagée à tous</option>
                                         </select>
                                         <br>
                                     </div>
-                                    <div class="col-6 col-md-4 text-center">
+                                    <div class="col-sm-6 text-center">
                                         <button type="submit" name="save" value="<?php echo $donnees['id'] ?>" class="btn btn-primary">Enregistrer</button>
-                                        <br>
                                     </div>
                                     <?php
                                     if (isset($_GET['liste']) && $donnees != null) {
                                     ?>
+                                        <br>
+                                        <br>
                                         <form action="" method="post">
-                                            <div class="col-6 col-md-4 text-center">
+                                            <div class="col-sm-6 text-center">
                                                 <button type="submit" name="delete" value="<?php echo $donnees['id'] ?>" class="btn btn-danger">Supprimer</button>
-                                                <br>
                                             </div>
                                         </form>
                                     <?php
@@ -200,6 +200,22 @@ if (isset($_POST['delete'])) {
                 $response1->closeCursor();
                 ?>
                 <br>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h3>Type de partage</h3>
+                                <ul>
+                                    <li><strong>Privé</strong> - La liste n'est accessible que par vous.</li>
+                                    <li><strong>Partage limité</strong> - Seules les personnes que vous avez autorisez pourront avoir accès à votre liste.</li>
+                                    <li><strong>Partagée à tous</strong> - Toutes les personnes disposant du lien pourront accèder à votre liste.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <!-- TODO - Historique des modifications -->
             </div>
         </div>
     </div>
