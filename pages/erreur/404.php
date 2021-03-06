@@ -2,7 +2,7 @@
 <html lang="fr" class="h-100">
 
 <head>
-    <title>Liste d'idée cadeaux - Mon compte</title>
+    <title>Liste d'idée cadeaux - Erreur 404</title>
 
     <!-- Import -->
     <?php include('../../widgets/import/index.php'); ?>

@@ -74,7 +74,7 @@ if (isset($_POST['Mail'])) {
     <?php include('../../widgets/navbar/index.php'); ?>
 
     <div class="container">
-        <div class="row  justify-content-center">
+        <div class="row justify-content-center">
             <div class="col-sm-12 col-md-9 col-lg-6">
                 <br>
                 <?php

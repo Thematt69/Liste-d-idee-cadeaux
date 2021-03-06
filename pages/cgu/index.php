@@ -2,7 +2,7 @@
 <html lang="fr" class="h-100">
 
 <head>
-    <title>Liste d'idée cadeaux - Erreur 403</title>
+    <title>Liste d'idée cadeaux - CGU</title>
 
     <!-- Import -->
     <?php include('../../widgets/import/index.php'); ?>
@@ -16,10 +16,10 @@
         <div class="row">
             <div class="col-md-12">
                 <br>
-                <h1 class="text-center">Erreur 403</h1>
+                <h1 class="text-center">Page en cours de construction</h1>
                 <br>
                 <div class="text-center">
-                    <h4>Vous n'êtes pas autorisé à accéder à ce fichier.</h4>
+                    <h4>Cette page n'est pas encore disponible, revenez plus tard.</h4>
                     <br>
                     <a class="btn btn-outline-primary" href="https://family.matthieudevilliers.fr">
                         Revenir au site

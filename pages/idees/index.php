@@ -38,7 +38,7 @@ if (!isset($_SESSION['id_compte'])) {
     ?>
         <div class="container">
             <div class="row">
-                <div class="col-sm-12">
+                <div class="col-12">
                     <br>
                     <div class="alert alert-danger" role="alert">
                         <strong>Liste introuvable !</strong> Nous sommes désolées, mais nous n'avons pas trouvé votre liste. Merci de revenir à <a href="https://family.matthieudevilliers.fr/pages/listes/" class="alert-link">vos listes</a>.
@@ -52,7 +52,7 @@ if (!isset($_SESSION['id_compte'])) {
     ?>
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-sm-12">
+                <div class="col-12">
                     <br>
                     <h1 class="text-center">
                         <?php
@@ -86,14 +86,14 @@ if (!isset($_SESSION['id_compte'])) {
                     <div class="card text-dark bg-light">
                         <div class="card-body text-center">
                             <div class="table-responsive">
-                                <table class="table table-light text-center align-middle">
+                                <table class="table table-light text-center align-middle justify-content-">
                                     <thead>
                                         <tr>
-                                            <th class="col">Nom</th>
-                                            <th class="col lien">Lien</th>
+                                            <th class="col-md-4">Nom</th>
+                                            <th class="col-md-5">Lien</th>
                                             <!-- <th class="col image">Image</th> -->
-                                            <th class="col">Déja acheté</th>
-                                            <th class="col"></th>
+                                            <th class="col-md-2">Déja acheté</th>
+                                            <th class="col-md-1">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -110,7 +110,7 @@ if (!isset($_SESSION['id_compte'])) {
                                         ?>
                                             <tr>
                                                 <td><?php echo ($donnees['nom']) ?></td>
-                                                <td class="lien">
+                                                <td>
                                                     <?php
                                                     if ($donnees['lien'] == null) {
                                                         echo ('Aucun');
@@ -118,8 +118,9 @@ if (!isset($_SESSION['id_compte'])) {
                                                     ?>
                                                         <a href="<?php echo ($donnees['lien']) ?>">
                                                             <?php
-                                                            if ($donnees['lien'] != '') echo (substr($donnees['lien'], 0, 40));
-                                                            if (strlen($donnees['lien']) > 40) echo '...';
+                                                            echo $donnees['lien'];
+                                                            // if ($donnees['lien'] != '') echo (substr($donnees['lien'], 0, 40));
+                                                            // if (strlen($donnees['lien']) > 40) echo '...';
                                                             ?>
                                                         </a>
                                                     <?php
@@ -172,6 +173,8 @@ if (!isset($_SESSION['id_compte'])) {
                             <?php
                             }
                             ?>
+                            <br>
+                            <br>
                             <?php
                             if ($donnee['partage'] != 'prive') {
                             ?>

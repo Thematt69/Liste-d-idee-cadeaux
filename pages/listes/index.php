@@ -24,16 +24,16 @@ if (!isset($_SESSION['id_compte'])) {
     <?php include('../../widgets/navbar/index.php'); ?>
 
     <div class="container">
-        <div class="row  justify-content-center">
+        <div class="row justify-content-center">
             <div class="col-md-12">
                 <br>
                 <h1 class="text-center">Mes listes</h1>
                 <br>
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-sm-6 col-md-4 col-lg-3 col-xxl-2">
                         <div class="card text-dark bg-light" style="min-height: 6rem;">
                             <a href="https://family.matthieudevilliers.fr/pages/modif-listes/" class="stretched-link"></a>
-                            <div class="card-body d-flex align-items-center justify-content-center">
+                            <div class="card-body d-flex align-items-center justify-content-center text-center">
                                 <p class="card-text">Créer une nouvelle liste</p>
                             </div>
                         </div>
@@ -53,10 +53,10 @@ if (!isset($_SESSION['id_compte'])) {
                     while ($donnees = $response->fetch()) {
                         if ($donnees['roles'] == 'proprietaire') {
                     ?>
-                            <div class="col-md-4">
+                            <div class="col-sm-6 col-md-4 col-lg-3 col-xxl-2">
                                 <div class="card text-dark bg-light" style="min-height: 6rem;">
                                     <a href="https://family.matthieudevilliers.fr/pages/idees/?liste=<?php echo $donnees['lien_partage'] ?>" class="stretched-link"></a>
-                                    <div class="card-body d-flex align-items-center justify-content-center">
+                                    <div class="card-body d-flex align-items-center justify-content-center text-center">
                                         <p class="card-text"><?php echo $donnees['nom'] ?></p>
                                     </div>
                                 </div>
@@ -75,10 +75,10 @@ if (!isset($_SESSION['id_compte'])) {
 
                             $donnees1 = $response1->fetch();
                         ?>
-                            <div class="col-md-4">
+                            <div class="col-sm-6 col-md-4 col-lg-3 col-xxl-2">
                                 <div class="card text-dark bg-light" style="min-height: 6rem;">
                                     <a href="https://family.matthieudevilliers.fr/pages/idees/?liste=<?php echo $donnees['lien_partage'] ?>" class="stretched-link"></a>
-                                    <div class="card-body d-flex align-items-center justify-content-center">
+                                    <div class="card-body d-flex align-items-center justify-content-center text-center">
                                         <p class="card-text">
                                             <?php echo $donnees['nom'] ?>
                                             <br>
@@ -105,4 +105,4 @@ if (!isset($_SESSION['id_compte'])) {
 
 <?php include('../../widgets/footer/index.php'); ?>
 
-</html>
+</html>=
