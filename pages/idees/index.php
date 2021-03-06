@@ -173,21 +173,10 @@ if (!isset($_SESSION['id_compte'])) {
                             <?php
                             }
                             ?>
-                            <br>
-                            <br>
-                            <?php
-                            if ($donnee['partage'] != 'prive') {
-                            ?>
-                                <p>Lien de partage :
-                                    <a class="link-primary" target="_blank" href="https://family.matthieudevilliers.fr/pages/idees/?liste=<?php echo $_GET['liste']; ?>">
-                                        https://family.matthieudevilliers.fr/pages/idees/?liste=<?php echo $_GET['liste']; ?>
-                                    </a>
-                                </p>
-                            <?php
-                            }
-                            ?>
+
                         </div>
-                    </div> <br>
+                    </div>
+                    <br>
                 </div>
             </div>
         </div>

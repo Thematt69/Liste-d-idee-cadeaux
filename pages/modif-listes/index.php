@@ -10,27 +10,7 @@ if (!isset($_SESSION['id_compte'])) {
 
 if (isset($_POST['delete'])) {
 
-    // Enregistrement de la suppresion
-    $sql = 'UPDATE lic_liste
-            SET deleted_to = ?
-            WHERE id = ?';
-
-    $date = new DateTime();
-
-    $response = $bdd->prepare($sql);
-    $response->execute(array($date->format('Y-m-d H:m:i'), $_POST['delete']));
-
-    $response->closeCursor();
-
-    //Récupération de l'id le plus récent supprimée
-    $sql = 'SELECT id FROM lic_liste ORDER BY deleted_to DESC LIMIT 1';
-
-    $response = $bdd->prepare($sql);
-    $response->execute();
-
-    $donnee = $response->fetch();
-
-    // Enregistrement de la suppresion des autorisations
+    // Suppresion des autorisations
     $sql1 = 'UPDATE lic_autorisation
             SET deleted_to = ?
             WHERE id_liste = ?';
@@ -38,11 +18,20 @@ if (isset($_POST['delete'])) {
     $date = new DateTime();
 
     $response1 = $bdd->prepare($sql1);
-    $response1->execute(array($date->format('Y-m-d H:m:i'), $donnee['id']));
+    $response1->execute(array($date->format('Y-m-d H:m:i'), htmlentities($_POST['delete'])));
 
     $response1->closeCursor();
 
+    // Suppresion de la liste
+    $sql = 'UPDATE lic_liste
+            SET deleted_to = ?
+            WHERE id = ?';
+
+    $response = $bdd->prepare($sql);
+    $response->execute(array($date->format('Y-m-d H:m:i'), htmlentities($_POST['delete'])));
+
     $response->closeCursor();
+
     header('Location: https://family.matthieudevilliers.fr/pages/listes/');
 } elseif (isset($_POST['Nom']) && $_POST['save'] != "") {
 
@@ -67,7 +56,7 @@ if (isset($_POST['delete'])) {
     $rand = md5($str);
 
     $response = $bdd->prepare($sql);
-    $response->execute(array(htmlentities($_POST['Nom']), htmlentities($_POST['Partage']), $rand));
+    $response->execute(array(htmlentities($_POST['Nom']), htmlentities($_POST['Partage']), htmlentities($rand)));
 
     $response->closeCursor();
 
@@ -87,6 +76,8 @@ if (isset($_POST['delete'])) {
     $response1->execute(array($_SESSION['id_compte'], $donnee['id']));
 
     $response1->closeCursor();
+
+    // TODO - Ajouter les autres autorisations en fonction du partage
 
     $response->closeCursor();
 
@@ -146,15 +137,12 @@ if (isset($_POST['delete'])) {
                         echo ('<h1 class="text-center">Création de liste</h1>');
                     }
                 ?>
-                    <br>
-                    <!-- TODO - A enlever une fois le partage via lien effectif -->
-                    <div class="alert alert-warning alert-dismissible fade show" role="warning">
-                        <strong>
-                            Le partage d'une liste n'est pas encore disponible.
-                            Veuillez contacter le support pour pouvoir partager votre liste.
-                        </strong>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
+                    <!-- <br>
+                    <p class="text-center">Lien de partage :
+                        <a class="link-primary" target="_blank" href="https://family.matthieudevilliers.fr/pages/idees/?liste=<?php echo $_GET['liste']; ?>">
+                            https://family.matthieudevilliers.fr/pages/idees/?liste=<?php echo $_GET['liste']; ?>
+                        </a>
+                    </p> -->
                     <br>
                     <div class="card">
                         <div class="card-body">
@@ -168,7 +156,7 @@ if (isset($_POST['delete'])) {
                                         <br>
                                     </div>
                                     <div class="col-md-4">
-                                        <select class="form-select" name="Partage" aria-label="Paramètres de partage">
+                                        <select class="form-select" name="Partage" aria-label="Paramètres de partage" disabled>
                                             <option <?php if ($donnees['partage'] == 'prive') echo ('selected') ?> value="prive">Privé</option>
                                             <option <?php if ($donnees['partage'] == 'secure') echo ('selected') ?> value="lien">Partagée</option>
                                             <option <?php if ($donnees['partage'] == 'lien') echo ('selected') ?> value="secure">Partagée à tous</option>
@@ -199,6 +187,15 @@ if (isset($_POST['delete'])) {
                 }
                 $response1->closeCursor();
                 ?>
+                <br>
+                <!-- TODO - A enlever une fois le partage via lien effectif -->
+                <div class="alert alert-warning alert-dismissible fade show" role="warning">
+                    <strong>
+                        Le partage d'une liste n'est pas encore disponible.
+                        Veuillez contacter le support pour pouvoir partager votre liste.
+                    </strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
                 <br>
                 <div class="card">
                     <div class="card-body">

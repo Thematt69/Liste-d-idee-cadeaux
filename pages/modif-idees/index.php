@@ -168,25 +168,25 @@ if (isset($_POST['delete'])) {
                         <div class="card-body">
                             <form action="" method="post" enctype="multipart/form-data">
                                 <div class="row">
-                                    <div class="col-md-8">
+                                    <div class="col-md-7">
                                         <div class="form-floating">
                                             <input name="Nom" type="text" value="<?php echo ($donnees['nom']) ?>" class="form-control" id="LabelNom" placeholder="Nom de l'idée" required>
                                             <label for="LabelNom">Nom de l'idée</label>
                                         </div>
                                         <br>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-5">
                                         <div class="form-floating">
                                             <input name="Lien" type="url" value="<?php echo ($donnees['lien']) ?>" class="form-control" id="LabelLien" placeholder="Lien de l'idée">
                                             <label for="LabelLien">Lien de l'idée</label>
                                         </div>
                                         <br>
                                     </div>
-                                    <div class="col-md-8">
+                                    <div class="col-md-7">
                                         <!-- <input name="Image" class="form-control" type="file" accept="image/*"> -->
                                         <!-- <br> -->
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-5">
                                         <div class="form-check">
                                             <input name="Achat" value="1" class="form-check-input" type="checkbox" id="LabelAchat" <?php if ($donnees['is_buy']) echo 'checked' ?>>
                                             <label class="form-check-label" for="LabelAchat">
@@ -195,17 +195,24 @@ if (isset($_POST['delete'])) {
                                         </div>
                                         <br>
                                     </div>
-                                    <div class="col-6 col-md-4 text-center">
-                                        <button type="submit" name="save" value="<?php echo $donnees['id'] ?>" class="btn btn-primary">Enregistrer</button>
+                                    <!-- <div class="col-md-12">
+                                        <div class="form-floating">
+                                            <input name="Commentaire" type="text" value="<?php /* echo ($donnees['commentaire']) */ ?>" class="form-control" id="LabelCommentaire" placeholder="Commentaire">
+                                            <label for="LabelCommentaire">Commentaire</label>
+                                        </div>
                                         <br>
+                                    </div> -->
+                                    <div class="col-sm-6 text-center">
+                                        <button type="submit" name="save" value="<?php echo $donnees['id'] ?>" class="btn btn-primary">Enregistrer</button>
                                     </div>
                                     <?php
                                     if (isset($_GET['idee']) && $donnees != null && $donnee['droit'] == "proprietaire") {
                                     ?>
+                                        <br>
+                                        <br>
                                         <form action="" method="post">
-                                            <div class="col-6 col-md-4 text-center">
+                                            <div class="col-sm-6 text-center">
                                                 <button type="submit" name="delete" value="<?php echo $donnees['id'] ?>" class="btn btn-danger">Supprimer</button>
-                                                <br>
                                             </div>
                                         </form>
                                     <?php
@@ -221,6 +228,7 @@ if (isset($_POST['delete'])) {
                 $response1->closeCursor();
                 ?>
                 <br>
+                <!-- TODO - Historique de modification -->
             </div>
         </div>
     </div>
