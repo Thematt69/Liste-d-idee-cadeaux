@@ -57,7 +57,7 @@ if (isset($_POST['Mail'])) {
 
             header('Location: https://family.matthieudevilliers.fr/pages/listes/');
         } else {
-            $alert = "L'adresse mail est déja utilisé !";
+            $alert = "L'adresse mail est déjà utilisée !";
         }
 
         $response->closeCursor();
@@ -84,7 +84,7 @@ if (isset($_POST['Mail'])) {
     <?php include('../../widgets/navbar/index.php'); ?>
 
     <div class="container">
-        <div class="row  justify-content-center">
+        <div class="row justify-content-center">
             <div class="col-md-12 col-lg-8">
                 <br>
                 <?php
