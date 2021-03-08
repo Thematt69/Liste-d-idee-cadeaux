@@ -30,7 +30,7 @@ if (isset($_POST['Mail'])) {
 
     if ($response->success) {
 
-        $sql = 'SELECT id,motdepasse
+        $sql = 'SELECT id
             FROM lic_compte
             WHERE mail = ? AND deleted_to IS NULL';
 
@@ -39,15 +39,15 @@ if (isset($_POST['Mail'])) {
 
         $donnee = $response->fetch();
 
-        if (password_verify($_POST['MDP'], $donnee['motdepasse'])) {
-            // Le mot de passe correspond
-            $_SESSION['id_compte'] = $donnee['id'];
-            header('Location: https://family.matthieudevilliers.fr/pages/listes/');
-        } elseif (isset($donnee['motdepasse'])) {
-            // Le mot de passe ne correspond pas
-            $alert = 'Mot de passe incorrect !';
+        if ($donnee != null) {
+            // Un compte existe
+
+            // TODO - remplacer le mot de passe par des chiffres random
+
+            // TODO - Envoyer un mail avec $_GET['reset'] = chiffres random
         } else {
-            header('Location: https://family.matthieudevilliers.fr/pages/inscription/');
+            // Aucun compte existant
+            $alert = "Cette adresse mail n'est pas inscrite.";
         }
 
         $response->closeCursor();
@@ -61,7 +61,7 @@ if (isset($_POST['Mail'])) {
 <html lang="fr" class="h-100">
 
 <head>
-    <title>Liste d'idée cadeaux - Connexion</title>
+    <title>Liste d'idée cadeaux - Réinitialiser votre mot de passe</title>
 
     <!-- Import -->
     <?php include('../../widgets/import/index.php'); ?>
@@ -87,9 +87,13 @@ if (isset($_POST['Mail'])) {
                 <?php
                 }
                 ?>
-                <h1 class="text-center">Connexion</h1>
+                <h1 class="text-center">Réinitialiser votre mot de passe</h1>
                 <br>
-                <div class="card">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Cette page n'est pas encore disponible</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <!-- <div class="card">
                     <div class="card-body">
                         <form action="" method="post">
                             <div class="row">
@@ -99,30 +103,18 @@ if (isset($_POST['Mail'])) {
                                         <label for="LabelMail">Adresse mail</label>
                                     </div>
                                     <br>
-                                    <div class="form-floating">
-                                        <input name="MDP" type="password" class="form-control" id="LabelMDP" aria-describedby="DescriptionMDP" placeholder="Mot de passe" required>
-                                        <label for="LabelMDP">Mot de passe</label>
-                                        <small id="DescriptionMDP" class="form-text text-muted"><a href="https://family.matthieudevilliers.fr/pages/reset-password/">Mot de passe oublié</a></small>
-                                    </div>
-                                    <br>
                                     <div class=" d-flex justify-content-center">
                                         <div class="g-recaptcha" data-sitekey="6Lc-ZgkaAAAAAEoCEsUwvVPygJPyhxGDtPIvkppO"></div>
                                     </div>
                                     <br>
                                     <div class="text-center">
-                                        <button type="submit" class="btn btn-primary">Se connecter</button>
+                                        <button type="submit" class="btn btn-primary">Réinitialiser</button>
                                     </div>
                                 </div>
                             </div>
                         </form>
                     </div>
-                </div>
-                <br>
-                <div class="text-center">
-                    <a href="https://family.matthieudevilliers.fr/pages/inscription/">
-                        Pas de compte ? Je m'inscris
-                    </a>
-                </div>
+                </div> -->
                 <br>
             </div>
         </div>

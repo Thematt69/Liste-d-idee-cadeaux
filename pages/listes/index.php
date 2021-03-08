@@ -105,4 +105,4 @@ if (!isset($_SESSION['id_compte'])) {
 
 <?php include('../../widgets/footer/index.php'); ?>
 
-</html>=
+</html>
