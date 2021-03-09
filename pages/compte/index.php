@@ -163,6 +163,46 @@ if (isset($_POST['Mail'])) {
                     </div>
                 </div>
                 <br>
+                <h3 class="text-center">Historique de connexion</h3>
+                <br>
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div class="table-responsive">
+                            <table class="table text-center align-middle justify-content-">
+                                <thead>
+                                    <tr>
+                                        <th class="col">Date</th>
+                                        <th class="col">Adresse IP</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+
+                                    $sql1 = 'SELECT  connected_to,adresse_ip_v4
+                                            FROM lic_connexion
+                                            WHERE id_compte = ?';
+
+                                    $response1 = $bdd->prepare($sql1);
+                                    $response1->execute(array($_SESSION['id_compte']));
+
+                                    while ($donnees = $response1->fetch()) {
+                                        $datatime = new DateTime($donnees['connected_to']);
+                                    ?>
+                                        <tr>
+                                            <td><?php echo ($datatime->format('d/m/Y H:m')) ?></td>
+                                            <td><?php echo ($donnees['adresse_ip_v4']) ?></td>
+                                        </tr>
+                                    <?php
+                                    }
+
+                                    $response1->closeCursor();
+                                    ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <br>
             </div>
         </div>
     </div>
