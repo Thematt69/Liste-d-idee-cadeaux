@@ -23,14 +23,17 @@
                         <a class="nav-link" href="https://family.matthieudevilliers.fr/scripts/deconnexion/">Déconnexion</a>
                     </li>
                 <?php
-                } else
+                } else {
                 ?>
-                <li class="nav-item">
-                    <a class="nav-link" href="https://family.matthieudevilliers.fr/pages/inscription/">Inscription</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="https://family.matthieudevilliers.fr/pages/connexion/">Connexion</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://family.matthieudevilliers.fr/pages/inscription/">Inscription</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://family.matthieudevilliers.fr/pages/connexion/">Connexion</a>
+                    </li>
+                <?php
+                }
+                ?>
                 <!-- <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Dropdown
