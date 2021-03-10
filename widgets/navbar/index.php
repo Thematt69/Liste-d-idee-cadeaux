@@ -32,6 +32,7 @@
 
                         $req6->closeCursor();
                     }
+                    $_POST['notif'] = null;
                 }
 
                 if (isset($_SESSION['id_compte'])) {
