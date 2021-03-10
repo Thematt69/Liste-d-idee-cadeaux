@@ -194,9 +194,7 @@ if (isset($_POST['delete'])) {
                         Le partage d'une liste n'est pas encore disponible.
                         Veuillez contacter le support pour pouvoir partager votre liste.
                     </strong>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-                <br>
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
