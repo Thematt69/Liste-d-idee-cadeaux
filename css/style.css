@@ -1,3 +1,12 @@
+/* desktop */
+
+@media only screen and (min-width:768px) {
+    .navbar-expand-md .navbar-nav .dropdown-menu {
+        min-width: 22rem;
+    }
+}
+
+
 /* tablettes et mobiles */
 
 @media only screen and (max-width:989px) {
