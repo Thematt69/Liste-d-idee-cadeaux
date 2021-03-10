@@ -10,8 +10,6 @@ if (isset($_SESSION['id_compte'])) {
 
 $alert = false;
 
-$dateTimeNow = new DateTime();
-
 if (isset($_POST['Mail'])) {
 
     $url = 'https://www.google.com/recaptcha/api/siteverify';
@@ -43,19 +41,29 @@ if (isset($_POST['Mail'])) {
 
         if (!isset($donnee['mail'])) {
 
-            $_SESSION['prenom'] = htmlentities($_POST['Prénom']);
-            $_SESSION['nom'] = htmlentities($_POST['Nom']);
-            $_SESSION['motdepasse'] = password_hash(htmlentities($_POST['MDP']), PASSWORD_DEFAULT);
-            $date = new DateTime(htmlentities($_POST['Naissance']));
-            $_SESSION['date_naissance'] = $date->format('Y-m-d');
-            $_SESSION['mail'] = htmlentities($_POST['Mail']);
+            $prenom = htmlentities($_POST['Prénom']);
+            $nom = htmlentities($_POST['Nom']);
+            $motdepasse = password_hash(htmlentities($_POST['MDP']), PASSWORD_DEFAULT);
+            $mail = htmlentities($_POST['Mail']);
 
-            $sql1 = 'INSERT INTO lic_compte (prenom,nom,motdepasse,date_naissance,mail)
-                VALUES (?,?,?,?,?)';
+            $sql1 = 'INSERT INTO lic_compte (prenom,nom,motdepasse,mail)
+                VALUES (?,?,?,?)';
 
             $response1 = $bdd->prepare($sql1);
-            $response1->execute(array($_SESSION['prenom'], $_SESSION['nom'], $_SESSION['motdepasse'], $_SESSION['date_naissance'], $_SESSION['mail']));
+            $response1->execute(array($prenom, $nom, $motdepasse, $mail));
             $response1->closeCursor();
+
+            $sql2 = 'SELECT id
+                    FROM lic_compte
+                    WHERE mail = ? AND deleted_to IS NULL';
+
+            $response2 = $bdd->prepare($sql2);
+            $response2->execute(array($mail));
+            $donnee2 = $response2->fetch();
+
+            $_SESSION['id_compte'] = $donnee2['id'];
+
+            $response2->closeCursor();
 
             header('Location: https://family.matthieudevilliers.fr/pages/listes/');
         } else {
@@ -129,17 +137,15 @@ if (isset($_POST['Mail'])) {
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating">
-                                        <input name="Naissance" type="date" class="form-control" id="LabelNaissance" aria-describedby="DescriptionNaissance" placeholder="Date de naissance" max="<?php echo $dateTimeNow->format('Y-m-d') ?>" required>
-                                        <label for="LabelNaissance">Date de naissance</label>
-                                        <small id="DescriptionNaissance" class="form-text text-muted">Votre date de naissance est un moyen de sécuriser les listes que vous partagez.</small>
+                                        <input name="Mail" type="email" class="form-control" id="LabelMail" aria-describedby="DescriptionMail" placeholder="Adresse mail" required>
+                                        <label for="LabelMail">Adresse mail</label>
+                                        <small id="DescriptionMail" class="form-text text-muted">Votre adresse mail nous permet de vous transmet toutes les informations vous concernant.</small>
                                     </div>
                                     <br>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-floating">
-                                        <input name="Mail" type="email" class="form-control" id="LabelMail" aria-describedby="DescriptionMail" placeholder="Adresse mail" required>
-                                        <label for="LabelMail">Adresse mail</label>
-                                        <small id="DescriptionMail" class="form-text text-muted">Votre adresse mail nous permet de vous transmet toutes les informations vous concernant.</small>
+                                    <div class="d-flex justify-content-center">
+                                        <div class="g-recaptcha" data-sitekey="6Lc-ZgkaAAAAAEoCEsUwvVPygJPyhxGDtPIvkppO"></div>
                                     </div>
                                     <br>
                                 </div>
@@ -149,10 +155,6 @@ if (isset($_POST['Mail'])) {
                                         <label class="form-check-label" for="LabelCGU">
                                             J'accepte les <a href="https://family.matthieudevilliers.fr/pages/cgu/">Conditions Général d'Utilisation</a>
                                         </label>
-                                    </div>
-                                    <br>
-                                    <div class="d-flex justify-content-center">
-                                        <div class="g-recaptcha" data-sitekey="6Lc-ZgkaAAAAAEoCEsUwvVPygJPyhxGDtPIvkppO"></div>
                                     </div>
                                     <br>
                                 </div>

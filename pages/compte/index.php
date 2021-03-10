@@ -11,11 +11,10 @@ if (!isset($_SESSION['id_compte'])) {
 $alert = false;
 $info = false;
 
-$dateTimeNow = new DateTime();
-
 if (isset($_POST['Mail'])) {
-
-    if (($_POST['NewMDP'] != $_POST['MDP'])) {
+    if ($_POST['NewMDP'] == $_POST['MDP']) {
+        $alert = 'Mots de passe identiques !';
+    } else if ($_POST['NewMDP'] != "") {
 
         $sql = 'SELECT motdepasse
                 FROM lic_compte
@@ -29,20 +28,17 @@ if (isset($_POST['Mail'])) {
         $response->closeCursor();
 
         if (password_verify($_POST['MDP'], $donnee['motdepasse'])) {
-            $mail = $mail;
             $prenom = htmlentities($_POST['Prénom']);
             $nom = htmlentities($_POST['Nom']);
             $motDePasse = password_hash(htmlentities($_POST['NewMDP']), PASSWORD_DEFAULT);
-            $date = new DateTime(htmlentities($_POST['Naissance']));
-            $dateNaissance = $date->format('Y-m-d');
             $mail = htmlentities($_POST['Mail']);
 
             $sql = 'UPDATE lic_compte
-            SET prenom = ?, nom = ?, motdepasse = ?, date_naissance = ?, mail = ?
+            SET prenom = ?, nom = ?, motdepasse = ?, mail = ?
             WHERE mail = ?';
 
             $response = $bdd->prepare($sql);
-            $response->execute(array($prenom, $nom, $motDePasse, $dateNaissance, $mail, $mail));
+            $response->execute(array($prenom, $nom, $motDePasse, $mail, $mail));
 
             $info = 'Vos informations ont bien été modifiées.';
 
@@ -51,7 +47,35 @@ if (isset($_POST['Mail'])) {
             $alert = 'Mot de passe incorrect !';
         }
     } else {
-        $alert = 'Mots de passe identiques !';
+        $sql = 'SELECT motdepasse
+                FROM lic_compte
+                WHERE id = ? AND deleted_to IS NULL';
+
+        $response = $bdd->prepare($sql);
+        $response->execute(array($_SESSION['id_compte']));
+
+        $donnee = $response->fetch();
+
+        $response->closeCursor();
+
+        if (password_verify($_POST['MDP'], $donnee['motdepasse'])) {
+            $prenom = htmlentities($_POST['Prénom']);
+            $nom = htmlentities($_POST['Nom']);
+            $mail = htmlentities($_POST['Mail']);
+
+            $sql = 'UPDATE lic_compte
+            SET prenom = ?, nom = ?, mail = ?
+            WHERE mail = ?';
+
+            $response = $bdd->prepare($sql);
+            $response->execute(array($prenom, $nom, $mail, $mail));
+
+            $info = 'Vos informations ont bien été modifiées.';
+
+            $response->closeCursor();
+        } else {
+            $alert = 'Mot de passe incorrect !';
+        }
     }
 }
 
@@ -90,24 +114,22 @@ if (isset($_POST['Mail'])) {
                     </div>
                 <?php
                 }
+
+                $sql = 'SELECT prenom,nom,date_naissance,mail
+                                    FROM lic_compte
+                                    WHERE id = ? AND deleted_to IS NULL';
+
+                $response = $bdd->prepare($sql);
+                $response->execute(array($_SESSION['id_compte']));
+
+                $donnees = $response->fetch();
+
                 ?>
-                <h1 class="text-center">Matthieu DEVILLIERS</h1>
+                <h1 class="text-center"><?php echo ($donnees['prenom'] . " " . strtoupper($donnees['nom'])); ?></h1>
                 <br>
                 <div class="card">
                     <div class="card-body">
                         <form action="" method="post">
-                            <?php
-
-                            $sql = 'SELECT prenom,nom,date_naissance,mail
-                                    FROM lic_compte
-                                    WHERE id = ? AND deleted_to IS NULL';
-
-                            $response = $bdd->prepare($sql);
-                            $response->execute(array($_SESSION['id_compte']));
-
-                            $donnees = $response->fetch();
-
-                            ?>
                             <div class="row">
                                 <div class="col-md-6 col-xl-4">
                                     <div class="form-floating">
@@ -133,20 +155,12 @@ if (isset($_POST['Mail'])) {
                                 </div>
                                 <div class="col-md-6 col-xl-4">
                                     <div class="form-floating">
-                                        <input name="NewMDP" type="password" class="form-control" id="LabelNewMDP" aria-describedby="DescriptionMDP" placeholder="Confirmer mot de passe" required>
+                                        <input name="NewMDP" type="password" class="form-control" id="LabelNewMDP" aria-describedby="DescriptionMDP" placeholder="Nouveau mot de passe">
                                         <label for="LabelNewMDP">Nouveau mot de passe</label>
                                     </div>
                                     <br>
                                 </div>
-                                <div class="col-md-6 col-xl-4">
-                                    <div class="form-floating">
-                                        <input name="Naissance" type="date" class="form-control" id="LabelNaissance" aria-describedby="DescriptionNaissance" placeholder="Date de naissance" value="<?php echo $donnees['date_naissance'] ?>" max="<?php echo $dateTimeNow->format('Y-m-d') ?>" required>
-                                        <label for="LabelNaissance">Date de naissance</label>
-                                        <small id="DescriptionNaissance" class="form-text text-muted">Votre date de naissance est un moyen de sécuriser les listes que vous partagez.</small>
-                                    </div>
-                                    <br>
-                                </div>
-                                <div class="col-md-6 col-xl-4">
+                                <div class="col-md-12 col-xl-8">
                                     <div class="form-floating">
                                         <input name="Mail" type="email" class="form-control" id="LabelMail" aria-describedby="DescriptionMail" placeholder="Adresse mail" value="<?php echo $donnees['mail'] ?>" required>
                                         <label for="LabelMail">Adresse mail</label>
@@ -155,7 +169,7 @@ if (isset($_POST['Mail'])) {
                                     <br>
                                 </div>
                                 <div class="col-md-12 text-center">
-                                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                                    <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
                                 </div>
                             </div>
                             <?php $response->closeCursor(); ?>
