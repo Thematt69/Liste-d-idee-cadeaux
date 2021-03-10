@@ -189,7 +189,7 @@ if (isset($_POST['Mail'])) {
                                         $datatime = new DateTime($donnees['connected_to']);
                                     ?>
                                         <tr>
-                                            <td><?php echo ($datatime->format('d/m/Y H:m')) ?></td>
+                                            <td><?php echo ($datatime->format('d/m/Y H:i:s')) ?></td>
                                             <td><?php echo ($donnees['adresse_ip_v4']) ?></td>
                                         </tr>
                                     <?php
