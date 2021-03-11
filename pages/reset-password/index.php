@@ -108,6 +108,8 @@ if ($_POST['reset']) {
     } else {
         $alert = 'CAPTCHA invalide ou manquant !';
     }
+} else {
+    $alert = 'La réinitialisation d\'un mot de passe est définitif, vous ne pourrez plus revenir en arrière.';
 }
 
 ?>
@@ -173,7 +175,7 @@ if ($_POST['reset']) {
                                         </div>
                                         <br>
                                         <div class="text-center">
-                                            <button type="submit" name="reset" value="<?php echo $_GET['reset'] ?>" class="btn btn-primary">Réinitialiser</button>
+                                            <button type="submit" name="reset" value="<?php echo $_GET['reset'] ?>" class="btn btn-primary">Réinitialiser le mot de passe</button>
                                         </div>
                                     </div>
                                 </div>
@@ -198,7 +200,7 @@ if ($_POST['reset']) {
                                         </div>
                                         <br>
                                         <div class="text-center">
-                                            <button type="submit" class="btn btn-primary">Réinitialiser</button>
+                                            <button type="submit" class="btn btn-primary">Demander la réinitialisation</button>
                                         </div>
                                     </div>
                                 </div>
