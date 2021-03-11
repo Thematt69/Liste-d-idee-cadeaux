@@ -27,7 +27,7 @@ if ($_POST['reset']) {
             VALUES ((SELECT id FROM lic_compte WHERE mail = ?),?,?)';
 
     $msg =
-        "Votre mot de passe vient d'être modifié, si vous n'êtes pas à l'origine. Changez-le directement dans l'onglet \"Mon compte\" ou en contactant le support.";
+        "Votre mot de passe vient d'être modifié, si vous n'êtes pas à l'origine de ce changement, nous vous recommandons de le modifier directement dans l'onglet \"Mon compte\" ou en contactant le support.";
 
     $response3 = $bdd->prepare($sql3);
     $response3->execute(array(htmlentities($_POST['Mail']), 'Mot de passe modifié', $msg));

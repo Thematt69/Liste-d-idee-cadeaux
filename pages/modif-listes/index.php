@@ -188,7 +188,7 @@ if (isset($_POST['delete'])) {
                 $response1->closeCursor();
                 ?>
                 <br>
-                <!-- TODO - A enlever une fois le partage via lien effectif -->
+                <!-- FIXME - A enlever une fois le partage via lien effectif -->
                 <div class="alert alert-warning alert-dismissible fade show" role="warning">
                     <strong>
                         Le partage d'une liste n'est pas encore disponible.

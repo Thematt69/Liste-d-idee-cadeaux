@@ -76,7 +76,6 @@
                                 $req3 = $bdd->prepare($sqlreq3);
                                 $req3->execute(array($_SESSION['id_compte']));
 
-                                // TODO - Afficher les alertes non-lus
                                 while ($donneesreq3 = $req3->fetch()) {
                                     $datetime = new DateTime($donneesreq3["created_to"]);
                                 ?>
