@@ -14,7 +14,7 @@ $info = false;
 if (isset($_POST['Mail'])) {
     if ($_POST['NewMDP'] == $_POST['MDP']) {
         $alert = 'Mots de passe identiques !';
-    } else if ($_POST['NewMDP'] != "") {
+    } elseif ($_POST['NewMDP'] != "") {
 
         $sql = 'SELECT motdepasse
                 FROM lic_compte
@@ -106,7 +106,7 @@ if (isset($_POST['Mail'])) {
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 <?php
-                } else if ($info) {
+                } elseif ($info) {
                 ?>
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         <?php echo $info; ?>
@@ -194,7 +194,9 @@ if (isset($_POST['Mail'])) {
 
                                     $sql1 = 'SELECT  connected_to,adresse_ip_v4
                                             FROM lic_connexion
-                                            WHERE id_compte = ?';
+                                            WHERE id_compte = ?
+                                            ORDER BY connected_to DESC
+                                            LIMIT 20';
 
                                     $response1 = $bdd->prepare($sql1);
                                     $response1->execute(array($_SESSION['id_compte']));

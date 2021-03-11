@@ -15,8 +15,10 @@ function getIp()
         return $_SERVER['HTTP_CLIENT_IP'];
     } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
         return $_SERVER['HTTP_X_FORWARDED_FOR'];
-    } else {
+    } elseif (!empty($_SERVER['REMOTE_ADDR'])) {
         return $_SERVER['REMOTE_ADDR'];
+    } else {
+        return "Introuvable";
     }
 }
 
@@ -72,7 +74,7 @@ if (isset($_POST['Mail'])) {
 
         $response->closeCursor();
     } else {
-        $alert = 'CAPTCHA invalide !';
+        $alert = 'CAPTCHA invalide ou manquant !';
     }
 }
 

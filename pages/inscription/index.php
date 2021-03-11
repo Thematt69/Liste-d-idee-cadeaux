@@ -72,7 +72,7 @@ if (isset($_POST['Mail'])) {
 
         $response->closeCursor();
     } else {
-        $alert = 'CAPTCHA invalide !';
+        $alert = 'CAPTCHA invalide ou manquant !';
     }
 }
 
