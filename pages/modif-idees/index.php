@@ -39,11 +39,11 @@ if (isset($_POST['delete'])) {
 
     // Modification de l'idée
     $sql = 'UPDATE lic_idee
-            SET nom = ?, lien = ?, image = ?, is_buy = ?
+            SET nom = ?, commentaire = ?, lien = ?, image = ?, is_buy = ?
             WHERE id = ?;';
 
     $response = $bdd->prepare($sql);
-    $response->execute(array(htmlentities($_POST['Nom']), htmlentities($_POST['Lien']), '', htmlentities($_POST['Achat']) ?? 0, htmlentities($_POST['save'])));
+    $response->execute(array(htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($_POST['Lien']), '', htmlentities($_POST['Achat']) ?? 0, htmlentities($_POST['save'])));
 
     $response->closeCursor();
 
@@ -63,8 +63,8 @@ if (isset($_POST['delete'])) {
 } elseif (isset($_POST['Nom'])) {
 
     // Création de l'idée
-    $sql = 'INSERT INTO lic_idee (id_liste, nom, lien, image, is_buy)
-            VALUES (?,?,?,?,?)';
+    $sql = 'INSERT INTO lic_idee (id_liste, nom, commentaire, lien, image, is_buy)
+            VALUES (?,?,?,?,?,?)';
 
     $sql1 = 'SELECT id
             FROM lic_liste
@@ -76,7 +76,7 @@ if (isset($_POST['delete'])) {
     $donnee1 = $response1->fetch();
 
     $response = $bdd->prepare($sql);
-    $response->execute(array($donnee1['id'], htmlentities($_POST['Nom']), htmlentities($_POST['Lien']), '', htmlentities($_POST['Achat'])));
+    $response->execute(array($donnee1['id'], htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($_POST['Lien']), '', htmlentities($_POST['Achat'])));
 
     $response1->closeCursor();
 
@@ -148,7 +148,7 @@ if (isset($_POST['delete'])) {
                 <?php
                 } else {
 
-                    $sql = 'SELECT id,nom,lien,is_buy
+                    $sql = 'SELECT id,nom,commentaire,lien,is_buy
                         FROM lic_idee
                         WHERE id = ? AND deleted_to IS NULL';
 
@@ -183,9 +183,13 @@ if (isset($_POST['delete'])) {
                                         <br>
                                     </div>
                                     <div class="col-md-7">
-                                        <!-- <input name="Image" class="form-control" type="file" accept="image/*"> -->
-                                        <!-- <br> -->
+                                        <div class="form-floating">
+                                            <input name="Commentaire" type="text" value="<?php echo ($donnees['commentaire']) ?>" class="form-control" id="LabelCommentaire" placeholder="Commentaire">
+                                            <label for="LabelCommentaire">Commentaire</label>
+                                        </div>
+                                        <br>
                                     </div>
+                                    <!-- <input name="Image" class="form-control" type="file" accept="image/*"> -->
                                     <div class="col-md-5">
                                         <div class="form-check">
                                             <input name="Achat" value="1" class="form-check-input" type="checkbox" id="LabelAchat" <?php if ($donnees['is_buy']) echo 'checked' ?>>
@@ -195,13 +199,6 @@ if (isset($_POST['delete'])) {
                                         </div>
                                         <br>
                                     </div>
-                                    <!-- <div class="col-md-12">
-                                        <div class="form-floating">
-                                            <input name="Commentaire" type="text" value="<?php /* echo ($donnees['commentaire']) */ ?>" class="form-control" id="LabelCommentaire" placeholder="Commentaire">
-                                            <label for="LabelCommentaire">Commentaire</label>
-                                        </div>
-                                        <br>
-                                    </div> -->
                                     <div class="col-sm-6 text-center">
                                         <button type="submit" name="save" value="<?php echo $donnees['id'] ?>" class="btn btn-primary">Enregistrer</button>
                                     </div>

@@ -57,11 +57,11 @@ if (!isset($_SESSION['id_compte'])) {
                     <h1 class="text-center">
                         <?php
                         switch ($donnee['partage']) {
-                            case 'lien':
+                            case 'public':
                                 echo ('<i class="fas fa-users fa-2x" style="font-size: 1.5rem;"></i>');
                                 break;
 
-                            case 'secure':
+                            case 'limite':
                                 echo ('<i class="fas fa-user-lock fa-2x" style="font-size: 1.5rem;"></i>');
                                 break;
 
@@ -89,17 +89,18 @@ if (!isset($_SESSION['id_compte'])) {
                                 <table class="table table-light text-center align-middle justify-content-">
                                     <thead>
                                         <tr>
-                                            <th class="col-md-4">Nom</th>
-                                            <th class="col-md-5">Lien</th>
+                                            <th>Nom</th>
+                                            <th style="max-width: 30rem;">Commentaire</th>
+                                            <th style="max-width: 40rem;">Lien</th>
                                             <!-- <th class="col image">Image</th> -->
-                                            <th class="col-md-2">Déja acheté</th>
-                                            <th class="col-md-1">Actions</th>
+                                            <th>Déja acheté</th>
+                                            <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php
 
-                                        $sql1 = 'SELECT  id, nom, lien, image, is_buy
+                                        $sql1 = 'SELECT  id, nom, commentaire, lien, image, is_buy
                                             FROM lic_idee
                                             WHERE id_liste = ? AND deleted_to IS NULL';
 
@@ -109,23 +110,31 @@ if (!isset($_SESSION['id_compte'])) {
                                         while ($donnees = $response1->fetch()) {
                                         ?>
                                             <tr>
-                                                <td><?php echo ($donnees['nom']) ?></td>
                                                 <td>
                                                     <?php
-                                                    if ($donnees['lien'] == null) {
-                                                        echo ('Aucun');
-                                                    } else {
+                                                    if ($donnees['nom'] == null) echo ('Aucun nom');
+                                                    else echo ($donnees['nom']);
                                                     ?>
-                                                        <a href="<?php echo ($donnees['lien']) ?>">
-                                                            <?php
-                                                            echo $donnees['lien'];
-                                                            // if ($donnees['lien'] != '') echo (substr($donnees['lien'], 0, 40));
-                                                            // if (strlen($donnees['lien']) > 40) echo '...';
-                                                            ?>
-                                                        </a>
+                                                </td>
+                                                <td>
                                                     <?php
-                                                    }
+                                                    if ($donnees['commentaire'] == null) echo ('Aucun commentaire');
+                                                    else echo ($donnees['commentaire']);
                                                     ?>
+                                                </td>
+                                                <td style="max-width: 40rem;">
+                                                    <?php
+                                                    if ($donnees['lien'] == null)
+                                                        echo ('Aucun');
+                                                    else
+                                                    ?>
+                                                    <a href="<?php echo ($donnees['lien']) ?>">
+                                                        <?php
+                                                        // echo $donnees['lien'];
+                                                        if ($donnees['lien'] != '') echo (substr($donnees['lien'], 0, 120));
+                                                        if (strlen($donnees['lien']) > 120) echo '...';
+                                                        ?>
+                                                    </a>
                                                 </td>
                                                 <!-- <td class="image">
                                                     <?php
@@ -167,6 +176,7 @@ if (!isset($_SESSION['id_compte'])) {
                             <?php
                             if ($donnee['droit'] == "proprietaire") {
                             ?>
+                                <br>
                                 <a class="btn btn-primary" href="https://family.matthieudevilliers.fr/pages/modif-idees/?liste=<?php echo $_GET['liste']; ?>">
                                     Ajouter une idée
                                 </a>

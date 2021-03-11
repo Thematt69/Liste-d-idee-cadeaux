@@ -158,8 +158,8 @@ if (isset($_POST['delete'])) {
                                     <div class="col-md-4">
                                         <select class="form-select" name="Partage" aria-label="Paramètres de partage" disabled>
                                             <option <?php if ($donnees['partage'] == 'prive') echo ('selected') ?> value="prive">Privé</option>
-                                            <option <?php if ($donnees['partage'] == 'secure') echo ('selected') ?> value="lien">Partagée</option>
-                                            <option <?php if ($donnees['partage'] == 'lien') echo ('selected') ?> value="secure">Partagée à tous</option>
+                                            <option <?php if ($donnees['partage'] == 'limite') echo ('selected') ?> value="lien">Limité</option>
+                                            <option <?php if ($donnees['partage'] == 'public') echo ('selected') ?> value="secure">Public</option>
                                         </select>
                                         <br>
                                     </div>
@@ -202,8 +202,8 @@ if (isset($_POST['delete'])) {
                                 <h3>Type de partage</h3>
                                 <ul>
                                     <li><strong>Privé</strong> - La liste n'est accessible que par vous.</li>
-                                    <li><strong>Partage limité</strong> - Seules les personnes que vous avez autorisez pourront avoir accès à votre liste.</li>
-                                    <li><strong>Partagée à tous</strong> - Toutes les personnes disposant du lien pourront accèder à votre liste.</li>
+                                    <li><strong>Limité</strong> - Seules les personnes que vous avez autorisé pourront avoir accès à votre liste.</li>
+                                    <li><strong>Public</strong> - Toutes les personnes disposants du lien pourront accèder à votre liste.</li>
                                 </ul>
                             </div>
                         </div>
