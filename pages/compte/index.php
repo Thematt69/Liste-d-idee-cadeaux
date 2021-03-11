@@ -178,7 +178,9 @@ if (isset($_POST['Mail'])) {
                 </div>
                 <br>
                 <h3 class="text-center">Historique de connexion</h3>
-                <br>
+                <p class="text-center">
+                    <small>10 dernières connexions uniquement</small>
+                </p>
                 <div class="card">
                     <div class="card-body text-center">
                         <div class="table-responsive">
@@ -196,7 +198,7 @@ if (isset($_POST['Mail'])) {
                                             FROM lic_connexion
                                             WHERE id_compte = ?
                                             ORDER BY connected_to DESC
-                                            LIMIT 20';
+                                            LIMIT 10';
 
                                     $response1 = $bdd->prepare($sql1);
                                     $response1->execute(array($_SESSION['id_compte']));
