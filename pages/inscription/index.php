@@ -8,6 +8,19 @@ if (isset($_SESSION['id_compte'])) {
     header('Location: https://family.matthieudevilliers.fr/pages/listes/');
 }
 
+// Retourne l'adresse IP de l'utilisateur
+function getIp() {
+  if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+    return $_SERVER['HTTP_CLIENT_IP'];
+  } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+    return $_SERVER['HTTP_X_FORWARDED_FOR'];
+  } elseif (!empty($_SERVER['REMOTE_ADDR'])) {
+    return $_SERVER['REMOTE_ADDR'];
+  } else {
+    return "Introuvable";
+  }
+} 
+
 $alert = false;
 
 if (isset($_POST['Mail'])) {
@@ -64,6 +77,13 @@ if (isset($_POST['Mail'])) {
             $_SESSION['id_compte'] = $donnee2['id'];
 
             $response2->closeCursor();
+
+            $sql3 = 'INSERT INTO lic_connexion (id_compte, adresse_ip_v4)
+                    VALUES (?, ?)';
+
+            $response3 = $bdd->prepare($sql3);
+            $response3->execute(array($_SESSION['id_compte'], getIp()));
+            $response3->closeCursor();
 
             header('Location: https://family.matthieudevilliers.fr/pages/listes/');
         } else {
