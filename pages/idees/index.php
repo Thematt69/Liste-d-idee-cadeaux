@@ -131,8 +131,8 @@ if (!isset($_SESSION['id_compte'])) {
                                                     <a href="<?php echo ($donnees['lien']) ?>">
                                                         <?php
                                                         // echo $donnees['lien'];
-                                                        if ($donnees['lien'] != '') echo (substr($donnees['lien'], 0, 120));
-                                                        if (strlen($donnees['lien']) > 120) echo '...';
+                                                        if ($donnees['lien'] != '') echo (substr($donnees['lien'], 0, 60));
+                                                        if (strlen($donnees['lien']) > 60) echo '...';
                                                         ?>
                                                     </a>
                                                 </td>
