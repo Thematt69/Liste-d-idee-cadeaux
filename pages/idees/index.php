@@ -116,7 +116,7 @@ if (!isset($_SESSION['id_compte'])) {
                                                     else echo ($donnees['nom']);
                                                     ?>
                                                 </td>
-                                                <td>
+                                                <td style="max-width:25%">
                                                     <?php
                                                     if ($donnees['commentaire'] == null) echo ('Aucun commentaire');
                                                     else echo ($donnees['commentaire']);
