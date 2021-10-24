@@ -199,22 +199,24 @@ if (isset($_POST['delete'])) {
                                         </div>
                                         <br>
                                     </div>
-                                    <div class="col-sm-6 text-center">
-                                        <button type="submit" name="save" value="<?php echo $donnees['id'] ?>" class="btn btn-primary">Enregistrer</button>
+                                    <div class="btn-group" role="group">
+                                        <div class="col-md-6 text-center">
+                                            <button type="submit" name="save" value="<?php echo $donnees['id'] ?>" class="btn btn-primary">Enregistrer</button>
+                                        </div>
+                                        <?php
+                                        if (isset($_GET['idee']) && $donnees != null && $donnee['droit'] == "proprietaire") {
+                                        ?>
+                                            <br>
+                                            <br>
+                                            <form action="" method="post">
+                                                <div class="col-md-6 text-center">
+                                                    <button type="submit" name="delete" value="<?php echo $donnees['id'] ?>" class="btn btn-danger">Supprimer</button>
+                                                </div>
+                                            </form>
+                                        <?php
+                                        }
+                                        ?>
                                     </div>
-                                    <?php
-                                    if (isset($_GET['idee']) && $donnees != null && $donnee['droit'] == "proprietaire") {
-                                    ?>
-                                        <br>
-                                        <br>
-                                        <form action="" method="post">
-                                            <div class="col-sm-6 text-center">
-                                                <button type="submit" name="delete" value="<?php echo $donnees['id'] ?>" class="btn btn-danger">Supprimer</button>
-                                            </div>
-                                        </form>
-                                    <?php
-                                    }
-                                    ?>
                                 </div>
                             </form>
                         </div>
