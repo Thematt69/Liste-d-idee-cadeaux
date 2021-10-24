@@ -89,7 +89,7 @@ if (isset($_POST['delete'])) {
 <html lang="fr" class="h-100">
 
 <head>
-    <title>Liste d'idée cadeaux - Création / Modification de liste</title>
+    <title>Listes d'idées cadeaux - Création / Modification de liste</title>
 
     <!-- Import -->
     <?php include('../../widgets/import/index.php'); ?>

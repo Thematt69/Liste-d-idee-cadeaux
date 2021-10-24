@@ -2,7 +2,7 @@
 <html lang="fr" class="h-100">
 
 <head>
-    <title>Liste d'idée cadeaux - Erreur 403</title>
+    <title>Listes d'idées cadeaux - Erreur 403</title>
 
     <!-- Import -->
     <?php include('../../widgets/import/index.php'); ?>

@@ -2,7 +2,7 @@
 <html lang="fr" class="h-100">
 
 <head>
-    <title>Liste d'idée cadeaux - CGU</title>
+    <title>Listes d'idées cadeaux - CGU</title>
 
     <!-- Import -->
     <?php include('../../widgets/import/index.php'); ?>

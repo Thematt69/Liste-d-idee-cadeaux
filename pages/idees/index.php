@@ -13,7 +13,7 @@ if (!isset($_SESSION['id_compte'])) {
 <html lang="fr" class="h-100">
 
 <head>
-    <title>Liste d'idée cadeaux - Idées de ma liste</title>
+    <title>Listes d'idées cadeaux - Idées de ma liste</title>
 
     <!-- Import -->
     <?php include('../../widgets/import/index.php'); ?>

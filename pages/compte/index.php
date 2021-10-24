@@ -84,7 +84,7 @@ if (isset($_POST['Mail'])) {
 <html lang="fr" class="h-100">
 
 <head>
-    <title>Liste d'idée cadeaux - Mon compte</title>
+    <title>Listes d'idées cadeaux - Mon compte</title>
 
     <!-- Import -->
     <?php include('../../widgets/import/index.php'); ?>

@@ -83,7 +83,7 @@ if (isset($_POST['Mail'])) {
 <html lang="fr" class="h-100">
 
 <head>
-    <title>Liste d'idée cadeaux - Connexion</title>
+    <title>Listes d'idées cadeaux - Connexion</title>
 
     <!-- Import -->
     <?php include('../../widgets/import/index.php'); ?>

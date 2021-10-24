@@ -117,7 +117,7 @@ if ($_POST['reset']) {
 <html lang="fr" class="h-100">
 
 <head>
-    <title>Liste d'idée cadeaux - Réinitialiser votre mot de passe</title>
+    <title>Listes d'idées cadeaux - Réinitialiser votre mot de passe</title>
 
     <!-- Import -->
     <?php include('../../widgets/import/index.php'); ?>
