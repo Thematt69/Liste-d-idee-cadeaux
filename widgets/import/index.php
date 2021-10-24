@@ -1,8 +1,8 @@
 <meta charset="utf-8">
 
-<meta name="title" content="Listes d’idées cadeau">
+<meta name="title" content="Listes d'idées cadeaux">
 <meta name="author" content="Matthieu Devilliers">
-<meta name="description" content="Listes d’idées cadeau pour Noël ou Anniversaire">
+<meta name="description" content="Listes d'idées cadeaux pour Noël ou Anniversaire">
 <meta name="keywords" content="idée,idee,cadeaux,noël,noel,anniversaire">
 <meta name="owner" content="Matthieu Devilliers">
 <meta name="robots" content="noindex">

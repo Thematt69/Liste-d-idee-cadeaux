@@ -2,7 +2,7 @@
     <div class="container">
         <a class="navbar-brand" href="https://family.matthieudevilliers.fr">
             <img src="https://family.matthieudevilliers.fr/images/logo.webp" width="30" height="30" class="d-inline-block align-top" alt="Logo du site" loading="lazy">
-            Listes d’idées cadeau
+            Listes d'idées cadeaux
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

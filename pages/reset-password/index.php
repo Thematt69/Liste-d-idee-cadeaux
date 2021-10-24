@@ -92,7 +92,7 @@ if ($_POST['reset']) {
                     </body>
                 </html>
             ';
-            if (envoiMail(htmlentities($_POST['Mail']), "Mot de passe oublié - Listes d'idées cadeau", $contenu)) {
+            if (envoiMail(htmlentities($_POST['Mail']), "Mot de passe oublié - Listes d'idées cadeaux", $contenu)) {
                 // Le mail a bien été envoyé
                 $info = "Vous devriez recevoir prochainement un mail.";
             } else {
