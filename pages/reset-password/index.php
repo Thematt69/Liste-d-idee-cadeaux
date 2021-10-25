@@ -12,6 +12,8 @@ if (isset($_SESSION['id_compte'])) {
 $alert = false;
 $info = false;
 
+$invalide = false;
+
 if ($_POST['reset']) {
     $sql2 = 'UPDATE lic_compte
             SET motdepasse = ?
@@ -94,7 +96,7 @@ if ($_POST['reset']) {
             ';
             if (envoiMail(htmlentities($_POST['Mail']), "Mot de passe oublié - Listes d'idées cadeaux", $contenu)) {
                 // Le mail a bien été envoyé
-                $info = "Vous devriez recevoir prochainement un mail.";
+                $info = " Un mail va prochainement vous être envoyé à l'adresse fournie.";
             } else {
                 // Le mail n'a pas été envoyé
                 $alert = "Une erreur est survenue lors de l'envoi du mail.";
@@ -110,6 +112,25 @@ if ($_POST['reset']) {
     }
 } else {
     $alert = 'La réinitialisation d\'un mot de passe est définitif, vous ne pourrez plus revenir en arrière.';
+}
+
+if ($_GET['reset']) {
+    $sql = 'SELECT motdepasse
+            FROM lic_compte
+            WHERE motdepasse = ? AND deleted_to IS NULL';
+
+    $response = $bdd->prepare($sql);
+    $response->execute(array(htmlentities($_GET['reset'])));
+
+    $donnee = $response->fetch();
+
+    if ($donnee['motdepasse'] != $_GET['reset']) {
+        $invalide = true;
+        // Le lien n'est plus valide
+        $alert = "Le lien n'est plus valide !";
+    }
+
+    $response->closeCursor();
 }
 
 ?>
@@ -161,12 +182,12 @@ if ($_POST['reset']) {
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-floating">
-                                            <input name="Mail" type="email" class="form-control" id="LabelMail" placeholder="name@example.com" required>
+                                            <input name="Mail" type="email" class="form-control" id="LabelMail" placeholder="name@example.com" required <?php if ($invalide) echo 'disabled aria-disabled' ?>>
                                             <label for="LabelMail">Adresse mail</label>
                                         </div>
                                         <br>
                                         <div class="form-floating">
-                                            <input name="MDP" type="password" class="form-control" id="LabelMDP" aria-describedby="DescriptionMDP" placeholder="Mot de passe" required>
+                                            <input name="MDP" type="password" class="form-control" id="LabelMDP" aria-describedby="DescriptionMDP" placeholder="Mot de passe" required <?php if ($invalide) echo 'disabled aria-disabled' ?>>
                                             <label for="LabelMDP">Nouveau mot de passe</label>
                                         </div>
                                         <br>
@@ -175,7 +196,7 @@ if ($_POST['reset']) {
                                         </div>
                                         <br>
                                         <div class="text-center">
-                                            <button type="submit" name="reset" value="<?php echo $_GET['reset'] ?>" class="btn btn-primary">Réinitialiser le mot de passe</button>
+                                            <button type="submit" name="reset" value="<?php echo $_GET['reset'] ?>" class="btn btn-primary" <?php if ($invalide) echo 'disabled aria-disabled' ?>>Réinitialiser le mot de passe</button>
                                         </div>
                                     </div>
                                 </div>
@@ -191,7 +212,7 @@ if ($_POST['reset']) {
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-floating">
-                                            <input name="Mail" type="email" class="form-control" id="LabelMail" placeholder="name@example.com" required>
+                                            <input name="Mail" type="email" class="form-control" id="LabelMail" placeholder="name@example.com" required <?php if ($invalide) echo 'disabled aria-disabled' ?>>
                                             <label for="LabelMail">Adresse mail</label>
                                         </div>
                                         <br>
@@ -200,7 +221,7 @@ if ($_POST['reset']) {
                                         </div>
                                         <br>
                                         <div class="text-center">
-                                            <button type="submit" class="btn btn-primary">Demander la réinitialisation</button>
+                                            <button type="submit" class="btn btn-primary" <?php if ($invalide) echo 'disabled aria-disabled' ?>>Demander la réinitialisation</button>
                                         </div>
                                     </div>
                                 </div>
