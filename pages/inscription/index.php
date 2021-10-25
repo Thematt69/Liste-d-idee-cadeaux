@@ -9,17 +9,18 @@ if (isset($_SESSION['id_compte'])) {
 }
 
 // Retourne l'adresse IP de l'utilisateur
-function getIp() {
-  if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-    return $_SERVER['HTTP_CLIENT_IP'];
-  } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-    return $_SERVER['HTTP_X_FORWARDED_FOR'];
-  } elseif (!empty($_SERVER['REMOTE_ADDR'])) {
-    return $_SERVER['REMOTE_ADDR'];
-  } else {
-    return "Introuvable";
-  }
-} 
+function getIp()
+{
+    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+        return $_SERVER['HTTP_CLIENT_IP'];
+    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        return $_SERVER['HTTP_X_FORWARDED_FOR'];
+    } elseif (!empty($_SERVER['REMOTE_ADDR'])) {
+        return $_SERVER['REMOTE_ADDR'];
+    } else {
+        return "Introuvable";
+    }
+}
 
 $alert = false;
 
@@ -151,7 +152,7 @@ if (isset($_POST['Mail'])) {
                                     <div class="form-floating">
                                         <input name="MDP" type="password" class="form-control" id="LabelMDP" aria-describedby="DescriptionMDP" placeholder="Mot de passe" required>
                                         <label for="LabelMDP">Mot de passe</label>
-                                        <small id="DescriptionMDP" class="form-text text-muted">Votre mot de passe est enregistré dans un format crypté, il est impossible pour nous de le récupérer.</small>
+                                        <small id="DescriptionMDP" class="form-text text-muted">Votre mot de passe est enregistré dans un format haché, il est impossible pour nous de le récupérer.</small>
                                     </div>
                                     <br>
                                 </div>

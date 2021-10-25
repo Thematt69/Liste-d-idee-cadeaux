@@ -149,7 +149,7 @@ if (isset($_POST['Mail'])) {
                                     <div class="form-floating">
                                         <input name="MDP" type="password" class="form-control" id="LabelMDP" aria-describedby="DescriptionMDP" placeholder="Mot de passe" required>
                                         <label for="LabelMDP">Mot de passe actuel</label>
-                                        <small id="DescriptionMDP" class="form-text text-muted">Votre mot de passe est enregistré dans un format crypté, il est impossible pour nous de le récupérer.</small>
+                                        <small id="DescriptionMDP" class="form-text text-muted">Votre mot de passe est enregistré dans un format haché, il est impossible pour nous de le récupérer.</small>
                                     </div>
                                     <br>
                                 </div>
