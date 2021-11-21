@@ -174,7 +174,7 @@ if (!isset($_SESSION['id_compte'])) {
                                 </table>
                             </div>
                             <?php
-                            if ($donnee['droit'] == "proprietaire") {
+                            if ($donnee['droit'] == "proprietaire" || $donnee['droit'] == "moderateur") {
                             ?>
                                 <br>
                                 <a class="btn btn-primary" href="https://family.matthieudevilliers.fr/pages/modif-idees/?liste=<?php echo $_GET['liste']; ?>">
@@ -183,7 +183,18 @@ if (!isset($_SESSION['id_compte'])) {
                             <?php
                             }
                             ?>
-
+                            <br>
+                            <?php
+                            if ($donnee['partage'] == "limite" || $donnee['partage'] == "public") {
+                            ?>
+                                <br>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="copy">Partager ce lien :</span>
+                                    <input type="text" class="form-control" value="https://family.matthieudevilliers.fr/pages/idees/?liste=<?php echo $_GET['liste']; ?>" disabled aria-describedby="copy">
+                                </div>
+                            <?php
+                            }
+                            ?>
                         </div>
                     </div>
                     <br>
