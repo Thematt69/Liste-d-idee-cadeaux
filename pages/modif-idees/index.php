@@ -10,6 +10,17 @@ if (!isset($_SESSION['id_compte'])) {
 
 if (isset($_POST['delete'])) {
 
+    // Récupération du lien de la liste qui contient l'idée à supprimer
+    $sql1 = 'SELECT lic_liste.lien_partage as lien
+            FROM lic_liste
+            INNER JOIN lic_idee ON lic_idee.id_liste = lic_liste.id
+            WHERE lic_idee.id = ? AND lic_liste.deleted_to IS NULL AND lic_idee.deleted_to IS NULL';
+
+    $response1 = $bdd->prepare($sql1);
+    $response1->execute(array($_POST['delete']));
+
+    $donnee1 = $response1->fetch();
+
     // Enregistrement de la suppresion
     $sql = 'UPDATE lic_idee
             SET deleted_to = ?
@@ -22,19 +33,9 @@ if (isset($_POST['delete'])) {
 
     $response->closeCursor();
 
-    $sql = 'SELECT lic_liste.lien_partage
-            FROM lic_liste
-            INNER JOIN lic_idee ON lic_idee.id_liste = lic_liste.id
-            WHERE lic_idee.id = ? AND lic_liste.deleted_to IS NULL AND lic_idee.deleted_to IS NULL';
+    header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $donnee1['lien']);
 
-    $response = $bdd->prepare($sql);
-    $response->execute(array($_POST['delete']));
-
-    $donnee = $response->fetch();
-
-    header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $donnee['lien_partage']);
-
-    $response->closeCursor();
+    $response1->closeCursor();
 } elseif (isset($_POST['Nom']) && $_POST['save'] != "") {
 
     // Modification de l'idée
@@ -47,7 +48,7 @@ if (isset($_POST['delete'])) {
 
     $response->closeCursor();
 
-    $sql = 'SELECT lic_liste.lien_partage
+    $sql = 'SELECT lic_liste.lien_partage as lien
             FROM lic_liste
             INNER JOIN lic_idee ON lic_idee.id_liste = lic_liste.id
             WHERE lic_idee.nom = ? AND lic_liste.deleted_to IS NULL AND lic_idee.deleted_to IS NULL';
@@ -57,7 +58,7 @@ if (isset($_POST['delete'])) {
 
     $donnee = $response->fetch();
 
-    header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $donnee['lien_partage']);
+    header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $donnee['lien']);
 
     $response->closeCursor();
 } elseif (isset($_POST['Nom'])) {
