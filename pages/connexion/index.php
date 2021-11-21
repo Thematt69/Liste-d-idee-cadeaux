@@ -65,11 +65,8 @@ if (isset($_POST['Mail'])) {
             $response1->closeCursor();
 
             header('Location: https://family.matthieudevilliers.fr/pages/listes/');
-        } elseif (isset($donnee['motdepasse'])) {
-            // Le mot de passe ne correspond pas
-            $alert = 'Mot de passe incorrect !';
-        } else {
-            header('Location: https://family.matthieudevilliers.fr/pages/inscription/');
+        }  else {
+            $alert = 'Adresse mail ou mot de passe incorrect !';
         }
 
         $response->closeCursor();
