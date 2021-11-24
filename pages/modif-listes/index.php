@@ -205,7 +205,7 @@ if (isset($_POST['delete'])) {
                                     <div class="col-md-4">
                                         <select class="form-select" name="Partage" aria-label="Paramètres de partage">
                                             <option <?php if ($donnees['partage'] == 'prive') echo ('selected') ?> value="prive">Privé</option>
-                                            <option <?php if ($donnees['partage'] == 'limite') echo ('selected') ?> value="limite">Limité</option>
+                                            <option <?php if ($donnees['partage'] == 'limite') echo ('selected') ?> value="limite" disabled>Limité</option>
                                             <option <?php if ($donnees['partage'] == 'public') echo ('selected') ?> value="public">Public</option>
                                         </select>
                                         <br>
@@ -240,8 +240,7 @@ if (isset($_POST['delete'])) {
                 <!-- FIXME - A enlever une fois le partage via lien effectif -->
                 <div class="alert alert-warning alert-dismissible fade show" role="warning">
                     <strong>
-                        Le partage d'une liste n'est pas encore disponible.
-                        Veuillez contacter le support pour pouvoir partager votre liste.
+                        Le partage d'une liste en mode limité n'est pas encore disponible.
                     </strong>
                 </div>
                 <div class="card">
@@ -251,7 +250,7 @@ if (isset($_POST['delete'])) {
                                 <h3>Type de partage</h3>
                                 <ul>
                                     <li><strong>Privé</strong> - La liste n'est accessible que par vous.</li>
-                                    <li><strong>Limité</strong> - Seules les personnes que vous avez autorisé pourront avoir accès à votre liste.</li>
+                                    <li><s><strong>Limité</strong> - Seules les personnes que vous avez autorisé pourront avoir accès à votre liste.</s></li>
                                     <li><strong>Public</strong> - Toutes les personnes disposants du lien pourront accèder à votre liste.</li>
                                 </ul>
                             </div>

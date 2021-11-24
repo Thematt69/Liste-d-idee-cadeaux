@@ -8,12 +8,40 @@ if (!isset($_SESSION['id_compte'])) {
     header('Location: https://family.matthieudevilliers.fr/pages/connexion/');
 }
 
+$sql = 'SELECT id, partage
+        FROM lic_liste
+        WHERE lien_partage = ? AND deleted_to IS NULL';
+
+$response = $bdd->prepare($sql);
+$response->execute(array($_GET['liste']));
+$donnee = $response->fetch();
+
+$sql1 = 'SELECT type
+        FROM lic_autorisation
+        WHERE id_liste = ? AND id_compte = ? AND deleted_to IS NULL';
+
+$response1 = $bdd->prepare($sql1);
+$response1->execute(array($donnee['id'], $_SESSION['id_compte']));
+$donnee1 = $response1->fetch();
+
+if ($donnee['partage'] == 'public' && $donnee1['type'] == null) {
+    $sql2 = 'INSERT INTO lic_autorisation (id_compte, id_liste, type)
+            VALUES (?, ?, "lecteur")';
+
+    $response2 = $bdd->prepare($sql2);
+    $response2->execute(array($_SESSION['id_compte'], $donnee['id']));
+    $response2->closeCursor();
+}
+
+$response->closeCursor();
+$response1->closeCursor();
+
 ?>
 <!DOCTYPE html>
 <html lang="fr" class="h-100">
 
 <head>
-    <title>Listes d'idées cadeaux - Idées de ma liste</title>
+    <title>Listes d'idées cadeaux - Idées de la liste</title>
 
     <!-- Import -->
     <?php include('../../widgets/import/index.php'); ?>
@@ -41,7 +69,8 @@ if (!isset($_SESSION['id_compte'])) {
                 <div class="col-12">
                     <br>
                     <div class="alert alert-danger" role="alert">
-                        <strong>Liste introuvable !</strong> Nous sommes désolées, mais nous n'avons pas trouvé votre liste. Merci de revenir à <a href="https://family.matthieudevilliers.fr/pages/listes/" class="alert-link">vos listes</a>.
+                        Nous sommes désolées, mais nous n'avons pas trouvé votre liste. Merci de revenir à <a href="https://family.matthieudevilliers.fr/pages/listes/" class="alert-link">vos listes</a>.<br>
+                        Il se peut aussi que vous n'ayez pas les droits nécessaires pour y accéder.
                     </div>
                     <br>
                 </div>
