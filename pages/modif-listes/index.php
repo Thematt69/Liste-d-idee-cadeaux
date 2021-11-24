@@ -8,6 +8,9 @@ if (!isset($_SESSION['id_compte'])) {
     header('Location: https://family.matthieudevilliers.fr/pages/connexion/');
 }
 
+$alert = false;
+$info = false;
+
 if (isset($_POST['delete'])) {
 
     // Suppresion des autorisations
@@ -129,6 +132,43 @@ if (isset($_POST['delete'])) {
     $response->closeCursor();
 
     header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $rand);
+} elseif (isset($_POST['share'])) {
+    $sql1 = 'SELECT id
+            FROM lic_compte
+            WHERE mail = ? AND deleted_to IS NULL';
+
+    $response1 = $bdd->prepare($sql1);
+    $response1->execute(array(htmlspecialchars($_POST['share_email'])));
+    $donnees1 = $response1->fetch();
+
+    if ($donnees1 != null) {
+        $sql3 = 'SELECT id
+            FROM lic_autorisation
+            WHERE id_compte = ? AND id_liste = ? AND deleted_to IS NULL';
+
+        $response3 = $bdd->prepare($sql3);
+        $response3->execute(array($donnees1['id'], htmlspecialchars($_POST['share'])));
+        $donnees3 = $response3->fetch();
+
+        if ($donnees3 == null) {
+            $sql2 = 'INSERT INTO lic_autorisation (id_compte, id_liste, type)
+            VALUES (?, ?, "lecteur")';
+
+            $response2 = $bdd->prepare($sql2);
+            $response2->execute(array($donnees1['id'], htmlspecialchars($_POST['share'])));
+            $response2->closeCursor();
+            $info = "L'utilisateur a bien été ajouté.";
+        } else {
+            $alert = "L'utilisateur est déjà autorisé à accéder à votre liste.";
+        }
+
+
+
+        $response3->closeCursor();
+    } else {
+        $alert = "Aucun utilisateur ne correspond à l'adresse mail fourni !";
+    }
+    $response1->closeCursor();
 }
 
 ?>
@@ -149,8 +189,24 @@ if (isset($_POST['delete'])) {
     <div class="container">
         <div class="row  justify-content-center">
             <div class="col-md-12 col-lg-8">
+
                 <br>
                 <?php
+                if ($alert) {
+                ?>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong><?php echo $alert; ?></strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                <?php
+                } elseif ($info) {
+                ?>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <?php echo $info; ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                <?php
+                }
 
                 $sql = 'SELECT lic_autorisation.type as droit, lic_liste.id as id, lic_liste.nom as nom, lic_liste.partage as partage
                         FROM lic_autorisation
@@ -205,7 +261,7 @@ if (isset($_POST['delete'])) {
                                     <div class="col-md-4">
                                         <select class="form-select" name="Partage" aria-label="Paramètres de partage">
                                             <option <?php if ($donnees['partage'] == 'prive') echo ('selected') ?> value="prive">Privé</option>
-                                            <option <?php if ($donnees['partage'] == 'limite') echo ('selected') ?> value="limite" disabled>Limité</option>
+                                            <option <?php if ($donnees['partage'] == 'limite') echo ('selected') ?> value="limite">Limité</option>
                                             <option <?php if ($donnees['partage'] == 'public') echo ('selected') ?> value="public">Public</option>
                                         </select>
                                         <br>
@@ -234,15 +290,8 @@ if (isset($_POST['delete'])) {
                     </div>
                 <?php
                 }
-                $response1->closeCursor();
                 ?>
                 <br>
-                <!-- FIXME - A enlever une fois le partage via lien effectif -->
-                <div class="alert alert-warning alert-dismissible fade show" role="warning">
-                    <strong>
-                        Le partage d'une liste en mode limité n'est pas encore disponible.
-                    </strong>
-                </div>
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
@@ -250,7 +299,7 @@ if (isset($_POST['delete'])) {
                                 <h3>Type de partage</h3>
                                 <ul>
                                     <li><strong>Privé</strong> - La liste n'est accessible que par vous.</li>
-                                    <li><s><strong>Limité</strong> - Seules les personnes que vous avez autorisé pourront avoir accès à votre liste.</s></li>
+                                    <li><strong>Limité</strong> - Seules les personnes que vous avez autorisé pourront avoir accès à votre liste.</li>
                                     <li><strong>Public</strong> - Toutes les personnes disposants du lien pourront accèder à votre liste.</li>
                                 </ul>
                             </div>
@@ -258,7 +307,69 @@ if (isset($_POST['delete'])) {
                     </div>
                 </div>
                 <br>
-                <!-- TODO - Historique des modifications -->
+                <?php
+                if ($donnees['droit'] == "proprietaire" && $donnees['partage'] != 'prive') {
+                ?>
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h3 class="text-center">Les personnes à qui vous partagez votre liste</h3>
+                            <br>
+                            <?php
+                            if ($donnees['partage'] == 'limite') {
+                            ?>
+                                <form action="" method="post">
+                                    <div class="input-group">
+                                        <input type="email" class="form-control" name="share_email" placeholder="Adresse mail" aria-label="Adresse mail" aria-describedby="email" required aria-required="true">
+                                        <button type="submit" name="share" value="<?php echo $donnees['id'] ?>" id="email" class="btn btn-outline-primary">Ajouter</button>
+                                    </div>
+                                </form>
+                                <br>
+                            <?php
+                            }
+                            ?>
+                            <div class="table-responsive">
+                                <table class="table text-center align-middle justify-content-">
+                                    <thead>
+                                        <tr>
+                                            <th class="col">Adresse mail</th>
+                                            <th class="col">Droit</th>
+                                            <th class="col">Depuis le</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+
+                                        $sql1 = 'SELECT lic_compte.mail as mail, lic_autorisation.type as droit, lic_autorisation.created_to as created_to
+                                            FROM lic_compte
+                                            INNER JOIN lic_autorisation ON lic_autorisation.id_compte = lic_compte.id
+                                            WHERE lic_autorisation.id_liste = ?  AND lic_compte.deleted_to IS NULL AND lic_autorisation.deleted_to IS NULL';
+
+                                        $response1 = $bdd->prepare($sql1);
+                                        $response1->execute(array($donnees['id']));
+
+                                        while ($donnees1 = $response1->fetch()) {
+                                            $datetime = new DateTime($donnees1['created_to']);
+                                        ?>
+                                            <tr>
+                                                <td><?php echo ($donnees1['mail']) ?></td>
+                                                <td><?php echo ($donnees1['droit']) ?></td>
+                                                <td><?php echo ($datetime->format('d/m/Y H:i:s')) ?></td>
+                                            </tr>
+                                        <?php
+                                        }
+
+                                        $response1->closeCursor();
+                                        ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                <?php
+                }
+                $response1->closeCursor();
+                ?>
+                <br>
             </div>
         </div>
     </div>
