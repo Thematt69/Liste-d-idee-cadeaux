@@ -35,6 +35,53 @@ if (isset($_POST['delete'])) {
     header('Location: https://family.matthieudevilliers.fr/pages/listes/');
 } elseif (isset($_POST['Nom']) && $_POST['save'] != "") {
 
+    $sql = 'SELECT partage
+            FROM lic_liste
+            WHERE id = ?';
+
+    $response1 = $bdd->prepare($sql);
+    $response1->execute(array(htmlentities($_POST['save'])));
+
+    $donnees = $response1->fetch();
+
+    // Modification des autorisations en fonction du partage
+    switch ($_POST['Partage']) {
+        case 'prive':
+            switch ($donnees['partage']) {
+                case 'prive': # Privé -> Privé : Nothing to do
+                    break;
+                case 'limite': # Limité -> Privé
+                case 'public': # Public -> Privé
+                    // Suppresion des autorisations (hors propriétaire)
+                    $sql2 = 'UPDATE lic_autorisation
+                            SET deleted_to = ?
+                            WHERE id_liste = ? AND type != "proprietaire"';
+
+                    $date = new DateTime();
+
+                    $response2 = $bdd->prepare($sql2);
+                    $response2->execute(array($date->format('Y-m-d H:m:i'), htmlentities($_POST['save'])));
+                    $response2->closeCursor();
+                    break;
+            }
+        case 'limite':
+            switch ($donnees['partage']) {
+                case 'prive': # Privé -> Limité : Nothing to do
+                case 'limite': # Limité -> Limité : Nothing to do
+                case 'public': # Public -> Limité : Nothing to do
+                    break;
+            }
+        case 'public':
+            switch ($donnees['partage']) {
+                case 'prive': # Privé -> Public : Nothing to do
+                case 'limite': # Limité -> Public : Nothing to do
+                case 'public': # Public -> Public : Nothing to do
+                    break;
+            }
+    }
+
+    $response1->closeCursor();
+
     // Modification de la liste
     $sql = 'UPDATE lic_liste
             SET nom = ?,partage = ?
@@ -156,10 +203,10 @@ if (isset($_POST['delete'])) {
                                         <br>
                                     </div>
                                     <div class="col-md-4">
-                                        <select class="form-select" name="Partage" aria-label="Paramètres de partage" disabled>
+                                        <select class="form-select" name="Partage" aria-label="Paramètres de partage">
                                             <option <?php if ($donnees['partage'] == 'prive') echo ('selected') ?> value="prive">Privé</option>
-                                            <option <?php if ($donnees['partage'] == 'limite') echo ('selected') ?> value="lien">Limité</option>
-                                            <option <?php if ($donnees['partage'] == 'public') echo ('selected') ?> value="secure">Public</option>
+                                            <option <?php if ($donnees['partage'] == 'limite') echo ('selected') ?> value="limite">Limité</option>
+                                            <option <?php if ($donnees['partage'] == 'public') echo ('selected') ?> value="public">Public</option>
                                         </select>
                                         <br>
                                     </div>
