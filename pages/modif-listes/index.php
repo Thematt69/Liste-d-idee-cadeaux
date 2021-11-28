@@ -321,7 +321,7 @@ if (isset($_POST['delete'])) {
                         <div class="row">
                             <div class="col-md-12">
                                 <h3>Type de partage</h3>
-                                <p>Les administrateurs ont un accès par défaut pour touy partage de type "Limité" ou "Public".</p>
+                                <p>Les administrateurs ont un accès par défaut pour tout partage de type "Limité" ou "Public".</p>
                                 <ul>
                                     <li><strong>Privé</strong> - La liste n'est accessible que par vous.</li>
                                     <li><strong>Limité</strong> - Seules les personnes que vous avez autorisé pourront avoir accès à votre liste.</li>
