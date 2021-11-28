@@ -11,6 +11,8 @@ if (!isset($_SESSION['id_compte'])) {
 $alert = false;
 $info = false;
 
+
+
 if (isset($_POST['delete'])) {
 
     // Suppresion des autorisations
@@ -36,7 +38,7 @@ if (isset($_POST['delete'])) {
     $response->closeCursor();
 
     header('Location: https://family.matthieudevilliers.fr/pages/listes/');
-} elseif (isset($_POST['Nom']) && $_POST['save'] != "") {
+} elseif (isset($_POST['Nom']) && htmlentities($_POST['save']) != "") {
 
     $sql = 'SELECT partage
             FROM lic_liste
@@ -48,7 +50,7 @@ if (isset($_POST['delete'])) {
     $donnees = $response1->fetch();
 
     // Modification des autorisations en fonction du partage
-    switch ($_POST['Partage']) {
+    switch (htmlentities($_POST['Partage'])) {
         case 'prive':
             switch ($donnees['partage']) {
                 case 'prive': # Privé -> Privé : Nothing to do
@@ -70,6 +72,14 @@ if (isset($_POST['delete'])) {
         case 'limite':
             switch ($donnees['partage']) {
                 case 'prive': # Privé -> Limité : Nothing to do
+                    // Ajout des autorisations pour les admins
+                    $sql2 = 'INSERT INTO lic_autorisation (id_compte, id_liste, type)
+                            VALUES ((SELECT id FROM `lic_compte` WHERE fonction = "admin"), ?, "moderateur")';
+
+                    $response2 = $bdd->prepare($sql2);
+                    $response2->execute(array(htmlentities($_POST['save'])));
+                    $response2->closeCursor();
+                    break;
                 case 'limite': # Limité -> Limité : Nothing to do
                 case 'public': # Public -> Limité : Nothing to do
                     break;
@@ -77,6 +87,13 @@ if (isset($_POST['delete'])) {
         case 'public':
             switch ($donnees['partage']) {
                 case 'prive': # Privé -> Public : Nothing to do
+                    // Ajout des autorisations pour les admins
+                    $sql2 = 'INSERT INTO lic_autorisation (id_compte, id_liste, type)
+                            VALUES ((SELECT id FROM `lic_compte` WHERE fonction = "admin"), ?, "moderateur")';
+
+                    $response2 = $bdd->prepare($sql2);
+                    $response2->execute(array(htmlentities($_POST['save'])));
+                    $response2->closeCursor();
                 case 'limite': # Limité -> Public : Nothing to do
                 case 'public': # Public -> Public : Nothing to do
                     break;
@@ -125,11 +142,18 @@ if (isset($_POST['delete'])) {
     $response1 = $bdd->prepare($sql1);
     $response1->execute(array($_SESSION['id_compte'], $donnee['id']));
 
+    $response->closeCursor();
     $response1->closeCursor();
 
-    // TODO - Ajouter les autres autorisations en fonction du partage
+    if (htmlentities($_POST['Partage']) != 'prive') {
+        // Ajout des autorisations pour les admins
+        $sql2 = 'INSERT INTO lic_autorisation (id_compte, id_liste, type)
+            VALUES ((SELECT id FROM `lic_compte` WHERE fonction = "admin"), ?, "moderateur")';
 
-    $response->closeCursor();
+        $response2 = $bdd->prepare($sql2);
+        $response2->execute(array(htmlentities($_POST['save'])));
+        $response2->closeCursor();
+    }
 
     header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $rand);
 } elseif (isset($_POST['share'])) {
@@ -297,6 +321,7 @@ if (isset($_POST['delete'])) {
                         <div class="row">
                             <div class="col-md-12">
                                 <h3>Type de partage</h3>
+                                <p>Les administrateurs ont un accès par défaut pour touy partage de type "Limité" ou "Public".</p>
                                 <ul>
                                     <li><strong>Privé</strong> - La liste n'est accessible que par vous.</li>
                                     <li><strong>Limité</strong> - Seules les personnes que vous avez autorisé pourront avoir accès à votre liste.</li>
@@ -339,7 +364,7 @@ if (isset($_POST['delete'])) {
                                     <tbody>
                                         <?php
 
-                                        $sql1 = 'SELECT lic_compte.mail as mail, lic_autorisation.type as droit, lic_autorisation.created_to as created_to
+                                        $sql1 = 'SELECT lic_compte.mail as mail, lic_autorisation.type as droit, lic_autorisation.created_to as created_to, lic_compte.fonction as fonction
                                             FROM lic_compte
                                             INNER JOIN lic_autorisation ON lic_autorisation.id_compte = lic_compte.id
                                             WHERE lic_autorisation.id_liste = ?  AND lic_compte.deleted_to IS NULL AND lic_autorisation.deleted_to IS NULL';
@@ -351,7 +376,14 @@ if (isset($_POST['delete'])) {
                                             $datetime = new DateTime($donnees1['created_to']);
                                         ?>
                                             <tr>
-                                                <td><?php echo ($donnees1['mail']) ?></td>
+                                                <td>
+                                                    <?php
+                                                    echo ($donnees1['mail']);
+                                                    if ($donnees['fonction'] == 'admin') {
+                                                        echo ('<span class="badge rounded-pill bg-danger">ADLIN</span>');
+                                                    }
+                                                    ?>
+                                                </td>
                                                 <td><?php echo ($donnees1['droit']) ?></td>
                                                 <td><?php echo ($datetime->format('d/m/Y H:i:s')) ?></td>
                                             </tr>
