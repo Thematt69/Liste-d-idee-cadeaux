@@ -44,7 +44,7 @@ if (!isset($_SESSION['id_compte'])) {
                     $sql = 'SELECT lic_liste.nom as nom, lic_liste.lien_partage as lien_partage,lic_autorisation.type as roles,lic_liste.id as id
                             FROM lic_liste
                             INNER JOIN lic_autorisation ON lic_autorisation.id_liste = lic_liste.id
-                            WHERE lic_autorisation.id_compte = ? AND lic_liste.deleted_to IS NULL AND lic_autorisation.deleted_to IS NULL
+                            WHERE lic_autorisation.id_compte = ? AND lic_liste.deleted_to IS NULL
                             ORDER BY lic_liste.created_to DESC';
 
                     $response = $bdd->prepare($sql);
@@ -68,7 +68,7 @@ if (!isset($_SESSION['id_compte'])) {
                             $sql1 = 'SELECT lic_compte.prenom as prenom
                                     FROM lic_compte
                                     INNER JOIN lic_autorisation ON lic_autorisation.id_compte = lic_compte.id
-                                    WHERE lic_autorisation.type = "proprietaire" AND lic_autorisation.id_liste = ? AND lic_compte.deleted_to IS NULL AND lic_autorisation.deleted_to IS NULL';
+                                    WHERE lic_autorisation.type = "proprietaire" AND lic_autorisation.id_liste = ? AND lic_compte.deleted_to IS NULL';
 
                             $response1 = $bdd->prepare($sql1);
                             $response1->execute(array($donnees['id']));

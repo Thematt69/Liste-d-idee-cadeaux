@@ -12,18 +12,23 @@ $alert = false;
 $info = false;
 
 
-
-if (isset($_POST['delete'])) {
-
-    // Suppresion des autorisations
-    $sql1 = 'UPDATE lic_autorisation
-            SET deleted_to = ?
-            WHERE id_liste = ?';
-
-    $date = new DateTime();
+if (isset($_POST['share_delete'])) {
+    // Suppresion de l'autorisation
+    $sql1 = 'DELETE FROM lic_autorisation
+            WHERE id = ?';
 
     $response1 = $bdd->prepare($sql1);
-    $response1->execute(array($date->format('Y-m-d H:m:i'), htmlentities($_POST['delete'])));
+    $response1->execute(array(htmlentities($_POST['share_delete'])));
+
+    $response1->closeCursor();
+} elseif (isset($_POST['delete'])) {
+
+    // Suppresion des autorisations
+    $sql1 = 'DELETE FROM lic_autorisation
+            WHERE id_liste = ?';
+
+    $response1 = $bdd->prepare($sql1);
+    $response1->execute(array(htmlentities($_POST['delete'])));
 
     $response1->closeCursor();
 
@@ -31,6 +36,8 @@ if (isset($_POST['delete'])) {
     $sql = 'UPDATE lic_liste
             SET deleted_to = ?
             WHERE id = ?';
+
+    $date = new DateTime();
 
     $response = $bdd->prepare($sql);
     $response->execute(array($date->format('Y-m-d H:m:i'), htmlentities($_POST['delete'])));
@@ -58,14 +65,11 @@ if (isset($_POST['delete'])) {
                 case 'limite': # Limité -> Privé
                 case 'public': # Public -> Privé
                     // Suppresion des autorisations (hors propriétaire)
-                    $sql2 = 'UPDATE lic_autorisation
-                            SET deleted_to = ?
+                    $sql2 = 'DELETE FROM lic_autorisation
                             WHERE id_liste = ? AND type != "proprietaire"';
 
-                    $date = new DateTime();
-
                     $response2 = $bdd->prepare($sql2);
-                    $response2->execute(array($date->format('Y-m-d H:m:i'), htmlentities($_POST['save'])));
+                    $response2->execute(array(htmlentities($_POST['save'])));
                     $response2->closeCursor();
                     break;
             }
@@ -185,7 +189,7 @@ if (isset($_POST['delete'])) {
     if ($donnees1 != null) {
         $sql3 = 'SELECT id
             FROM lic_autorisation
-            WHERE id_compte = ? AND id_liste = ? AND deleted_to IS NULL';
+            WHERE id_compte = ? AND id_liste = ?';
 
         $response3 = $bdd->prepare($sql3);
         $response3->execute(array($donnees1['id'], htmlspecialchars($_POST['share'])));
@@ -252,7 +256,7 @@ if (isset($_POST['delete'])) {
                 $sql = 'SELECT lic_autorisation.type as droit, lic_liste.id as id, lic_liste.nom as nom, lic_liste.partage as partage
                         FROM lic_autorisation
                         INNER JOIN lic_liste ON lic_liste.id = lic_autorisation.id_liste
-                        WHERE lic_autorisation.id_compte = ? AND lic_liste.lien_partage = ? AND lic_autorisation.deleted_to IS NULL AND lic_liste.deleted_to IS NULL';
+                        WHERE lic_autorisation.id_compte = ? AND lic_liste.lien_partage = ? AND lic_liste.deleted_to IS NULL';
 
                 $response1 = $bdd->prepare($sql);
                 $response1->execute(array($_SESSION['id_compte'], $_GET['liste']));
@@ -376,15 +380,22 @@ if (isset($_POST['delete'])) {
                                             <th class="col">Adresse mail</th>
                                             <th class="col">Droit</th>
                                             <th class="col">Depuis le</th>
+                                            <?php
+                                            if ($donnees['droit'] != "lecteur") {
+                                            ?>
+                                                <th>Actions</th>
+                                            <?php
+                                            }
+                                            ?>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php
 
-                                        $sql1 = 'SELECT lic_compte.mail as mail, lic_autorisation.type as droit, lic_autorisation.created_to as created_to, lic_compte.fonction as fonction
+                                        $sql1 = 'SELECT lic_compte.id as compteId, lic_autorisation.id as authId, lic_compte.mail as mail, lic_autorisation.type as droit, lic_autorisation.created_to as created_to, lic_compte.fonction as fonction
                                             FROM lic_compte
                                             INNER JOIN lic_autorisation ON lic_autorisation.id_compte = lic_compte.id
-                                            WHERE lic_autorisation.id_liste = ?  AND lic_compte.deleted_to IS NULL AND lic_autorisation.deleted_to IS NULL';
+                                            WHERE lic_autorisation.id_liste = ?  AND lic_compte.deleted_to IS NULL';
 
                                         $response1 = $bdd->prepare($sql1);
                                         $response1->execute(array($donnees['id']));
@@ -393,16 +404,33 @@ if (isset($_POST['delete'])) {
                                             $datetime = new DateTime($donnees1['created_to']);
                                         ?>
                                             <tr>
+                                                <td> <?php echo ($donnees1['mail']); ?> </td>
                                                 <td>
                                                     <?php
-                                                    echo ($donnees1['mail']);
+                                                    echo ($donnees1['droit']);
                                                     if ($donnees1['fonction'] == 'admin') {
                                                         echo ('  <span class="badge rounded-pill bg-danger">ADMIN</span>');
                                                     }
                                                     ?>
                                                 </td>
-                                                <td><?php echo ($donnees1['droit']) ?></td>
                                                 <td><?php echo ($datetime->format('d/m/Y H:i:s')) ?></td>
+                                                <?php
+                                                if ($donnees['droit'] != "lecteur") {
+                                                    $disable = false;
+                                                    if ($donnees1['droit']  == 'proprietaire') {
+                                                        $disable = true;
+                                                    } elseif ($donnees1['compteId']  == $_SESSION['id_compte']) {
+                                                        $disable = true;
+                                                    }
+                                                ?>
+                                                    <td>
+                                                        <button type="submit" name="share_delete" value="<?php echo $donnees1['authId'] ?>" class="btn btn-outline-danger" <?php if ($disable) echo ('disabled'); ?>>
+                                                            Supprimer
+                                                        </button>
+                                                    </td>
+                                                <?php
+                                                }
+                                                ?>
                                             </tr>
                                         <?php
                                         }
