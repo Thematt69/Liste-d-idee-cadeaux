@@ -123,7 +123,13 @@ $response1->closeCursor();
                                             <th style="max-width: 40rem;">Lien</th>
                                             <!-- <th class="col image">Image</th> -->
                                             <th>Déja acheté</th>
-                                            <th>Actions</th>
+                                            <?php
+                                            if ($donnee['droit'] != "lecteur") {
+                                            ?>
+                                                <th>Actions</th>
+                                            <?php
+                                            }
+                                            ?>
                                         </tr>
                                     </thead>
                                     <tbody>
