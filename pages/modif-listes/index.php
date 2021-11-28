@@ -146,13 +146,30 @@ if (isset($_POST['delete'])) {
     $response1->closeCursor();
 
     if (htmlentities($_POST['Partage']) != 'prive') {
-        // Ajout des autorisations pour les admins
-        $sql2 = 'INSERT INTO lic_autorisation (id_compte, id_liste, type)
-            VALUES ((SELECT id FROM `lic_compte` WHERE fonction = "admin"), ?, "moderateur")';
+        // Récupération des id des comptes admin
+        $sql1 = 'SELECT id 
+                FROM lic_compte
+                WHERE fonction = "admin"';
 
-        $response2 = $bdd->prepare($sql2);
-        $response2->execute(array(htmlentities($_POST['save'])));
-        $response2->closeCursor();
+        $response1 = $bdd->prepare($sql1);
+        $response1->execute();
+
+        while ($donnee1 = $response1->fetch()) {
+            // Si le compte admin parcouru est différent de celui actuel
+            if ($donnee1['id'] != $_SESSION['id_compte']) {
+                // Ajout des autorisations pour les admins
+                $sql2 = 'INSERT INTO lic_autorisation (id_compte, id_liste, type)
+            VALUES (?, ?, "moderateur")';
+
+                $response2 = $bdd->prepare($sql2);
+                $response2->execute(array($donnee1['id'], htmlentities($_POST['save'])));
+                $response2->closeCursor();
+            }
+        }
+
+
+
+        $response1->closeCursor();
     }
 
     header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $rand);
