@@ -396,8 +396,8 @@ if (isset($_POST['delete'])) {
                                                 <td>
                                                     <?php
                                                     echo ($donnees1['mail']);
-                                                    if ($donnees['fonction'] == 'admin') {
-                                                        echo ('<span class="badge rounded-pill bg-danger">ADLIN</span>');
+                                                    if ($donnees1['fonction'] == 'admin') {
+                                                        echo ('  <span class="badge rounded-pill bg-danger">ADMIN</span>');
                                                     }
                                                     ?>
                                                 </td>
