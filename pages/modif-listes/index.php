@@ -348,6 +348,7 @@ if (isset($_POST['share_delete'])) {
                                     <li><strong>Limité</strong> - Seules les personnes que vous avez autorisé pourront avoir accès à votre liste.</li>
                                     <li><strong>Public</strong> - Toutes les personnes disposants du lien pourront accèder à votre liste.</li>
                                 </ul>
+                                <p>Un modérateur a la possibilité d'ajouter et modifier les idées de votre liste ; par contre, il ne pourra pas gérer, modifier ou supprimer votre liste.</p>
                             </div>
                         </div>
                     </div>
@@ -404,19 +405,29 @@ if (isset($_POST['share_delete'])) {
                                             $datetime = new DateTime($donnees1['created_to']);
                                         ?>
                                             <tr>
-                                                <td> <?php echo ($donnees1['mail']); ?> </td>
                                                 <td>
                                                     <?php
-                                                    echo ($donnees1['droit']);
+                                                    echo ($donnees1['mail']);
                                                     if ($donnees1['fonction'] == 'admin') {
                                                         echo ('  <span class="badge rounded-pill bg-danger">ADMIN</span>');
                                                     }
                                                     ?>
                                                 </td>
+                                                <td>
+                                                    <div class="input-group input-group-sm">
+                                                        <select class=" form-select form-select-sm" name="new_droit" <?php if ($donnees1['fonction'] == 'admin' || $donnees1['droit'] == 'proprietaire') echo "disabled"; ?>>
+                                                            <option disabled <?php if ($donnees1['droit'] == 'proprietaire') echo "selected"; ?> value="proprietaire">Proriétaire</option>
+                                                            <option <?php if ($donnees1['droit'] == 'moderateur') echo "selected"; ?> value="moderateur">Modérateur</option>
+                                                            <option <?php if ($donnees1['droit'] == 'lecteur') echo "selected"; ?> value="lecteur">Lecteur</option>
+                                                        </select>
+
+                                                        <button class="btn btn-outline-secondary" name="new_droit_auth_id" value="<?php echo $donnees1['authId'] ?>" <?php if ($donnees1['fonction'] == 'admin' || $donnees1['droit'] == 'proprietaire') echo "disabled"; ?> type="submit"><i class="fas fa-check"></i></button>
+                                                    </div>
+                                                </td>
                                                 <td><?php echo ($datetime->format('d/m/Y H:i:s')) ?></td>
                                                 <?php
                                                 if ($donnees['droit'] != "lecteur") {
-                                                    $disable = false;
+                                                    -$disable = false;
                                                     if ($donnees1['droit']  == 'proprietaire') {
                                                         $disable = true;
                                                     } elseif ($donnees1['compteId']  == $_SESSION['id_compte']) {
@@ -425,7 +436,7 @@ if (isset($_POST['share_delete'])) {
                                                 ?>
                                                     <td>
                                                         <button type="submit" name="share_delete" value="<?php echo $donnees1['authId'] ?>" class="btn btn-outline-danger" <?php if ($disable) echo ('disabled'); ?>>
-                                                            Supprimer
+                                                            <i class="far fa-trash-alt"></i>
                                                         </button>
                                                     </td>
                                                 <?php
