@@ -121,7 +121,7 @@ $response1->closeCursor();
                                             <th>Nom</th>
                                             <th style="max-width: 30rem;">Commentaire</th>
                                             <th style="max-width: 40rem;">Lien</th>
-                                            <th>Déja acheté</th>
+                                            <th>Infos</th>
                                             <?php
                                             if ($donnee['droit'] != "lecteur")
                                                 echo '<th>Actions</th>';
@@ -131,7 +131,7 @@ $response1->closeCursor();
                                     <tbody>
                                         <?php
 
-                                        $sql1 = 'SELECT  id, nom, commentaire, lien, image, is_buy
+                                        $sql1 = 'SELECT  id, nom, commentaire, lien, is_buy, buy_from
                                             FROM lic_idee
                                             WHERE id_liste = ? AND deleted_to IS NULL';
 
@@ -147,7 +147,7 @@ $response1->closeCursor();
                                                     else echo ($donnees['nom']);
                                                     ?>
                                                 </td>
-                                                <td style="max-width:25%">
+                                                <td style="max-width: 40rem">
                                                     <?php
                                                     if ($donnees['commentaire'] == null) echo ('//');
                                                     else echo ($donnees['commentaire']);
@@ -161,13 +161,46 @@ $response1->closeCursor();
                                                     ?>
                                                     <a href="<?php echo ($donnees['lien']) ?>" target="_blank">
                                                         <?php
-                                                        // echo $donnees['lien'];
                                                         if ($donnees['lien'] != '') echo (substr($donnees['lien'], 0, 60));
                                                         if (strlen($donnees['lien']) > 60) echo '...';
                                                         ?>
                                                     </a>
                                                 </td>
-                                                <td><input class="form-check-input" type="checkbox" <?php if ($donnees['is_buy']) echo ('checked') ?> disabled></td>
+                                                <td>
+                                                    <?php
+                                                    if ($donnees['is_buy']) {
+
+                                                        $sql2 = 'SELECT prenom
+                                                            FROM lic_compte
+                                                            WHERE id = (SELECT id_compte FROM `lic_autorisation` WHERE id_liste = ? AND type = "proprietaire") AND deleted_to IS NULL';
+
+                                                        $response2 = $bdd->prepare($sql2);
+                                                        $response2->execute(array($donnee['id']));
+
+                                                        $donnee1 = $response2->fetch();
+
+                                                        echo 'Acheté par ' . $donnee1['prenom'];
+
+                                                        $response2->closeCursor();
+                                                    } elseif ($donnees['buy_from'] && $donnee['droit'] != "proprietaire") {
+
+                                                        $sql2 = 'SELECT prenom
+                                                            FROM lic_compte
+                                                            WHERE id = ? AND deleted_to IS NULL';
+
+                                                        $response2 = $bdd->prepare($sql2);
+                                                        $response2->execute(array($donnees['buy_from']));
+
+                                                        $donnee1 = $response2->fetch();
+
+                                                        echo 'Réservé par ' . $donnee1['prenom'];
+
+                                                        $response2->closeCursor();
+                                                    } else {
+                                                        echo '//';
+                                                    }
+                                                    ?>
+                                                </td>
                                                 <?php
                                                 if ($donnee['droit'] != "lecteur") {
                                                 ?>

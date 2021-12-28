@@ -52,33 +52,65 @@ if (isset($_POST['cancel'])) {
     $response1->closeCursor();
 } elseif (isset($_POST['Nom']) && $_POST['save'] != "") {
 
-    // Modification de l'idée
-    $sql = 'UPDATE lic_idee
-            SET nom = ?, commentaire = ?, lien = ?, image = ?, is_buy = ?
+    if (isset($_POST['Achat'])) {
+        // Modification de l'idée par le propriétaire
+        $sql = 'UPDATE lic_idee
+            SET nom = ?, commentaire = ?, lien = ?, is_buy = ?
             WHERE id = ?;';
 
-    $response = $bdd->prepare($sql);
-    $response->execute(array(htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($_POST['Lien']), '', htmlentities($_POST['Achat']) ?? 0, htmlentities($_POST['save'])));
+        $response = $bdd->prepare($sql);
+        $response->execute(array(htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($_POST['Lien']), htmlentities($_POST['Achat']) ?? 0, htmlentities($_POST['save'])));
 
-    $response->closeCursor();
+        $response->closeCursor();
 
-    $sql = 'SELECT lic_liste.lien_partage as lien
+        $sql = 'SELECT lic_liste.lien_partage as lien
             FROM lic_liste
             INNER JOIN lic_idee ON lic_idee.id_liste = lic_liste.id
             WHERE lic_idee.nom = ? AND lic_liste.deleted_to IS NULL AND lic_idee.deleted_to IS NULL';
 
-    $response = $bdd->prepare($sql);
-    $response->execute(array(htmlentities($_POST['Nom'])));
+        $response = $bdd->prepare($sql);
+        $response->execute(array(htmlentities($_POST['Nom'])));
 
-    $donnee = $response->fetch();
+        $donnee = $response->fetch();
 
-    header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $donnee['lien']);
+        header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $donnee['lien']);
 
-    $response->closeCursor();
-} elseif (isset($_POST['Nom'])) {
+        $response->closeCursor();
+    } else {
+        echo 'achat from ' . htmlentities($_POST['AchatFrom']) . '<br>';
 
-    // Création de l'idée
-    $sql = 'INSERT INTO lic_idee (id_liste, nom, commentaire, lien, image, is_buy)
+        if (htmlentities($_POST['AchatFrom']) == "1") {
+            $buyFrom = $_SESSION['id_compte'];
+        }
+
+        // Modification de l'idée par un modérateur
+        $sql = 'UPDATE lic_idee
+            SET nom = ?, commentaire = ?, lien = ?, buy_from = ?
+            WHERE id = ?;';
+
+        $response = $bdd->prepare($sql);
+        $response->execute(array(htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($_POST['Lien']), $buyFrom, htmlentities($_POST['save'])));
+
+        $response->closeCursor();
+
+        $sql = 'SELECT lic_liste.lien_partage as lien
+            FROM lic_liste
+            INNER JOIN lic_idee ON lic_idee.id_liste = lic_liste.id
+            WHERE lic_idee.nom = ? AND lic_liste.deleted_to IS NULL AND lic_idee.deleted_to IS NULL';
+
+        $response = $bdd->prepare($sql);
+        $response->execute(array(htmlentities($_POST['Nom'])));
+
+        $donnee = $response->fetch();
+
+        header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $donnee['lien']);
+
+        $response->closeCursor();
+    }
+} elseif (isset($_POST['Achat'])) {
+
+    // Création de l'idée par le propriétaire
+    $sql = 'INSERT INTO lic_idee (id_liste, nom, commentaire, lien, is_buy)
             VALUES (?,?,?,?,?,?)';
 
     $sql1 = 'SELECT id
@@ -91,7 +123,36 @@ if (isset($_POST['cancel'])) {
     $donnee1 = $response1->fetch();
 
     $response = $bdd->prepare($sql);
-    $response->execute(array($donnee1['id'], htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($_POST['Lien']), '', htmlentities($_POST['Achat'])));
+    $response->execute(array($donnee1['id'], htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($_POST['Lien']), htmlentities($_POST['Achat'])));
+
+    $response1->closeCursor();
+
+    $response->closeCursor();
+
+    header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $_GET['liste']);
+} elseif (isset($_POST['AchatFrom'])) {
+
+    echo 'achat from ' . htmlentities($_POST['AchatFrom']) . '<br>';
+
+    if (htmlentities($_POST['AchatFrom']) == "1") {
+        $buyFrom = $_SESSION['id_compte'];
+    }
+
+    // Création de l'idée par un modérateur
+    $sql = 'INSERT INTO lic_idee (id_liste, nom, commentaire, lien, buyFrom)
+            VALUES (?,?,?,?,?,?)';
+
+    $sql1 = 'SELECT id
+            FROM lic_liste
+            WHERE lien_partage = ? AND deleted_to IS NULL';
+
+    $response1 = $bdd->prepare($sql1);
+    $response1->execute(array($_GET['liste']));
+
+    $donnee1 = $response1->fetch();
+
+    $response = $bdd->prepare($sql);
+    $response->execute(array($donnee1['id'], htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($_POST['Lien']), $buyFrom));
 
     $response1->closeCursor();
 
@@ -163,7 +224,7 @@ if (isset($_POST['cancel'])) {
                 <?php
                 } else {
 
-                    $sql = 'SELECT id,nom,commentaire,lien,is_buy
+                    $sql = 'SELECT id, nom, commentaire, lien, is_buy, buy_from
                         FROM lic_idee
                         WHERE id = ? AND deleted_to IS NULL';
 
@@ -181,7 +242,7 @@ if (isset($_POST['cancel'])) {
                     <br>
                     <div class="card">
                         <div class="card-body">
-                            <form action="" method="post" enctype="multipart/form-data">
+                            <form action="" method="post">
                                 <div class="row">
                                     <div class="col-md-7">
                                         <div class="form-floating">
@@ -204,13 +265,25 @@ if (isset($_POST['cancel'])) {
                                         </div>
                                         <br>
                                     </div>
-                                    <!-- <input name="Image" class="form-control" type="file" accept="image/*"> -->
                                     <div class="col-md-5">
                                         <div class="form-check">
-                                            <input name="Achat" value="1" class="form-check-input" type="checkbox" id="LabelAchat" <?php if ($donnees['is_buy']) echo 'checked' ?>>
-                                            <label class="form-check-label" for="LabelAchat">
-                                                Déjà acheté l'idée
-                                            </label>
+                                            <?php
+                                            if ($donnee['droit'] == "proprietaire") {
+                                            ?>
+                                                <input name="Achat" value="1" class="form-check-input" type="checkbox" id="LabelAchat" <?php if ($donnees['is_buy']) echo 'checked' ?>>
+                                                <label class="form-check-label" for="LabelAchat">
+                                                    J'ai acheté cette idée
+                                                </label>
+                                            <?php
+                                            } else {
+                                            ?>
+                                                <input name="AchatFrom" value="1" class="form-check-input" type="checkbox" id="LabelAchat" <?php if (isset($donnees['buy_from'])) echo 'checked' ?>>
+                                                <label class="form-check-label" for="LabelAchat">
+                                                    Je réserve cette idée
+                                                </label>
+                                            <?php
+                                            }
+                                            ?>
                                         </div>
                                         <br>
                                     </div>
