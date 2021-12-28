@@ -55,11 +55,11 @@ if (isset($_POST['cancel'])) {
     if (isset($_POST['Achat'])) {
         // Modification de l'idée par le propriétaire
         $sql = 'UPDATE lic_idee
-            SET nom = ?, commentaire = ?, lien = ?, is_buy = ?
+            SET nom = ?, commentaire = ?, lien = ?, is_buy = ?, price = ?
             WHERE id = ?;';
 
         $response = $bdd->prepare($sql);
-        $response->execute(array(htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($_POST['Lien']), htmlentities($_POST['Achat']) ?? 0, htmlentities($_POST['save'])));
+        $response->execute(array(htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($_POST['Lien']), htmlentities($_POST['Achat']) ?? 0, htmlentities($_POST['Prix']), htmlentities($_POST['save'])));
 
         $response->closeCursor();
 
@@ -85,11 +85,11 @@ if (isset($_POST['cancel'])) {
 
         // Modification de l'idée par un modérateur
         $sql = 'UPDATE lic_idee
-            SET nom = ?, commentaire = ?, lien = ?, buy_from = ?
+            SET nom = ?, commentaire = ?, lien = ?, buy_from = ?, price = ?
             WHERE id = ?;';
 
         $response = $bdd->prepare($sql);
-        $response->execute(array(htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($_POST['Lien']), $buyFrom, htmlentities($_POST['save'])));
+        $response->execute(array(htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($_POST['Lien']), $buyFrom, htmlentities($_POST['Prix']), htmlentities($_POST['save'])));
 
         $response->closeCursor();
 
@@ -110,7 +110,7 @@ if (isset($_POST['cancel'])) {
 } elseif (isset($_POST['Achat'])) {
 
     // Création de l'idée par le propriétaire
-    $sql = 'INSERT INTO lic_idee (id_liste, nom, commentaire, lien, is_buy)
+    $sql = 'INSERT INTO lic_idee (id_liste, nom, commentaire, lien, is_buy, price)
             VALUES (?,?,?,?,?,?)';
 
     $sql1 = 'SELECT id
@@ -123,7 +123,7 @@ if (isset($_POST['cancel'])) {
     $donnee1 = $response1->fetch();
 
     $response = $bdd->prepare($sql);
-    $response->execute(array($donnee1['id'], htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($_POST['Lien']), htmlentities($_POST['Achat'])));
+    $response->execute(array($donnee1['id'], htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($_POST['Lien']), htmlentities($_POST['Achat']), htmlentities($_POST['Prix'])));
 
     $response1->closeCursor();
 
@@ -139,7 +139,7 @@ if (isset($_POST['cancel'])) {
     }
 
     // Création de l'idée par un modérateur
-    $sql = 'INSERT INTO lic_idee (id_liste, nom, commentaire, lien, buyFrom)
+    $sql = 'INSERT INTO lic_idee (id_liste, nom, commentaire, lien, buyFrom, price)
             VALUES (?,?,?,?,?,?)';
 
     $sql1 = 'SELECT id
@@ -152,7 +152,7 @@ if (isset($_POST['cancel'])) {
     $donnee1 = $response1->fetch();
 
     $response = $bdd->prepare($sql);
-    $response->execute(array($donnee1['id'], htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($_POST['Lien']), $buyFrom));
+    $response->execute(array($donnee1['id'], htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($_POST['Lien']), $buyFrom, htmlentities($_POST['Prix'])));
 
     $response1->closeCursor();
 
@@ -224,7 +224,7 @@ if (isset($_POST['cancel'])) {
                 <?php
                 } else {
 
-                    $sql = 'SELECT id, nom, commentaire, lien, is_buy, buy_from
+                    $sql = 'SELECT id, nom, commentaire, lien, is_buy, buy_from, price
                         FROM lic_idee
                         WHERE id = ? AND deleted_to IS NULL';
 
@@ -247,21 +247,28 @@ if (isset($_POST['cancel'])) {
                                     <div class="col-md-7">
                                         <div class="form-floating">
                                             <input name="Nom" type="text" value="<?php echo ($donnees['nom']) ?>" class="form-control" id="LabelNom" placeholder="Nom de l'idée" required>
-                                            <label for="LabelNom">Nom de l'idée</label>
+                                            <label for="LabelNom">Nom de l'idée *</label>
                                         </div>
                                         <br>
                                     </div>
                                     <div class="col-md-5">
                                         <div class="form-floating">
-                                            <input name="Lien" type="url" value="<?php echo ($donnees['lien']) ?>" class="form-control" id="LabelLien" placeholder="Lien de l'idée">
-                                            <label for="LabelLien">Lien de l'idée</label>
+                                            <input name="Prix" type="text" value="<?php echo ($donnees['price']) ?>" class="form-control" id="LabelPrix" placeholder="Prix de l'idée">
+                                            <label for="LabelPrix">Prix de l'idée</label>
+                                        </div>
+                                        <br>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-floating">
+                                            <input name="Commentaire" type="text" value="<?php echo ($donnees['commentaire']) ?>" class="form-control" id="LabelCommentaire" placeholder="Commentaire">
+                                            <label for="LabelCommentaire">Commentaire</label>
                                         </div>
                                         <br>
                                     </div>
                                     <div class="col-md-7">
                                         <div class="form-floating">
-                                            <input name="Commentaire" type="text" value="<?php echo ($donnees['commentaire']) ?>" class="form-control" id="LabelCommentaire" placeholder="Commentaire">
-                                            <label for="LabelCommentaire">Commentaire</label>
+                                            <input name="Lien" type="url" value="<?php echo ($donnees['lien']) ?>" class="form-control" id="LabelLien" placeholder="Lien de l'idée">
+                                            <label for="LabelLien">Lien de l'idée</label>
                                         </div>
                                         <br>
                                     </div>

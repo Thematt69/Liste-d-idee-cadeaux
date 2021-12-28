@@ -121,6 +121,7 @@ $response1->closeCursor();
                                             <th>Nom</th>
                                             <th style="max-width: 30rem;">Commentaire</th>
                                             <th style="max-width: 40rem;">Lien</th>
+                                            <th>Prix</th>
                                             <th>Infos</th>
                                             <?php
                                             if ($donnee['droit'] != "lecteur")
@@ -131,7 +132,7 @@ $response1->closeCursor();
                                     <tbody>
                                         <?php
 
-                                        $sql1 = 'SELECT  id, nom, commentaire, lien, is_buy, buy_from
+                                        $sql1 = 'SELECT  id, nom, commentaire, lien, is_buy, buy_from, price
                                             FROM lic_idee
                                             WHERE id_liste = ? AND deleted_to IS NULL';
 
@@ -165,6 +166,12 @@ $response1->closeCursor();
                                                         if (strlen($donnees['lien']) > 60) echo '...';
                                                         ?>
                                                     </a>
+                                                </td>
+                                                <td>
+                                                    <?php
+                                                    if ($donnees['price'] == null) echo ('//');
+                                                    else echo ($donnees['price']);
+                                                    ?>
                                                 </td>
                                                 <td>
                                                     <?php
@@ -206,7 +213,7 @@ $response1->closeCursor();
                                                 ?>
                                                     <td>
                                                         <a class="btn btn-outline-secondary" href="https://family.matthieudevilliers.fr/pages/modif-idees/?idee=<?php echo $donnees['id']; ?>">
-                                                            Modifier
+                                                            <i class="far fa-edit"></i>
                                                         </a>
                                                     </td>
                                                 <?php
