@@ -11,7 +11,9 @@ if (!isset($_SESSION['id_compte'])) {
 $alert = false;
 $info = false;
 
-if (isset($_POST['share_delete'])) {
+if (isset($_POST['cancel'])) {
+    header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $_GET['liste']);
+} elseif (isset($_POST['share_delete'])) {
     // Suppresion de l'autorisation
     $sql1 = 'DELETE FROM lic_autorisation
             WHERE id = ?';
@@ -322,19 +324,18 @@ if (isset($_POST['share_delete'])) {
                                         <br>
                                     </div>
                                     <div class="btn-group" role="group">
-                                        <div class="col-md-6 text-center">
+                                        <div class="col-md-8 text-center">
                                             <button type="submit" name="save" value="<?php echo $donnees['id'] ?>" class="btn btn-primary">Enregistrer</button>
+                                            <button type="submit" name="cancel" value="<?php echo $donnees['id'] ?>" class="btn btn-secondary">Annuler</button>
                                         </div>
                                         <?php
                                         if (isset($_GET['liste']) && $donnees != null) {
                                         ?>
                                             <br>
                                             <br>
-                                            <form action="" method="post">
-                                                <div class="col-sm-6 text-center">
-                                                    <button type="submit" name="delete" value="<?php echo $donnees['id'] ?>" class="btn btn-danger">Supprimer</button>
-                                                </div>
-                                            </form>
+                                            <div class="col-md-4 text-center">
+                                                <button type="submit" name="delete" value="<?php echo $donnees['id'] ?>" class="btn btn-danger">Supprimer</button>
+                                            </div>
                                         <?php
                                         }
                                         ?>

@@ -8,7 +8,21 @@ if (!isset($_SESSION['id_compte'])) {
     header('Location: https://family.matthieudevilliers.fr/pages/connexion/');
 }
 
-if (isset($_POST['delete'])) {
+if (isset($_POST['cancel'])) {
+    $sql = 'SELECT lic_liste.lien_partage as lien
+            FROM lic_liste
+            INNER JOIN lic_idee ON lic_idee.id_liste = lic_liste.id
+            WHERE lic_idee.id = ? AND lic_liste.deleted_to IS NULL AND lic_idee.deleted_to IS NULL';
+
+    $response = $bdd->prepare($sql);
+    $response->execute(array(htmlentities($_POST['cancel'])));
+
+    $donnee = $response->fetch();
+
+    header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $donnee['lien']);
+
+    $response->closeCursor();
+} elseif (isset($_POST['delete'])) {
 
     // Récupération du lien de la liste qui contient l'idée à supprimer
     $sql1 = 'SELECT lic_liste.lien_partage as lien
@@ -201,19 +215,18 @@ if (isset($_POST['delete'])) {
                                         <br>
                                     </div>
                                     <div class="btn-group" role="group">
-                                        <div class="col-md-6 text-center">
+                                        <div class="col-md-8 text-center">
                                             <button type="submit" name="save" value="<?php echo $donnees['id'] ?>" class="btn btn-primary">Enregistrer</button>
+                                            <button type="submit" name="cancel" value="<?php echo $donnees['id'] ?>" class="btn btn-secondary">Annuler</button>
                                         </div>
                                         <?php
                                         if (isset($_GET['idee']) && $donnees != null && $donnee['droit'] == "proprietaire") {
                                         ?>
                                             <br>
                                             <br>
-                                            <form action="" method="post">
-                                                <div class="col-md-6 text-center">
-                                                    <button type="submit" name="delete" value="<?php echo $donnees['id'] ?>" class="btn btn-danger">Supprimer</button>
-                                                </div>
-                                            </form>
+                                            <div class="col-md-4 text-center">
+                                                <button type="submit" name="delete" value="<?php echo $donnees['id'] ?>" class="btn btn-danger">Supprimer</button>
+                                            </div>
                                         <?php
                                         }
                                         ?>
