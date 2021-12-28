@@ -11,7 +11,6 @@ if (!isset($_SESSION['id_compte'])) {
 $alert = false;
 $info = false;
 
-
 if (isset($_POST['share_delete'])) {
     // Suppresion de l'autorisation
     $sql1 = 'DELETE FROM lic_autorisation
@@ -214,6 +213,17 @@ if (isset($_POST['share_delete'])) {
         $alert = "Aucun utilisateur ne correspond à l'adresse mail fourni !";
     }
     $response1->closeCursor();
+} elseif (isset($_POST['new_droit_auth_id'])) {
+    // Modification de l'autorisation
+    $sql = 'UPDATE lic_autorisation
+            SET type = ?
+            WHERE id = ?';
+
+    $response = $bdd->prepare($sql);
+    $response->execute(array(htmlentities($_POST['new_droit']), htmlentities($_POST['new_droit_auth_id'])));
+
+    $response->closeCursor();
+    header('Location: https://family.matthieudevilliers.fr/pages/modif-listes/?liste=' . $_GET['liste']);
 }
 
 ?>
@@ -233,7 +243,7 @@ if (isset($_POST['share_delete'])) {
 
     <div class="container">
         <div class="row  justify-content-center">
-            <div class="col-md-12 col-lg-8">
+            <div class="col-md-12 col-lg-10">
 
                 <br>
                 <?php
@@ -348,7 +358,11 @@ if (isset($_POST['share_delete'])) {
                                     <li><strong>Limité</strong> - Seules les personnes que vous avez autorisé pourront avoir accès à votre liste.</li>
                                     <li><strong>Public</strong> - Toutes les personnes disposants du lien pourront accèder à votre liste.</li>
                                 </ul>
-                                <p>Un modérateur a la possibilité d'ajouter et modifier les idées de votre liste ; par contre, il ne pourra pas gérer, modifier ou supprimer votre liste.</p>
+                                <?php
+                                if (isset($_GET['liste'])) {
+                                    echo ("<p>Un modérateur a la possibilité d'ajouter et modifier les idées de votre liste ; par contre, il ne pourra pas gérer, modifier ou supprimer votre liste.</p>");
+                                }
+                                ?>
                             </div>
                         </div>
                     </div>
@@ -414,15 +428,17 @@ if (isset($_POST['share_delete'])) {
                                                     ?>
                                                 </td>
                                                 <td>
-                                                    <div class="input-group input-group-sm">
-                                                        <select class=" form-select form-select-sm" name="new_droit" <?php if ($donnees1['fonction'] == 'admin' || $donnees1['droit'] == 'proprietaire') echo "disabled"; ?>>
-                                                            <option disabled <?php if ($donnees1['droit'] == 'proprietaire') echo "selected"; ?> value="proprietaire">Proriétaire</option>
-                                                            <option <?php if ($donnees1['droit'] == 'moderateur') echo "selected"; ?> value="moderateur">Modérateur</option>
-                                                            <option <?php if ($donnees1['droit'] == 'lecteur') echo "selected"; ?> value="lecteur">Lecteur</option>
-                                                        </select>
+                                                    <form action="" method="post">
+                                                        <div class="input-group input-group-sm">
+                                                            <select class=" form-select form-select-sm" name="new_droit" <?php if ($donnees1['fonction'] == 'admin' || $donnees1['droit'] == 'proprietaire') echo "disabled"; ?>>
+                                                                <option disabled <?php if ($donnees1['droit'] == 'proprietaire') echo "selected"; ?> value="proprietaire">Proriétaire</option>
+                                                                <option <?php if ($donnees1['droit'] == 'moderateur') echo "selected"; ?> value="moderateur">Modérateur</option>
+                                                                <option <?php if ($donnees1['droit'] == 'lecteur') echo "selected"; ?> value="lecteur">Lecteur</option>
+                                                            </select>
 
-                                                        <button class="btn btn-outline-secondary" name="new_droit_auth_id" value="<?php echo $donnees1['authId'] ?>" <?php if ($donnees1['fonction'] == 'admin' || $donnees1['droit'] == 'proprietaire') echo "disabled"; ?> type="submit"><i class="fas fa-check"></i></button>
-                                                    </div>
+                                                            <button class="btn btn-outline-secondary" name="new_droit_auth_id" value="<?php echo $donnees1['authId'] ?>" <?php if ($donnees1['fonction'] == 'admin' || $donnees1['droit'] == 'proprietaire') echo "disabled"; ?> type="submit"><i class="fas fa-check"></i></button>
+                                                        </div>
+                                                    </form>
                                                 </td>
                                                 <td><?php echo ($datetime->format('d/m/Y H:i:s')) ?></td>
                                                 <?php

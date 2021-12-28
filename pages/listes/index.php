@@ -25,7 +25,7 @@ if (!isset($_SESSION['id_compte'])) {
 
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-12">
+            <div class="col-md-12 col-lg-10">
                 <br>
                 <h1 class="text-center">Mes listes</h1>
                 <br>
