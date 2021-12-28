@@ -121,14 +121,10 @@ $response1->closeCursor();
                                             <th>Nom</th>
                                             <th style="max-width: 30rem;">Commentaire</th>
                                             <th style="max-width: 40rem;">Lien</th>
-                                            <!-- <th class="col image">Image</th> -->
                                             <th>Déja acheté</th>
                                             <?php
-                                            if ($donnee['droit'] != "lecteur") {
-                                            ?>
-                                                <th>Actions</th>
-                                            <?php
-                                            }
+                                            if ($donnee['droit'] != "lecteur")
+                                                echo '<th>Actions</th>';
                                             ?>
                                         </tr>
                                     </thead>
@@ -147,23 +143,23 @@ $response1->closeCursor();
                                             <tr>
                                                 <td>
                                                     <?php
-                                                    if ($donnees['nom'] == null) echo ('Aucun nom');
+                                                    if ($donnees['nom'] == null) echo ('//');
                                                     else echo ($donnees['nom']);
                                                     ?>
                                                 </td>
                                                 <td style="max-width:25%">
                                                     <?php
-                                                    if ($donnees['commentaire'] == null) echo ('Aucun commentaire');
+                                                    if ($donnees['commentaire'] == null) echo ('//');
                                                     else echo ($donnees['commentaire']);
                                                     ?>
                                                 </td>
                                                 <td style="max-width: 40rem;">
                                                     <?php
                                                     if ($donnees['lien'] == null)
-                                                        echo ('Aucun');
+                                                        echo ('//');
                                                     else
                                                     ?>
-                                                    <a href="<?php echo ($donnees['lien']) ?>">
+                                                    <a href="<?php echo ($donnees['lien']) ?>" target="_blank">
                                                         <?php
                                                         // echo $donnees['lien'];
                                                         if ($donnees['lien'] != '') echo (substr($donnees['lien'], 0, 60));
@@ -171,22 +167,6 @@ $response1->closeCursor();
                                                         ?>
                                                     </a>
                                                 </td>
-                                                <!-- <td class="image">
-                                                    <?php
-                                                    // if ($donnees['image'] == null) {
-                                                    //     echo ('Aucune');
-                                                    // } else {
-                                                    ?>
-                                                        <a href="https://family.matthieudevilliers.fr/images/<?php /* echo ($donnees['image']) */ ?>">
-                                                            <?php
-                                                            // if ($donnees['image'] != '') echo (substr($donnees['image'], 0, 20));
-                                                            // if (strlen($donnees['image']) > 20) echo '...';
-                                                            ?>
-                                                        </a>
-                                                    <?php
-                                                    // }
-                                                    ?>
-                                                </td> -->
                                                 <td><input class="form-check-input" type="checkbox" <?php if ($donnees['is_buy']) echo ('checked') ?> disabled></td>
                                                 <?php
                                                 if ($donnee['droit'] != "lecteur") {
