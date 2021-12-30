@@ -8,21 +8,7 @@ if (!isset($_SESSION['id_compte'])) {
     header('Location: https://family.matthieudevilliers.fr/pages/connexion/');
 }
 
-if (isset($_POST['cancel'])) {
-    $sql = 'SELECT lic_liste.lien_partage as lien
-            FROM lic_liste
-            INNER JOIN lic_idee ON lic_idee.id_liste = lic_liste.id
-            WHERE lic_idee.id = ? AND lic_liste.deleted_to IS NULL AND lic_idee.deleted_to IS NULL';
-
-    $response = $bdd->prepare($sql);
-    $response->execute(array(htmlentities($_POST['cancel'])));
-
-    $donnee = $response->fetch();
-
-    header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $donnee['lien']);
-
-    $response->closeCursor();
-} elseif (isset($_POST['delete'])) {
+if (isset($_POST['delete'])) {
 
     // Récupération du lien de la liste qui contient l'idée à supprimer
     $sql1 = 'SELECT lic_liste.lien_partage as lien
@@ -107,58 +93,67 @@ if (isset($_POST['cancel'])) {
 
         $response->closeCursor();
     }
-} elseif (isset($_POST['Achat'])) {
+} elseif (isset($_POST['Nom'])) {
+    $sql2 = 'SELECT lic_autorisation.type as droit
+            FROM lic_autorisation
+            INNER JOIN lic_liste ON lic_autorisation.id_liste = lic_liste.id
+            WHERE lic_autorisation.id_compte = ? AND lic_liste.lien_partage = ? AND lic_liste.deleted_to IS NULL';
 
-    // Création de l'idée par le propriétaire
-    $sql = 'INSERT INTO lic_idee (id_liste, nom, commentaire, lien, is_buy, price)
+    $response2 = $bdd->prepare($sql2);
+    $response2->execute(array($_SESSION['id_compte'], $_GET['liste']));
+
+    $donnee2 = $response2->fetch();
+
+    if ($donnee2['droit'] == "proprietaire") {
+        // Création de l'idée par le propriétaire
+        $sql = 'INSERT INTO lic_idee (id_liste, nom, commentaire, lien, is_buy, price)
             VALUES (?,?,?,?,?,?)';
 
-    $sql1 = 'SELECT id
+        $sql1 = 'SELECT id
             FROM lic_liste
             WHERE lien_partage = ? AND deleted_to IS NULL';
 
-    $response1 = $bdd->prepare($sql1);
-    $response1->execute(array($_GET['liste']));
+        $response1 = $bdd->prepare($sql1);
+        $response1->execute(array($_GET['liste']));
 
-    $donnee1 = $response1->fetch();
+        $donnee1 = $response1->fetch();
 
-    $response = $bdd->prepare($sql);
-    $response->execute(array($donnee1['id'], htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($_POST['Lien']), htmlentities($_POST['Achat']), htmlentities($_POST['Prix'])));
+        $response = $bdd->prepare($sql);
+        $response->execute(array($donnee1['id'], htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($_POST['Lien']), $_POST['Achat'] ?? 0, htmlentities($_POST['Prix'])));
 
-    $response1->closeCursor();
+        $response1->closeCursor();
 
-    $response->closeCursor();
+        $response->closeCursor();
 
-    header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $_GET['liste']);
-} elseif (isset($_POST['AchatFrom'])) {
+        header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $_GET['liste']);
+    } elseif ($donnee2['droit'] == "moderateur") {
+        // Création de l'idée par un modérateur
+        $sql = 'INSERT INTO lic_idee (id_liste, nom, commentaire, lien, buy_from, price)
+            VALUES (?,?,?,?,?,?)';
 
-    echo 'achat from ' . htmlentities($_POST['AchatFrom']) . '<br>';
+        $sql1 = 'SELECT id
+            FROM lic_liste
+            WHERE lien_partage = ? AND deleted_to IS NULL';
 
-    if (htmlentities($_POST['AchatFrom']) == "1") {
-        $buyFrom = $_SESSION['id_compte'];
+        $response1 = $bdd->prepare($sql1);
+        $response1->execute(array($_GET['liste']));
+
+        $donnee1 = $response1->fetch();
+
+        if ($_POST['AchatFrom'] == 1) {
+            $buyFrom = $_SESSION['id_compte'];
+        }
+
+        $response = $bdd->prepare($sql);
+        $response->execute(array($donnee1['id'], htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($_POST['Lien']), $buyFrom, htmlentities($_POST['Prix'])));
+
+        $response1->closeCursor();
+
+        $response->closeCursor();
+
+        header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $_GET['liste']);
     }
-
-    // Création de l'idée par un modérateur
-    $sql = 'INSERT INTO lic_idee (id_liste, nom, commentaire, lien, buyFrom, price)
-            VALUES (?,?,?,?,?,?)';
-
-    $sql1 = 'SELECT id
-            FROM lic_liste
-            WHERE lien_partage = ? AND deleted_to IS NULL';
-
-    $response1 = $bdd->prepare($sql1);
-    $response1->execute(array($_GET['liste']));
-
-    $donnee1 = $response1->fetch();
-
-    $response = $bdd->prepare($sql);
-    $response->execute(array($donnee1['id'], htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($_POST['Lien']), $buyFrom, htmlentities($_POST['Prix'])));
-
-    $response1->closeCursor();
-
-    $response->closeCursor();
-
-    header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $_GET['liste']);
+    $response2->closeCursor();
 }
 
 ?>
@@ -182,14 +177,21 @@ if (isset($_POST['cancel'])) {
                 <br>
                 <?php
 
-                $sql = 'SELECT lic_autorisation.type as droit
-                        FROM lic_autorisation
-                        INNER JOIN lic_idee ON lic_idee.id_liste = lic_autorisation.id_liste
-                        INNER JOIN lic_liste ON lic_liste.id = lic_autorisation.id_liste
-                        WHERE lic_autorisation.id_compte = ? AND lic_idee.id = ? AND lic_idee.deleted_to IS NULL AND lic_liste.deleted_to IS NULL';
+                if ($_GET['idee']) {
+                    $sql = 'SELECT lic_autorisation.type as droit, lic_liste.lien_partage as partage
+                            FROM lic_autorisation
+                            INNER JOIN lic_idee ON lic_idee.id_liste = lic_autorisation.id_liste
+                            INNER JOIN lic_liste ON lic_liste.id = lic_autorisation.id_liste
+                            WHERE lic_autorisation.id_compte = ? AND lic_idee.id = ? AND lic_idee.deleted_to IS NULL AND lic_liste.deleted_to IS NULL';
+                } else {
+                    $sql = 'SELECT lic_autorisation.type as droit, lic_liste.lien_partage as partage
+                            FROM lic_autorisation
+                            INNER JOIN lic_liste ON lic_liste.id = lic_autorisation.id_liste
+                            WHERE lic_autorisation.id_compte = ? AND lic_liste.lien_partage = ? AND lic_liste.deleted_to IS NULL';
+                }
 
                 $response1 = $bdd->prepare($sql);
-                $response1->execute(array($_SESSION['id_compte'], $_GET['idee']));
+                $response1->execute(array($_SESSION['id_compte'], $_GET['idee'] ?? $_GET['liste']));
 
                 $donnee = $response1->fetch();
 
@@ -233,7 +235,9 @@ if (isset($_POST['cancel'])) {
 
                     $donnees = $response->fetch();
 
-                    if (isset($_GET['idee']) && $donnees != null) {
+                    $isModif = isset($_GET['idee']) && $donnees != null;
+
+                    if ($isModif) {
                         echo ('<h1 class="text-center">Modification d\'une idée</h1>');
                     } else {
                         echo ('<h1 class="text-center">Création d\'une idée</h1>');
@@ -297,7 +301,9 @@ if (isset($_POST['cancel'])) {
                                     <div class="btn-group" role="group">
                                         <div class="col-md-8 text-center">
                                             <button type="submit" name="save" value="<?php echo $donnees['id'] ?>" class="btn btn-primary">Enregistrer</button>
-                                            <button type="submit" name="cancel" value="<?php echo $donnees['id'] ?>" class="btn btn-secondary">Annuler</button>
+                                            <a class="btn btn-secondary" href="https://family.matthieudevilliers.fr/pages/idees/?liste=<?php echo $_GET['liste'] ?? $donnee['partage']; ?>">
+                                                Annuler
+                                            </a>
                                         </div>
                                         <?php
                                         if (isset($_GET['idee']) && $donnees != null && $donnee['droit'] == "proprietaire") {
