@@ -2,8 +2,8 @@
     if (isset($_POST['notif'])) {
         if ($_POST['notif'] == "tous") {
             $sqlreq6 = 'UPDATE lic_notif 
-                                    SET etat = "lu"
-                                    WHERE id_compte = ? AND etat != "lu"';
+                        SET etat = "lu"
+                        WHERE id_compte = ? AND etat != "lu"';
 
             $req6 = $bdd->prepare($sqlreq6);
             $req6->execute(array($_SESSION['id_compte']));
@@ -11,8 +11,8 @@
             $req6->closeCursor();
         } else {
             $sqlreq6 = 'UPDATE lic_notif 
-                                    SET etat = "lu"
-                                    WHERE id_compte = ? AND etat != "lu" AND id = ?';
+                        SET etat = "lu"
+                        WHERE id_compte = ? AND etat != "lu" AND id = ?';
 
             $req6 = $bdd->prepare($sqlreq6);
             $req6->execute(array($_SESSION['id_compte'], $_POST['notif']));
@@ -23,8 +23,8 @@
     }
 
     $sqlreq2 = 'SELECT count(id) as num_alert
-                                        FROM lic_notif
-                                        WHERE id_compte = ? AND etat = "non-lu"';
+                FROM lic_notif
+                WHERE id_compte = ? AND etat = "non-lu"';
 
     $req2 = $bdd->prepare($sqlreq2);
     $req2->execute(array($_SESSION['id_compte']));
@@ -53,8 +53,8 @@
              <?php
 
                 $sqlreq3 = 'SELECT id,titre,message,etat,created_to
-                                            FROM lic_notif
-                                            WHERE id_compte = ? AND etat = "non-lu"';
+                            FROM lic_notif
+                            WHERE id_compte = ? AND etat = "non-lu"';
 
                 $req3 = $bdd->prepare($sqlreq3);
                 $req3->execute(array($_SESSION['id_compte']));

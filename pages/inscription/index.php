@@ -102,7 +102,7 @@ if (isset($_POST['Mail'])) {
 <html lang="fr" class="h-100">
 
 <head>
-    <title>Listes d'idées cadeaux - Inscription</title>
+    <title>Listes d'idées cadeau - Inscription</title>
 
     <!-- Import -->
     <?php include('../../widgets/import/index.php'); ?>
@@ -189,7 +189,7 @@ if (isset($_POST['Mail'])) {
                 <br>
                 <div class="text-center">
                     <a href="https://family.matthieudevilliers.fr/pages/connexion/">
-                        Déja un compte ? Je me connecte
+                        Déjà un compte ? Je me connecte
                     </a>
                 </div>
                 <br>

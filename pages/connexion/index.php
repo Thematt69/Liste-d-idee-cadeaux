@@ -65,7 +65,7 @@ if (isset($_POST['Mail'])) {
             $response1->closeCursor();
 
             header('Location: https://family.matthieudevilliers.fr/pages/listes/');
-        }  else {
+        } else {
             $alert = 'Adresse mail ou mot de passe incorrect !';
         }
 
@@ -80,7 +80,7 @@ if (isset($_POST['Mail'])) {
 <html lang="fr" class="h-100">
 
 <head>
-    <title>Listes d'idées cadeaux - Connexion</title>
+    <title>Listes d'idées cadeau - Connexion</title>
 
     <!-- Import -->
     <?php include('../../widgets/import/index.php'); ?>

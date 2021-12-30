@@ -87,16 +87,16 @@ if ($_POST['reset']) {
                         <h3>Mot de passe oublié</h3>
                         <br>
                         <p>Bonjour,</p>
-                        <p>Vous avez demandé à réinitialisé votre mot de passe, pour continuer, cliquer sur le lien ci-dessous.</p>
+                        <p>Vous avez demandé à réinitialiser votre mot de passe, pour continuer, cliquer sur le lien ci-dessous.</p>
                         <p><a href="https://family.matthieudevilliers.fr/pages/reset-password/?reset=' . htmlentities($rand) . '">https://family.matthieudevilliers.fr/pages/reset-password/?reset=' . htmlentities($rand) . '</a></p>
                         <br>
                         <p>L\'équipe de Listes d\'idées cadeaux</p>
                     </body>
                 </html>
             ';
-            if (envoiMail(htmlentities($_POST['Mail']), "Mot de passe oublié - Listes d'idées cadeaux", $contenu)) {
+            if (envoiMail(htmlentities($_POST['Mail']), "Mot de passe oublié - Listes d'idées cadeau", $contenu)) {
                 // Le mail a bien été envoyé
-                $info = " Un mail va prochainement vous être envoyé à l'adresse fournie.";
+                $info = "Un mail va prochainement vous être envoyé à l'adresse fournie.";
             } else {
                 // Le mail n'a pas été envoyé
                 $alert = "Une erreur est survenue lors de l'envoi du mail.";
@@ -111,7 +111,7 @@ if ($_POST['reset']) {
         $alert = 'CAPTCHA invalide ou manquant !';
     }
 } else {
-    $alert = 'La réinitialisation d\'un mot de passe est définitif, vous ne pourrez plus revenir en arrière.';
+    $alert = 'La réinitialisation d\'un mot de passe est définitive, vous ne pourrez plus revenir en arrière.';
 }
 
 if ($_GET['reset']) {
@@ -138,7 +138,7 @@ if ($_GET['reset']) {
 <html lang="fr" class="h-100">
 
 <head>
-    <title>Listes d'idées cadeaux - Réinitialiser votre mot de passe</title>
+    <title>Listes d'idées cadeau - Réinitialiser votre mot de passe</title>
 
     <!-- Import -->
     <?php include('../../widgets/import/index.php'); ?>

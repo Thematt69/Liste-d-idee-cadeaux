@@ -15,7 +15,7 @@ $info = false;
 
 if (isset($_POST['Comptes'])) {
     if ($_POST['Comptes'][0] == 'tous' && count($_POST['Comptes']) > 1) {
-        $alert = 'Vous ne pouvez pas sélectionez "Tous les comptes" et d\'autres comptes !';
+        $alert = 'Vous ne pouvez pas sélectionner "Tous les comptes" et d\'autres comptes !';
     } else {
         foreach ($_POST['Comptes'] as $value) {
             if ($value != 'tous') {
@@ -47,7 +47,7 @@ if (isset($_POST['Comptes'])) {
                 $response1->closeCursor();
             }
         }
-        $info = 'Les notifications ont bien été envoyés.';
+        $info = 'Les notifications ont bien été envoyées.';
     }
 }
 
@@ -56,7 +56,7 @@ if (isset($_POST['Comptes'])) {
 <html lang="fr" class="h-100">
 
 <head>
-    <title>Listes d'idées cadeaux - Connexion</title>
+    <title>Listes d'idées cadeau - Connexion</title>
 
     <!-- Import -->
     <?php include('../../widgets/import/index.php'); ?>

@@ -41,7 +41,7 @@ $response1->closeCursor();
 <html lang="fr" class="h-100">
 
 <head>
-    <title>Listes d'idées cadeaux - Idées de la liste</title>
+    <title>Listes d'idées cadeau - Idées de la liste</title>
 
     <!-- Import -->
     <?php include('../../widgets/import/index.php'); ?>

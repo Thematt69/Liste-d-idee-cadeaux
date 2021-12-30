@@ -98,7 +98,7 @@ if (isset($_POST['delete'])) {
 
             $donnee3 = $response3->fetch();
 
-            envoiMail($donnee3['mail'], "Annulation de votre réservation d'idée - Listes d'idées cadeaux", $contenu);
+            envoiMail($donnee3['mail'], "Annulation de votre réservation d'idée - Listes d'idées cadeau", $contenu);
 
             $response3->closeCursor();
 
@@ -215,7 +215,7 @@ if (isset($_POST['delete'])) {
 <html lang="fr" class="h-100">
 
 <head>
-    <title>Listes d'idées cadeaux - Création / Modification d'une idée</title>
+    <title>Listes d'idées cadeau - Création / Modification d'une idée</title>
 
     <!-- Import -->
     <?php include('../../widgets/import/index.php'); ?>

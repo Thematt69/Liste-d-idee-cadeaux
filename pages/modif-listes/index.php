@@ -172,8 +172,6 @@ if (isset($_POST['cancel'])) {
             }
         }
 
-
-
         $response1->closeCursor();
     }
 
@@ -208,11 +206,9 @@ if (isset($_POST['cancel'])) {
             $alert = "L'utilisateur est déjà autorisé à accéder à votre liste.";
         }
 
-
-
         $response3->closeCursor();
     } else {
-        $alert = "Aucun utilisateur ne correspond à l'adresse mail fourni !";
+        $alert = "Aucun utilisateur ne correspond à l'adresse mail fournie !";
     }
     $response1->closeCursor();
 } elseif (isset($_POST['new_droit_auth_id'])) {
@@ -233,7 +229,7 @@ if (isset($_POST['cancel'])) {
 <html lang="fr" class="h-100">
 
 <head>
-    <title>Listes d'idées cadeaux - Création / Modification de liste</title>
+    <title>Listes d'idées cadeau - Création / Modification de liste</title>
 
     <!-- Import -->
     <?php include('../../widgets/import/index.php'); ?>
@@ -282,7 +278,7 @@ if (isset($_POST['cancel'])) {
                             <div class="col-sm-12">
                                 <br>
                                 <div class="alert alert-danger" role="alert">
-                                    <strong>Vous n'avez pas les droits !</strong> Nous sommes désolées, mais il semblerai que vous n'avez pas les droits pour cette idée. Merci de revenir à <a href="https://family.matthieudevilliers.fr/pages/listes/" class="alert-link">vos listes</a>.
+                                    <strong>Vous n'avez pas les droits !</strong> Nous sommes désolées, mais il semblerait que vous n'ayez pas les droits pour cette idée. Merci de revenir à <a href="https://family.matthieudevilliers.fr/pages/listes/" class="alert-link">vos listes</a>.
                                 </div>
                                 <br>
                             </div>
@@ -356,8 +352,8 @@ if (isset($_POST['cancel'])) {
                                 <p>Les administrateurs ont un accès par défaut pour tout partage de type "Limité" ou "Public".</p>
                                 <ul>
                                     <li><strong>Privé</strong> - La liste n'est accessible que par vous.</li>
-                                    <li><strong>Limité</strong> - Seules les personnes que vous avez autorisé pourront avoir accès à votre liste.</li>
-                                    <li><strong>Public</strong> - Toutes les personnes disposants du lien pourront accèder à votre liste.</li>
+                                    <li><strong>Limité</strong> - Seules les personnes que vous avez autorisées pourront avoir accès à votre liste.</li>
+                                    <li><strong>Public</strong> - Toutes les personnes disposants du lien pourront accéder à votre liste.</li>
                                 </ul>
                                 <?php
                                 if (isset($_GET['liste'])) {
