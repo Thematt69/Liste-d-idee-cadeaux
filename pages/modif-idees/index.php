@@ -3,6 +3,7 @@
 session_start();
 
 include('../../scripts/verif/index.php');
+include('../../scripts/mail/index.php');
 
 if (!isset($_SESSION['id_compte'])) {
     header('Location: https://family.matthieudevilliers.fr/pages/connexion/');
@@ -50,14 +51,67 @@ if (isset($_POST['delete'])) {
         $response->closeCursor();
 
         $sql = 'SELECT lic_liste.lien_partage as lien
-            FROM lic_liste
-            INNER JOIN lic_idee ON lic_idee.id_liste = lic_liste.id
-            WHERE lic_idee.nom = ? AND lic_liste.deleted_to IS NULL AND lic_idee.deleted_to IS NULL';
+                FROM lic_liste
+                INNER JOIN lic_idee ON lic_idee.id_liste = lic_liste.id
+                WHERE lic_idee.nom = ? AND lic_liste.deleted_to IS NULL AND lic_idee.deleted_to IS NULL';
 
         $response = $bdd->prepare($sql);
         $response->execute(array(htmlentities($_POST['Nom'])));
 
         $donnee = $response->fetch();
+
+        $sql1 = 'SELECT is_buy, buy_from
+                FROM lic_idee
+                WHERE nom = ? AND deleted_to IS NULL';
+
+        $response1 = $bdd->prepare($sql1);
+        $response1->execute(array(htmlentities($_POST['Nom'])));
+
+        $donnee1 = $response1->fetch();
+
+        if ($donnee1['is_buy'] == 1 && $donnee1['buy_from'] != null) {
+            // Envoyer un mail à la personne qui avait réservé
+            $contenu = '
+                <html>
+                    <body>
+                        <h3>Annulation de votre réservation d\'idée</h3>
+                        <br>
+                        <p>Bonjour,</p>
+                        <p>
+                            Vous aviez réservé l\'idée intitulée "' . htmlentities($_POST['Nom']) . '" mais le propriétaire vient d\'indiquer qu\'il l\'a finalement acheté par lui-même.
+                            Votre réservation est donc annulée, pour voir la liste d\'idée(s) concernée(s), cliquer sur le lien ci-dessous.
+                        </p>
+                        <p><a href="https://family.matthieudevilliers.fr/pages/idees/?liste=' . $donnee['lien'] . '">https://family.matthieudevilliers.fr/pages/idees/?liste=' . $donnee['lien'] . '</a></p>
+                        <br>
+                        <p>L\'équipe de Listes d\'idées cadeaux</p>
+                    </body>
+                </html>
+            ';
+
+
+            $sql3 = 'SELECT mail
+                FROM lic_compte
+                WHERE id = ? AND deleted_to IS NULL';
+
+            $response3 = $bdd->prepare($sql3);
+            $response3->execute(array($_SESSION['id_compte']));
+
+            $donnee3 = $response3->fetch();
+
+            envoiMail($donnee3['mail'], "Annulation de votre réservation d'idée - Listes d'idées cadeaux", $contenu);
+
+            $response3->closeCursor();
+
+            // Supprimer la réservation
+            $sql2 = 'UPDATE lic_idee
+                    SET buy_from = NULL
+                    WHERE nom = ? AND deleted_to IS NULL';
+
+            $response2 = $bdd->prepare($sql2);
+            $response2->execute(array(htmlentities($_POST['Nom'])));
+            $response2->closeCursor();
+        }
+        $response1->closeCursor();
 
         header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $donnee['lien']);
 
@@ -202,7 +256,7 @@ if (isset($_POST['delete'])) {
                             <div class="col-sm-12">
                                 <br>
                                 <div class="alert alert-danger" role="alert">
-                                    <strong>Vous n'avez pas les droits !</strong> Nous sommes désolées, mais il semblerai que vous n'avez pas les droits pour cette idée. Merci de revenir à <a href="https://family.matthieudevilliers.fr/pages/listes/" class="alert-link">vos listes</a>.
+                                    <strong>Vous n'avez pas les droits !</strong> Nous sommes désolées, mais il semblerait que vous n'ayez pas les droits pour cette idée. Merci de revenir à <a href="https://family.matthieudevilliers.fr/pages/listes/" class="alert-link">vos listes</a>.
                                 </div>
                                 <br>
                             </div>
@@ -299,7 +353,7 @@ if (isset($_POST['delete'])) {
                                                 ?>
                                                     <input name="AchatFrom" value="1" class="form-check-input" type="checkbox" id="LabelAchat" checked disabled>
                                                     <label class="form-check-label" for="LabelAchat">
-                                                        Déja réservé
+                                                        Déjà réservé
                                                     </label>
                                                 <?php
                                                 } else {
