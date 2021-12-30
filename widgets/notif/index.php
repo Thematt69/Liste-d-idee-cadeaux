@@ -68,7 +68,9 @@
                              <?php echo $donneesreq3["titre"] ?>
                          </strong>
                          <br>
-                         <?php echo $donneesreq3["message"] ?>
+                         <div class="text-start" style="padding: 0px 10px;">
+                             <?php echo $donneesreq3["message"] ?>
+                         </div>
                          <br>
                          <small>
                              Le <?php echo $datetime->format("d/m/Y H:i") ?>
