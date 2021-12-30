@@ -279,20 +279,37 @@ if (isset($_POST['delete'])) {
                                     <div class="col-md-5">
                                         <div class="form-check">
                                             <?php
+
                                             if ($donnee['droit'] == "proprietaire") {
                                             ?>
                                                 <input name="Achat" value="1" class="form-check-input" type="checkbox" id="LabelAchat" <?php if ($donnees['is_buy']) echo 'checked' ?>>
                                                 <label class="form-check-label" for="LabelAchat">
                                                     J'ai acheté cette idée
                                                 </label>
-                                            <?php
+                                                <?php
                                             } else {
-                                            ?>
-                                                <input name="AchatFrom" value="1" class="form-check-input" type="checkbox" id="LabelAchat" <?php if (isset($donnees['buy_from'])) echo 'checked' ?>>
-                                                <label class="form-check-label" for="LabelAchat">
-                                                    Je réserve cette idée
-                                                </label>
+                                                if ($donnees['is_buy']) {
+                                                ?>
+                                                    <input class="form-check-input" type="checkbox" id="LabelAchat" checked disabled>
+                                                    <label class="form-check-label" for="LabelAchat">
+                                                        Déjà acheté par le propriétaire
+                                                    </label>
+                                                <?php
+                                                } elseif (isset($donnees['buy_from'])) {
+                                                ?>
+                                                    <input name="AchatFrom" value="1" class="form-check-input" type="checkbox" id="LabelAchat" checked disabled>
+                                                    <label class="form-check-label" for="LabelAchat">
+                                                        Déja réservé
+                                                    </label>
+                                                <?php
+                                                } else {
+                                                ?>
+                                                    <input name="AchatFrom" value="1" class="form-check-input" type="checkbox" id="LabelAchat" <?php if ($donnees['buy_from'] == $_SESSION['id_compte']) echo 'checked' ?>>
+                                                    <label class="form-check-label" for="LabelAchat">
+                                                        Je réserve cette idée
+                                                    </label>
                                             <?php
+                                                }
                                             }
                                             ?>
                                         </div>
