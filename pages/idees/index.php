@@ -98,9 +98,29 @@ $response1->closeCursor();
                                 echo ('<i class="fas fa-lock fa-2x" style="font-size: 1.5rem;"></i>');
                                 break;
                         }
+                        echo $donnee['nom'];
+
+                        if ($donnee['droit'] != 'proprietaire') {
+
+                            $sql1 = 'SELECT lic_compte.prenom as prenom
+                                FROM lic_compte
+                                INNER JOIN lic_autorisation ON lic_autorisation.id_compte = lic_compte.id
+                                WHERE lic_autorisation.type = "proprietaire" AND lic_autorisation.id_liste = ? AND lic_compte.deleted_to IS NULL';
+
+                            $response1 = $bdd->prepare($sql1);
+                            $response1->execute(array($donnee['id']));
+
+                            $donnees1 = $response1->fetch();
+
                         ?>
-                        <?php echo $donnee['nom'] ?>
+                            <small class="text-muted">
+                                de <?php echo $donnees1['prenom'] ?>
+                            </small>
                         <?php
+
+                            $response1->closeCursor();
+                        }
+
                         if ($donnee['droit'] == "proprietaire") {
                         ?>
                             <a href="https://family.matthieudevilliers.fr/pages/modif-listes/?liste=<?php echo ($_GET['liste']) ?>" class="link-dark">
