@@ -130,7 +130,7 @@ if (isset($_POST['Comptes'])) {
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-floating">
-                                        <input name="Message" type="text" class="form-control" id="LabelMessage" aria-describedby="DescriptionMessage" placeholder="Message" required>
+                                        <textarea name="Message" class="form-control" id="LabelMessage" aria-describedby="DescriptionMessage" placeholder="Message" required>
                                         <label for="LabelMessage">Message</label>
                                     </div>
                                     <br>
