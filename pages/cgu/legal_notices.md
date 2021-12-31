@@ -28,7 +28,7 @@ Pour toute question concernant vos données personnelles, veuillez utilisez le f
 
 Nous ne sommes pas responsables du contenu défini par les utilisateurs, ni de l'authenticité des liens internet.
 
-Aucun système de suppression automatique n'est actuellement déployé. 
+Les données personnelles ou non sont supprimé au bout de trois ans, du moment qu'il est supprimé par l'utilisateur (Le script est exécuté tous les dimanches à minuit).
 
 TODO - Droits d'opposition, d'interrogation, d'accès et de rectification
 

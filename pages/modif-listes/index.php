@@ -41,7 +41,7 @@ if (isset($_POST['cancel'])) {
     $date = new DateTime();
 
     $response = $bdd->prepare($sql);
-    $response->execute(array($date->format('Y-m-d H:m:i'), htmlentities($_POST['delete'])));
+    $response->execute(array($date->format('Y-m-d H:i:s'), htmlentities($_POST['delete'])));
 
     $response->closeCursor();
 

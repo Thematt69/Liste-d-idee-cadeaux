@@ -57,8 +57,8 @@ if ($_POST['reset']) {
     if ($response->success) {
 
         $sql = 'SELECT id
-            FROM lic_compte
-            WHERE mail = ? AND deleted_to IS NULL';
+                FROM lic_compte
+                WHERE mail = ? AND deleted_to IS NULL';
 
         $response = $bdd->prepare($sql);
         $response->execute(array(htmlentities($_POST['Mail'])));
