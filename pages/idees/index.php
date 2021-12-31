@@ -87,15 +87,15 @@ $response1->closeCursor();
                         <?php
                         switch ($donnee['partage']) {
                             case 'public':
-                                echo ('<i class="fas fa-users fa-2x" style="font-size: 1.5rem;"></i>');
+                                echo '<i class="fas fa-users fa-2x" style="font-size: 1.5rem;"></i> ';
                                 break;
 
                             case 'limite':
-                                echo ('<i class="fas fa-user-lock fa-2x" style="font-size: 1.5rem;"></i>');
+                                echo '<i class="fas fa-user-lock fa-2x" style="font-size: 1.5rem;"></i> ';
                                 break;
 
                             default:
-                                echo ('<i class="fas fa-lock fa-2x" style="font-size: 1.5rem;"></i>');
+                                echo '<i class="fas fa-lock fa-2x" style="font-size: 1.5rem;"></i> ';
                                 break;
                         }
                         echo $donnee['nom'];
