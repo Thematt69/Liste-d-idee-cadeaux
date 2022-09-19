@@ -428,7 +428,7 @@ if (isset($_POST['cancel'])) {
                                                     <form action="" method="post">
                                                         <div class="input-group input-group-sm">
                                                             <select class=" form-select form-select-sm" name="new_droit" <?php if ($donnees1['fonction'] == 'admin' || $donnees1['droit'] == 'proprietaire') echo "disabled"; ?>>
-                                                                <option disabled <?php if ($donnees1['droit'] == 'proprietaire') echo "selected"; ?> value="proprietaire">Proriétaire</option>
+                                                                <option disabled <?php if ($donnees1['droit'] == 'proprietaire') echo "selected"; ?> value="proprietaire">Propriétaire</option>
                                                                 <option <?php if ($donnees1['droit'] == 'moderateur') echo "selected"; ?> value="moderateur">Modérateur</option>
                                                                 <option <?php if ($donnees1['droit'] == 'lecteur') echo "selected"; ?> value="lecteur">Lecteur</option>
                                                             </select>
