@@ -140,6 +140,17 @@ if (isset($_POST['cancel'])) {
 
     $donnee = $response->fetch();
 
+    if (isset($_POST['Co-propriétaire'])) {
+        // Création de l'autorisation 'propriétaire' au co-propriétaire
+        $sql1 = 'INSERT INTO lic_autorisation (id_compte, id_liste, `type`)
+            VALUES (?,?,"proprietaire")';
+
+        $response1 = $bdd->prepare($sql1);
+        $response1->execute(array($_POST['Co-propriétaire'], $donnee['id']));
+
+        $response1->closeCursor();
+    }
+
     // Création de l'autorisation 'propriétaire'
     $sql1 = 'INSERT INTO lic_autorisation (id_compte, id_liste, `type`)
             VALUES (?,?,"proprietaire")';
@@ -293,12 +304,6 @@ if (isset($_POST['cancel'])) {
                         echo ('<h1 class="text-center">Création de liste</h1>');
                     }
                 ?>
-                    <!-- <br>
-                    <p class="text-center">Lien de partage :
-                        <a class="link-primary" target="_blank" href="https://family.matthieudevilliers.fr/pages/idees/?liste=<?php echo $_GET['liste']; ?>">
-                            https://family.matthieudevilliers.fr/pages/idees/?liste=<?php echo $_GET['liste']; ?>
-                        </a>
-                    </p> -->
                     <br>
                     <div class="card">
                         <div class="card-body">
@@ -320,7 +325,7 @@ if (isset($_POST['cancel'])) {
                                         <br>
                                     </div>
                                     <div class="btn-group" role="group">
-                                        <div class="col-md-8 text-center">
+                                        <div class="col-md-6 text-center">
                                             <button type="submit" name="save" value="<?php echo $donnees['id'] ?>" class="btn btn-primary">Enregistrer</button>
                                             <button type="submit" name="cancel" value="<?php echo $donnees['id'] ?>" class="btn btn-secondary">Annuler</button>
                                         </div>
@@ -329,8 +334,36 @@ if (isset($_POST['cancel'])) {
                                         ?>
                                             <br>
                                             <br>
-                                            <div class="col-md-4 text-center">
+                                            <div class="col-md-6 text-center">
                                                 <button type="submit" name="delete" value="<?php echo $donnees['id'] ?>" class="btn btn-danger">Supprimer</button>
+                                            </div>
+                                        <?php
+                                        } elseif (isset($_GET['type']) && $_GET['type'] == 'duo') {
+                                        ?>
+                                            <br>
+                                            <br>
+                                            <div class="col-md-6">
+                                                <select class="form-select" name="Co-propriétaire" aria-label="Co-propriétaire">
+                                                    <?php
+
+                                                    $sql1 = 'SELECT id,prenom,nom,mail
+                                                            FROM lic_compte
+                                                            WHERE id != ? AND deleted_to IS NULL';
+
+                                                    $response1 = $bdd->prepare($sql1);
+                                                    $response1->execute(array($_SESSION['id_compte']));
+
+                                                    while ($donnees = $response1->fetch()) {
+                                                    ?>
+                                                        <option value="<?php echo ($donnees['id']) ?>"><?php echo ($donnees['prenom'] . " " . strtoupper($donnees['nom']) . " - " . $donnees['mail']); ?></option>
+                                                    <?php
+                                                    }
+
+                                                    $response1->closeCursor();
+
+                                                    ?>
+                                                </select>
+                                                <br>
                                             </div>
                                         <?php
                                         }

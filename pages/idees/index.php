@@ -100,26 +100,43 @@ $response1->closeCursor();
                         }
                         echo $donnee['nom'];
 
-                        if ($donnee['droit'] != 'proprietaire') {
 
-                            $sql1 = 'SELECT lic_compte.prenom as prenom
+
+                        $sql1 = 'SELECT lic_compte.prenom as prenom, lic_compte.id as id
                                 FROM lic_compte
                                 INNER JOIN lic_autorisation ON lic_autorisation.id_compte = lic_compte.id
-                                WHERE lic_autorisation.type = "proprietaire" AND lic_autorisation.id_liste = ? AND lic_compte.deleted_to IS NULL';
+                                WHERE lic_autorisation.type = "proprietaire" AND lic_autorisation.id_liste = ? AND lic_compte.deleted_to IS NULL
+                                ORDER BY lic_compte.prenom ASC';
 
-                            $response1 = $bdd->prepare($sql1);
-                            $response1->execute(array($donnee['id']));
+                        $response1 = $bdd->prepare($sql1);
+                        $response1->execute(array($donnee['id']));
 
-                            $donnees1 = $response1->fetch();
+                        $proprietaire = array();
+
+                        while ($donnees1 = $response1->fetch()) {
+                            array_push($proprietaire, $donnees1);
+                        }
 
                         ?>
-                            <small class="text-muted">
-                                de <?php echo $donnees1['prenom'] ?>
-                            </small>
+                        <small class="text-muted">de
+                            <?php
+                            for ($i = 0; $i < count($proprietaire); $i++) {
+                                if ($i > 0) {
+                                    echo " et ";
+                                }
+                                if ($proprietaire[$i]['id'] == $_SESSION['id_compte']) {
+                                    echo "<strong>&thinsp;vous&thinsp;</strong>";
+                                } else {
+                                    echo $proprietaire[$i]['prenom'];
+                                }
+                            }
+
+                            ?>
+                        </small>
                         <?php
 
-                            $response1->closeCursor();
-                        }
+                        $response1->closeCursor();
+
 
                         if ($donnee['droit'] == "proprietaire") {
                         ?>
