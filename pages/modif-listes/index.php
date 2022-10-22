@@ -140,6 +140,15 @@ if (isset($_POST['cancel'])) {
 
     $donnee = $response->fetch();
 
+    // Création de l'autorisation 'propriétaire'
+    $sql1 = 'INSERT INTO lic_autorisation (id_compte, id_liste, `type`)
+            VALUES (?,?,"proprietaire")';
+
+    $response1 = $bdd->prepare($sql1);
+    $response1->execute(array($_SESSION['id_compte'], $donnee['id']));
+
+    $response1->closeCursor();
+
     if (isset($_POST['Co-propriétaire'])) {
         // Création de l'autorisation 'propriétaire' au co-propriétaire
         $sql1 = 'INSERT INTO lic_autorisation (id_compte, id_liste, `type`)
@@ -150,15 +159,6 @@ if (isset($_POST['cancel'])) {
 
         $response1->closeCursor();
     }
-
-    // Création de l'autorisation 'propriétaire'
-    $sql1 = 'INSERT INTO lic_autorisation (id_compte, id_liste, `type`)
-            VALUES (?,?,"proprietaire")';
-
-    $response1 = $bdd->prepare($sql1);
-    $response1->execute(array($_SESSION['id_compte'], $donnee['id']));
-
-    $response1->closeCursor();
 
     if (htmlentities($_POST['Partage']) != 'prive') {
         // Récupération des id des comptes admin

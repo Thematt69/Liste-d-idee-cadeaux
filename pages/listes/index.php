@@ -41,11 +41,15 @@ if (!isset($_SESSION['id_compte'])) {
                 <div class="row">
                     <?php
 
-                    $sql = 'SELECT lic_liste.nom as nom, lic_liste.lien_partage as lien_partage,lic_autorisation.type as roles,lic_liste.id as id
+                    $sql = 'SELECT lic_liste.nom as nom, lic_liste.lien_partage as lien_partage, lic_liste.id as id
                             FROM lic_liste
                             INNER JOIN lic_autorisation ON lic_autorisation.id_liste = lic_liste.id
                             WHERE lic_autorisation.id_compte = ? AND lic_liste.deleted_to IS NULL
-                            ORDER BY lic_liste.nom ASC';
+                            UNION
+                            SELECT lic_liste.nom as nom, lic_liste.lien_partage as lien_partage, lic_liste.id as id
+                            FROM lic_liste
+                            WHERE lic_liste.partage = "public" AND lic_liste.deleted_to IS NULL  
+                            ORDER BY nom ASC';
 
                     $response = $bdd->prepare($sql);
                     $response->execute(array($_SESSION['id_compte']));
