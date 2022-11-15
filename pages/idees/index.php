@@ -8,6 +8,30 @@ if (!isset($_SESSION['id_compte'])) {
     header('Location: https://family.matthieudevilliers.fr/pages/connexion/');
 }
 
+if (isset($_POST['AchatFrom'])) {
+    $sql1 = 'SELECT buy_from
+            FROM lic_idee
+            WHERE id = ?';
+
+    $response1 = $bdd->prepare($sql1);
+    $response1->execute(array($_POST['AchatFrom']));
+    $donnee1 = $response1->fetch();
+
+    $buyFrom = $donnee1['buy_from'] == $_SESSION['id_compte'] ? NULL : $_SESSION['id_compte'];
+
+    $response1->closeCursor();
+
+    // Modification de la réservation
+    $sql = 'UPDATE lic_idee
+            SET buy_from = ?
+            WHERE id = ?';
+
+    $response = $bdd->prepare($sql);
+    $response->execute(array($buyFrom, htmlentities($_POST['AchatFrom'])));
+
+    $response->closeCursor();
+}
+
 $sql = 'SELECT id, partage
         FROM lic_liste
         WHERE lien_partage = ? AND deleted_to IS NULL';
@@ -163,6 +187,8 @@ $response1->closeCursor();
                                             <?php
                                             if ($donnee['droit'] != "lecteur")
                                                 echo '<th>Actions</th>';
+                                            else
+                                                echo '<th>Réservé</th>';
                                             ?>
                                         </tr>
                                     </thead>
@@ -253,6 +279,26 @@ $response1->closeCursor();
                                                             <i class="far fa-edit"></i>
                                                         </a>
                                                     </td>
+                                                    <?php
+                                                } else {
+                                                    if ($donnees['is_buy'] || (isset($donnees['buy_from']) && $donnees['buy_from'] != $_SESSION['id_compte'])) {
+                                                    ?>
+                                                        <td>
+                                                            <input class="form-check-input" type="checkbox" checked disabled>
+                                                        </td>
+                                                    <?php
+                                                    } else {
+                                                    ?>
+                                                        <td>
+                                                            <form action="" method="post">
+                                                                <input name='AchatFrom' value="<?php echo $donnees['id']; ?>" type='hidden'>
+                                                                <input name="AchatFrom" value="<?php echo $donnees['id']; ?>" class="form-check-input" type="checkbox" onChange="submit();" <?php if ($donnees['buy_from'] == $_SESSION['id_compte']) echo 'checked'; ?> />
+                                                            </form>
+                                                        </td>
+                                                    <?php
+                                                    }
+                                                    ?>
+
                                                 <?php
                                                 }
                                                 ?>
@@ -272,18 +318,6 @@ $response1->closeCursor();
                                 <a class="btn btn-primary" href="https://family.matthieudevilliers.fr/pages/modif-idees/?liste=<?php echo $_GET['liste']; ?>">
                                     Ajouter une idée
                                 </a>
-                            <?php
-                            }
-                            ?>
-                            <br>
-                            <?php
-                            if ($donnee['partage'] == "limite" || $donnee['partage'] == "public") {
-                            ?>
-                                <br>
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text" id="copy">Partager ce lien :</span>
-                                    <input type="text" class="form-control" value="https://family.matthieudevilliers.fr/pages/idees/?liste=<?php echo $_GET['liste']; ?>" disabled aria-describedby="copy">
-                                </div>
                             <?php
                             }
                             ?>

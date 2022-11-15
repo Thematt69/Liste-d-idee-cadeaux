@@ -117,8 +117,6 @@ if (isset($_POST['delete'])) {
 
         $response->closeCursor();
     } else {
-        echo 'achat from ' . htmlentities($_POST['AchatFrom']) . '<br>';
-
         if (htmlentities($_POST['AchatFrom']) == "1") {
             $buyFrom = $_SESSION['id_compte'];
         }
