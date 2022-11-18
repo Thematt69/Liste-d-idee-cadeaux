@@ -240,16 +240,27 @@ $response1->closeCursor();
                                                     <?php
                                                     if ($donnees['is_buy']) {
 
-                                                        $sql2 = 'SELECT prenom
-                                                            FROM lic_compte
-                                                            WHERE id = (SELECT id_compte FROM `lic_autorisation` WHERE id_liste = ? AND type = "proprietaire") AND deleted_to IS NULL';
+                                                        $sql2 = 'SELECT lic_compte.prenom as prenom, lic_compte.id as id
+                                                                FROM lic_compte
+                                                                INNER JOIN lic_autorisation ON lic_autorisation.id_compte = lic_compte.id
+                                                                WHERE lic_autorisation.type = "proprietaire" AND lic_autorisation.id_liste = ? AND lic_compte.deleted_to IS NULL
+                                                                ORDER BY lic_compte.prenom ASC';
 
                                                         $response2 = $bdd->prepare($sql2);
                                                         $response2->execute(array($donnee['id']));
 
-                                                        $donnee1 = $response2->fetch();
+                                                        $proprietaire = array();
 
-                                                        echo 'Acheté par ' . $donnee1['prenom'];
+                                                        while ($donnee1 = $response2->fetch()) {
+                                                            array_push($proprietaire, $donnee1);
+                                                        }
+
+                                                        echo 'Acheté par ';
+
+                                                        for ($i = 0; $i < count($proprietaire); $i++) {
+                                                            if ($i > 0) echo " et ";
+                                                            echo $proprietaire[$i]['prenom'];
+                                                        }
 
                                                         $response2->closeCursor();
                                                     } elseif ($donnees['buy_from'] && $donnee['droit'] != "proprietaire") {
