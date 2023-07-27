@@ -161,7 +161,6 @@ $response1->closeCursor();
 
                         $response1->closeCursor();
 
-
                         if ($donnee['droit'] == "proprietaire") {
                         ?>
                             <a href="https://family.matthieudevilliers.fr/pages/modif-listes/?liste=<?php echo ($_GET['liste']) ?>" class="link-dark">
@@ -170,6 +169,12 @@ $response1->closeCursor();
                         <?php
                         }
                         ?>
+
+
+                        <a href="https://family.matthieudevilliers.fr/pages/print-liste/?liste=<?php echo ($_GET['liste']) ?>" class="link-dark">
+                            <i class="fas fa-print fa-2x" style="font-size: 1.5rem;"></i>
+                        </a>
+
                     </h1>
                     <br>
 
@@ -182,7 +187,7 @@ $response1->closeCursor();
                                             <th>Nom</th>
                                             <th style="max-width: 30rem;">Commentaire</th>
                                             <th style="max-width: 40rem;">Lien</th>
-                                            <th>Prix</th>
+                                            <th style="min-width: 8rem;">Prix</th>
                                             <th>Infos</th>
                                             <?php
                                             if ($donnee['droit'] != "lecteur")
@@ -230,7 +235,7 @@ $response1->closeCursor();
                                                         ?>
                                                     </a>
                                                 </td>
-                                                <td>
+                                                <td style="min-width: 8rem;">
                                                     <?php
                                                     if ($donnees['price'] == null) echo ('//');
                                                     else echo ($donnees['price']);
