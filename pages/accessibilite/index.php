@@ -2,7 +2,7 @@
 <html lang="fr" class="h-100">
 
 <head>
-    <title>Listes d'idées cadeau - CGU</title>
+    <title>Listes d'idées cadeau - Déclaration d’accessibilité</title>
 
     <!-- Import -->
     <?php include('../../widgets/import/index.php'); ?>
