@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md navbar-dark bg-secondary shadow-sm" aria-label="Navigation principale">
+<nav class="navbar navbar-expand-md navbar-dark bg-secondary shadow-sm" role="navigation" aria-label="Navigation principale">
     <div class="container">
         <a class="navbar-brand" href="https://family.matthieudevilliers.fr" aria-label="Retour à l'accueil">
             <img src="https://family.matthieudevilliers.fr/images/logo.webp" width="30" height="30" class="d-inline-block align-top" alt="Logo du site" loading="lazy">
