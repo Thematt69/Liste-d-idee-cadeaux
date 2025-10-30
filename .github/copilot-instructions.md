@@ -108,7 +108,7 @@ php -S localhost:8000
 - **Redirect safety:** All `header('Location: ...')` calls followed by `exit()` to prevent code execution
 - **Input validation:** GET/POST parameters validated before use
 - **Null checks:** Database `fetch()` results checked before array access
-- **Component updates:** Bootstrap upgraded from v5.0.2 to v5.3.3
+- **Component updates:** Bootstrap upgraded from v5.0.2 to v5.3.8 and jQuery from v3.5.1 to v3.7.1
 
 When making changes, maintain these security patterns:
 - Always escape output with `htmlspecialchars($var, ENT_QUOTES, 'UTF-8')`
