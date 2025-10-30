@@ -58,7 +58,7 @@
      * Enhance checkbox interactions with visual feedback
      */
     function enhanceCheckboxes() {
-        const checkboxForms = document.querySelectorAll('form input[type="checkbox"][onChange*="submit"]');
+        const checkboxForms = document.querySelectorAll('form input[type="checkbox"][onchange*="submit"]');
         
         checkboxForms.forEach(function(checkbox) {
             checkbox.addEventListener('change', function() {
@@ -167,22 +167,8 @@
                 });
             }
         });
-    }
-
-    /**
-     * Add visual feedback for card interactions
-     */
-    function enhanceCardInteractions() {
-        const cards = document.querySelectorAll('.card');
-        
-        cards.forEach(function(card) {
-            card.addEventListener('mouseenter', function() {
-                card.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease';
-            });
+            }
         });
     }
-
-    // Initialize card enhancements
-    enhanceCardInteractions();
 
 })();
