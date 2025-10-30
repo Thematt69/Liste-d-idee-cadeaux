@@ -7,6 +7,7 @@ include('../../scripts/mail/index.php');
 
 if (isset($_SESSION['id_compte'])) {
     header('Location: https://family.matthieudevilliers.fr/pages/listes/');
+    exit();
 }
 
 $alert = false;
@@ -36,6 +37,7 @@ if ($_POST['reset']) {
     $response3->closeCursor();
 
     header('Location: https://family.matthieudevilliers.fr/pages/connexion/');
+    exit();
 } elseif (isset($_POST['Mail'])) {
 
     $url = 'https://www.google.com/recaptcha/api/siteverify';
@@ -73,11 +75,11 @@ if ($_POST['reset']) {
                     WHERE mail = ?';
 
             // Lien random de partage
-            $str = rand();
-            $rand = md5($str);
+            $rand = bin2hex(random_bytes(32));
+            $hashedRand = password_hash(htmlentities($rand), PASSWORD_DEFAULT);
 
             $response1 = $bdd->prepare($sql1);
-            $response1->execute(array(htmlentities($rand), htmlentities($_POST['Mail'])));
+            $response1->execute(array($hashedRand, htmlentities($_POST['Mail'])));
             $response1->closeCursor();
 
             // Contenu du mail
@@ -124,7 +126,7 @@ if ($_GET['reset']) {
 
     $donnee = $response->fetch();
 
-    if ($donnee['motdepasse'] != $_GET['reset']) {
+    if (!password_verify($_GET['reset'], $donnee['motdepasse'])) {
         $invalide = true;
         // Le lien n'est plus valide
         $alert = "Le lien n'est plus valide !";

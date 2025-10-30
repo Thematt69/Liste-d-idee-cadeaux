@@ -6,6 +6,13 @@ include('../../scripts/verif/index.php');
 
 if (!isset($_SESSION['id_compte'])) {
     header('Location: https://family.matthieudevilliers.fr/pages/connexion/');
+    exit();
+}
+
+// Validate required GET parameter
+if (!isset($_GET['liste']) || empty($_GET['liste'])) {
+    header('Location: https://family.matthieudevilliers.fr/pages/listes/');
+    exit();
 }
 
 if (isset($_POST['AchatFrom'])) {
@@ -122,7 +129,7 @@ $response1->closeCursor();
                                 echo '<i class="fas fa-lock fa-2x" style="font-size: 1.5rem;"></i> ';
                                 break;
                         }
-                        echo $donnee['nom'];
+                        echo htmlspecialchars($donnee['nom'], ENT_QUOTES, 'UTF-8');
 
 
 
@@ -151,7 +158,7 @@ $response1->closeCursor();
                                 if ($proprietaire[$i]['id'] == $_SESSION['id_compte']) {
                                     echo "<strong>&thinsp;vous&thinsp;</strong>";
                                 } else {
-                                    echo $proprietaire[$i]['prenom'];
+                                    echo htmlspecialchars($proprietaire[$i]['prenom'], ENT_QUOTES, 'UTF-8');
                                 }
                             }
 
@@ -213,13 +220,13 @@ $response1->closeCursor();
                                                 <td>
                                                     <?php
                                                     if ($donnees['nom'] == null) echo ('//');
-                                                    else echo ($donnees['nom']);
+                                                    else echo htmlspecialchars($donnees['nom'], ENT_QUOTES, 'UTF-8');
                                                     ?>
                                                 </td>
                                                 <td style="max-width: 40rem">
                                                     <?php
                                                     if ($donnees['commentaire'] == null) echo ('//');
-                                                    else echo ($donnees['commentaire']);
+                                                    else echo htmlspecialchars($donnees['commentaire'], ENT_QUOTES, 'UTF-8');
                                                     ?>
                                                 </td>
                                                 <td style="max-width: 40rem;">
@@ -242,7 +249,7 @@ $response1->closeCursor();
                                                 <td style="min-width: 8rem;">
                                                     <?php
                                                     if ($donnees['price'] == null) echo ('//');
-                                                    else echo ($donnees['price']);
+                                                    else echo htmlspecialchars($donnees['price'], ENT_QUOTES, 'UTF-8');
                                                     ?>
                                                 </td>
                                                 <td>
@@ -268,7 +275,7 @@ $response1->closeCursor();
 
                                                         for ($i = 0; $i < count($proprietaire); $i++) {
                                                             if ($i > 0) echo " et ";
-                                                            echo $proprietaire[$i]['prenom'];
+                                                            echo htmlspecialchars($proprietaire[$i]['prenom'], ENT_QUOTES, 'UTF-8');
                                                         }
 
                                                         $response2->closeCursor();
@@ -283,7 +290,9 @@ $response1->closeCursor();
 
                                                         $donnee1 = $response2->fetch();
 
-                                                        echo 'Réservé par ' . $donnee1['prenom'];
+                                                        if ($donnee1) {
+                                                            echo 'Réservé par ' . htmlspecialchars($donnee1['prenom'], ENT_QUOTES, 'UTF-8');
+                                                        }
 
                                                         $response2->closeCursor();
                                                     } else {

@@ -6,17 +6,22 @@ include ('../../scripts/verif/index.php');
 
 if (isset($_SESSION['id_compte'])) {
     header('Location: https://family.matthieudevilliers.fr/pages/listes/');
+    exit();
 }
 
 // Retourne l'adresse IP de l'utilisateur
 function getIp()
 {
-    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-        return $_SERVER['HTTP_CLIENT_IP'];
-    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-        return $_SERVER['HTTP_X_FORWARDED_FOR'];
-    } elseif (!empty($_SERVER['REMOTE_ADDR'])) {
+    // Prioritize REMOTE_ADDR as it cannot be easily spoofed
+    if (!empty($_SERVER['REMOTE_ADDR'])) {
         return $_SERVER['REMOTE_ADDR'];
+    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        // Only use X-Forwarded-For if REMOTE_ADDR is not available
+        // Take only the first IP in case of multiple proxies
+        $ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+        return trim($ips[0]);
+    } elseif (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+        return $_SERVER['HTTP_CLIENT_IP'];
     } else {
         return "Introuvable";
     }
@@ -34,7 +39,7 @@ if (isset($_POST['Mail'])) {
 
     $donnee = $response->fetch();
 
-    if (password_verify($_POST['MDP'], $donnee['motdepasse'])) {
+    if ($donnee && password_verify($_POST['MDP'], $donnee['motdepasse'])) {
         // Le mot de passe correspond
 
         // Prevent session fixation: regenerate id on successful authentication
@@ -49,6 +54,7 @@ if (isset($_POST['Mail'])) {
         $response1->closeCursor();
 
         header('Location: https://family.matthieudevilliers.fr/pages/listes/');
+        exit();
     } else {
         $alert = 'Adresse mail ou mot de passe incorrect !';
     }

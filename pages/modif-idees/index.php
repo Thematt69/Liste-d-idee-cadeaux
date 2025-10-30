@@ -7,6 +7,7 @@ include('../../scripts/mail/index.php');
 
 if (!isset($_SESSION['id_compte'])) {
     header('Location: https://family.matthieudevilliers.fr/pages/connexion/');
+    exit();
 }
 
 if (isset($_POST['delete'])) {
@@ -33,10 +34,10 @@ if (isset($_POST['delete'])) {
     $response->execute(array($date->format('Y-m-d H:i:s'), $_POST['delete']));
 
     $response->closeCursor();
+    $response1->closeCursor();
 
     header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $donnee1['lien']);
-
-    $response1->closeCursor();
+    exit();
 } elseif (isset($_POST['Nom']) && $_POST['save'] != "") {
 
     if (isset($_POST['Achat'])) {
@@ -112,10 +113,10 @@ if (isset($_POST['delete'])) {
             $response2->closeCursor();
         }
         $response1->closeCursor();
+        $response->closeCursor();
 
         header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $donnee['lien']);
-
-        $response->closeCursor();
+        exit();
     } else {
         if (htmlentities($_POST['AchatFrom']) == "1") {
             $buyFrom = $_SESSION['id_compte'];
@@ -140,10 +141,10 @@ if (isset($_POST['delete'])) {
         $response->execute(array(htmlentities($_POST['Nom'])));
 
         $donnee = $response->fetch();
+        $response->closeCursor();
 
         header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $donnee['lien']);
-
-        $response->closeCursor();
+        exit();
     }
 } elseif (isset($_POST['Nom'])) {
     $sql2 = 'SELECT lic_autorisation.type as droit
@@ -178,6 +179,7 @@ if (isset($_POST['delete'])) {
         $response->closeCursor();
 
         header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $_GET['liste']);
+        exit();
     } elseif ($donnee2['droit'] == "moderateur") {
         // Création de l'idée par un modérateur
         $sql = 'INSERT INTO lic_idee (id_liste, nom, commentaire, lien, buy_from, price)
@@ -204,6 +206,7 @@ if (isset($_POST['delete'])) {
         $response->closeCursor();
 
         header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $_GET['liste']);
+        exit();
     }
     $response2->closeCursor();
 }

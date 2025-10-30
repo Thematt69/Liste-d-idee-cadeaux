@@ -21,10 +21,9 @@
 
 <!-- Bootstrap JS -->
 <script src="https://family.matthieudevilliers.fr/js/bootstrap.bundle.min.js"></script>
-<script src="https://family.matthieudevilliers.fr/js/bootstrap.min.js"></script>
 
 <!-- Bootstrap -->
-<script src="https://family.matthieudevilliers.fr/js/jquery-3.7.1.min.js"></script>
+<script src="https://family.matthieudevilliers.fr/js/jquery.min.js"></script>
 
 <!-- Icon FontAwesome -->
 <script src="https://family.matthieudevilliers.fr/js/45afd6dbfc.js"></script>

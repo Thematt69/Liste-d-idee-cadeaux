@@ -6,6 +6,7 @@ include('../../scripts/verif/index.php');
 
 if (!isset($_SESSION['id_compte'])) {
     header('Location: https://family.matthieudevilliers.fr/pages/connexion/');
+    exit();
 }
 
 $alert = false;
@@ -13,6 +14,7 @@ $info = false;
 
 if (isset($_POST['cancel'])) {
     header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $_GET['liste']);
+    exit();
 } elseif (isset($_POST['share_delete'])) {
     // Suppresion de l'autorisation
     $sql1 = 'DELETE FROM lic_autorisation
@@ -46,6 +48,7 @@ if (isset($_POST['cancel'])) {
     $response->closeCursor();
 
     header('Location: https://family.matthieudevilliers.fr/pages/listes/');
+    exit();
 } elseif (isset($_POST['Nom']) && htmlentities($_POST['save']) != "") {
 
     $sql = 'SELECT partage
@@ -117,6 +120,7 @@ if (isset($_POST['cancel'])) {
 
     $response->closeCursor();
     header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $_GET['liste']);
+    exit();
 } elseif (isset($_POST['Nom'])) {
 
     // Création de la liste
@@ -187,6 +191,7 @@ if (isset($_POST['cancel'])) {
     $response->closeCursor();
 
     header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $rand);
+    exit();
 } elseif (isset($_POST['share'])) {
     $sql1 = 'SELECT id
             FROM lic_compte
@@ -233,6 +238,7 @@ if (isset($_POST['cancel'])) {
 
     $response->closeCursor();
     header('Location: https://family.matthieudevilliers.fr/pages/modif-listes/?liste=' . $_GET['liste']);
+    exit();
 }
 
 ?>

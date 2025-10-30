@@ -97,6 +97,25 @@ php -S localhost:8000
 
 - `scripts/verif/index.php` currently contains production DB credentials. Do not commit changes that leak new secrets. If rotating credentials, update only `scripts/verif/index.php` and record the change in project notes.
 
+### Security improvements implemented (October 2025)
+
+- **Session security:** Configured httponly, secure, and SameSite=Strict cookies in `scripts/verif/index.php`
+- **HTTP security headers:** Added X-Frame-Options, X-Content-Type-Options, Referrer-Policy, and Permissions-Policy in `.htaccess`
+- **XSS protection:** Consistent use of `htmlspecialchars($var, ENT_QUOTES, 'UTF-8')` for all user outputs
+- **IP spoofing prevention:** `getIp()` function now prioritizes `REMOTE_ADDR` over proxy headers
+- **Secure password reset:** Using `random_bytes(32)` instead of `md5(rand())` for reset tokens
+- **Session regeneration:** ID regenerated on password changes
+- **Redirect safety:** All `header('Location: ...')` calls followed by `exit()` to prevent code execution
+- **Input validation:** GET/POST parameters validated before use
+- **Null checks:** Database `fetch()` results checked before array access
+- **Component updates:** Bootstrap upgraded from v5.0.2 to v5.3.8 and jQuery from v3.5.1 to v3.7.1
+
+When making changes, maintain these security patterns:
+- Always escape output with `htmlspecialchars($var, ENT_QUOTES, 'UTF-8')`
+- Always call `exit()` immediately after `header('Location: ...')`
+- Always check `fetch()` results for null before accessing array keys
+- Always validate required GET/POST parameters exist before use
+
 ### When to open a PR vs direct edits
 
 - Small presentational fixes (typos, minor CSS) can be edited directly in feature branches. Database or auth changes require a PR and a clear migration plan because of production credentials and soft-delete semantics.
