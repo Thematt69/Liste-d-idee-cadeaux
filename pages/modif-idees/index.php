@@ -347,7 +347,7 @@ if (isset($_POST['delete'])) {
                                                         Déjà acheté par le propriétaire
                                                     </label>
                                                 <?php
-                                                } elseif (isset($donnees['buy_from'])) {
+                                                } elseif (isset($donnees['buy_from']) && $donnees['buy_from'] != $_SESSION['id_compte']) {
                                                 ?>
                                                     <input name="AchatFrom" value="1" class="form-check-input" type="checkbox" id="LabelAchat" checked disabled>
                                                     <label class="form-check-label" for="LabelAchat">
