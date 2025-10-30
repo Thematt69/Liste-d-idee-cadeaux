@@ -34,11 +34,10 @@ if (isset($_POST['delete'])) {
     $response->execute(array($date->format('Y-m-d H:i:s'), $_POST['delete']));
 
     $response->closeCursor();
+    $response1->closeCursor();
 
     header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $donnee1['lien']);
     exit();
-
-    $response1->closeCursor();
 } elseif (isset($_POST['Nom']) && $_POST['save'] != "") {
 
     if (isset($_POST['Achat'])) {
@@ -114,11 +113,10 @@ if (isset($_POST['delete'])) {
             $response2->closeCursor();
         }
         $response1->closeCursor();
+        $response->closeCursor();
 
         header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $donnee['lien']);
         exit();
-
-        $response->closeCursor();
     } else {
         if (htmlentities($_POST['AchatFrom']) == "1") {
             $buyFrom = $_SESSION['id_compte'];
@@ -143,11 +141,10 @@ if (isset($_POST['delete'])) {
         $response->execute(array(htmlentities($_POST['Nom'])));
 
         $donnee = $response->fetch();
+        $response->closeCursor();
 
         header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $donnee['lien']);
         exit();
-
-        $response->closeCursor();
     }
 } elseif (isset($_POST['Nom'])) {
     $sql2 = 'SELECT lic_autorisation.type as droit
