@@ -75,7 +75,7 @@ if (!isset($_SESSION['id_compte'])) {
                     ?>
                         <div class="col-sm-6 col-md-4 col-lg-3 col-xxl-2">
                             <div class="card text-dark bg-light" style="min-height: 6rem;">
-                                <a href="https://family.matthieudevilliers.fr/pages/idees/?liste=<?php echo safe_output_url($donnees['lien_partage']) ?>" class="stretched-link"></a>
+                                <a href="https://family.matthieudevilliers.fr/pages/idees/?liste=<?php echo safe_output($donnees['lien_partage']) ?>" class="stretched-link"></a>
                                 <div class="card-body d-flex align-items-center justify-content-center text-center">
                                     <p class="card-text">
                                         <?php echo safe_output($donnees['nom']) ?>

@@ -235,12 +235,12 @@ $response1->closeCursor();
                                                         echo ('//');
                                                     else
                                                     ?>
-                                                    <?php $safeHref = safe_output_url($donnees['lien'] ?? ''); ?>
+                                                    <?php $safeHref = safe_output($donnees['lien'] ?? ''); ?>
                                                     <a href="<?php echo $safeHref ?>" target="_blank" rel="noopener noreferrer">
                                                         <?php
                                                         if (!empty($donnees['lien'])) {
                                                             $display = mb_substr($donnees['lien'], 0, 60);
-                                                            echo safe_output_url($display);
+                                                            echo safe_output($display);
                                                             if (mb_strlen($donnees['lien']) > 60) echo '...';
                                                         }
                                                         ?>

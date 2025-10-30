@@ -27,12 +27,3 @@ function safe_output($str)
     // Then escape for HTML output
     return htmlspecialchars($decoded, ENT_QUOTES, 'UTF-8');
 }
-
-/// Helper: decode stored HTML entities, escape for HTML output and rawurlencode.
-function safe_output_url($str)
-{
-    // First decode any HTML entities stored in DB, using UTF-8
-    $decoded = html_entity_decode($str, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-    // Then escape for HTML output and rawurlencode
-    return rawurlencode($decoded);
-}
