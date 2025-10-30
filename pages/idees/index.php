@@ -170,16 +170,16 @@ $response1->closeCursor();
 
                         if ($donnee['droit'] == "proprietaire") {
                         ?>
-                            <a href="https://family.matthieudevilliers.fr/pages/modif-listes/?liste=<?php echo ($_GET['liste']) ?>" class="link-dark">
-                                <i class="fas fa-pen fa-2x" style="font-size: 1.5rem;"></i>
+                            <a href="https://family.matthieudevilliers.fr/pages/modif-listes/?liste=<?php echo ($_GET['liste']) ?>" class="link-dark" aria-label="Modifier la liste">
+                                <i class="fas fa-pen fa-2x" style="font-size: 1.5rem;" aria-hidden="true"></i>
                             </a>
                         <?php
                         }
                         ?>
 
 
-                        <a href="https://family.matthieudevilliers.fr/pages/print-liste/?liste=<?php echo ($_GET['liste']) ?>" class="link-dark">
-                            <i class="fas fa-print fa-2x" style="font-size: 1.5rem;"></i>
+                        <a href="https://family.matthieudevilliers.fr/pages/print-liste/?liste=<?php echo ($_GET['liste']) ?>" class="link-dark" aria-label="Imprimer la liste">
+                            <i class="fas fa-print fa-2x" style="font-size: 1.5rem;" aria-hidden="true"></i>
                         </a>
 
                     </h1>
@@ -188,19 +188,19 @@ $response1->closeCursor();
                     <div class="card text-dark bg-light">
                         <div class="card-body text-center">
                             <div class="table-responsive">
-                                <table class="table table-light text-center align-middle justify-content-">
+                                <table class="table table-light text-center align-middle justify-content-" aria-label="Liste des idées cadeaux">
                                     <thead>
                                         <tr>
-                                            <th>Nom</th>
-                                            <th style="max-width: 30rem;">Commentaire</th>
-                                            <th style="max-width: 40rem;">Lien</th>
-                                            <th style="min-width: 8rem;">Prix</th>
-                                            <th>Infos</th>
+                                            <th scope="col">Nom</th>
+                                            <th scope="col" style="max-width: 30rem;">Commentaire</th>
+                                            <th scope="col" style="max-width: 40rem;">Lien</th>
+                                            <th scope="col" style="min-width: 8rem;">Prix</th>
+                                            <th scope="col">Infos</th>
                                             <?php
                                             if ($donnee['droit'] != "lecteur")
-                                                echo '<th>Actions</th>';
+                                                echo '<th scope="col">Actions</th>';
                                             else
-                                                echo '<th>Réservé</th>';
+                                                echo '<th scope="col">Réservé</th>';
                                             ?>
                                         </tr>
                                     </thead>
@@ -304,8 +304,8 @@ $response1->closeCursor();
                                                 if ($donnee['droit'] != "lecteur") {
                                                 ?>
                                                     <td>
-                                                        <a class="btn btn-outline-secondary" href="https://family.matthieudevilliers.fr/pages/modif-idees/?idee=<?php echo $donnees['id']; ?>">
-                                                            <i class="far fa-edit"></i>
+                                                        <a class="btn btn-outline-secondary" href="https://family.matthieudevilliers.fr/pages/modif-idees/?idee=<?php echo $donnees['id']; ?>" aria-label="Modifier l'idée <?php echo htmlspecialchars($donnees['nom'] ?? 'sans nom', ENT_QUOTES, 'UTF-8'); ?>">
+                                                            <i class="far fa-edit" aria-hidden="true"></i>
                                                         </a>
                                                     </td>
                                                     <?php
@@ -313,7 +313,7 @@ $response1->closeCursor();
                                                     if ($donnees['is_buy'] || (isset($donnees['buy_from']) && $donnees['buy_from'] != $_SESSION['id_compte'])) {
                                                     ?>
                                                         <td>
-                                                            <input class="form-check-input" type="checkbox" checked disabled>
+                                                            <input class="form-check-input" type="checkbox" checked disabled aria-label="Idée déjà réservée ou achetée">
                                                         </td>
                                                     <?php
                                                     } else {
@@ -321,7 +321,7 @@ $response1->closeCursor();
                                                         <td>
                                                             <form action="" method="post">
                                                                 <input name='AchatFrom' value="<?php echo $donnees['id']; ?>" type='hidden'>
-                                                                <input name="AchatFrom" value="<?php echo $donnees['id']; ?>" class="form-check-input" type="checkbox" onChange="submit();" <?php if ($donnees['buy_from'] == $_SESSION['id_compte']) echo 'checked'; ?> />
+                                                                <input name="AchatFrom" value="<?php echo $donnees['id']; ?>" class="form-check-input" type="checkbox" onChange="submit();" <?php if ($donnees['buy_from'] == $_SESSION['id_compte']) echo 'checked'; ?> aria-label="Réserver cette idée cadeau" />
                                                             </form>
                                                         </td>
                                                     <?php

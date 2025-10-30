@@ -32,14 +32,14 @@ if (!isset($_SESSION['id_compte'])) {
                 <br>
                 <div class="row">
                     <div class="col-6 text-center">
-                        <a class="btn btn-primary btn-lg" href="https://family.matthieudevilliers.fr/pages/modif-listes/?type=solo" role="button">Créer une liste</a>
+                        <a class="btn btn-primary btn-lg" href="https://family.matthieudevilliers.fr/pages/modif-listes/?type=solo" role="button" aria-label="Créer une nouvelle liste personnelle">Créer une liste</a>
                     </div>
                     <div class="col-6 text-center">
-                        <a class="btn btn-primary btn-lg" href="https://family.matthieudevilliers.fr/pages/modif-listes/?type=duo" role="button">Créer une liste en duo</a>
+                        <a class="btn btn-primary btn-lg" href="https://family.matthieudevilliers.fr/pages/modif-listes/?type=duo" role="button" aria-label="Créer une nouvelle liste partagée avec une autre personne">Créer une liste en duo</a>
                     </div>
                 </div>
                 <br>
-                <div class="row">
+                <div class="row" role="list" aria-label="Vos listes d'idées cadeaux">
                     <?php
 
                     $sql = 'SELECT lic_liste.nom as nom, lic_liste.lien_partage as lien_partage, lic_liste.id as id
@@ -73,9 +73,9 @@ if (!isset($_SESSION['id_compte'])) {
                         }
 
                     ?>
-                        <div class="col-sm-6 col-md-4 col-lg-3 col-xxl-2">
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xxl-2" role="listitem">
                             <div class="card text-dark bg-light" style="min-height: 6rem;">
-                                <a href="https://family.matthieudevilliers.fr/pages/idees/?liste=<?php echo htmlspecialchars($donnees['lien_partage'], ENT_QUOTES, 'UTF-8') ?>" class="stretched-link"></a>
+                                <a href="https://family.matthieudevilliers.fr/pages/idees/?liste=<?php echo htmlspecialchars($donnees['lien_partage'], ENT_QUOTES, 'UTF-8') ?>" class="stretched-link" aria-label="Voir la liste <?php echo htmlspecialchars($donnees['nom'], ENT_QUOTES, 'UTF-8') ?>"></a>
                                 <div class="card-body d-flex align-items-center justify-content-center text-center">
                                     <p class="card-text">
                                         <?php echo htmlspecialchars($donnees['nom'], ENT_QUOTES, 'UTF-8') ?>

@@ -1,15 +1,15 @@
-<nav class="navbar navbar-expand-md navbar-dark bg-secondary shadow-sm">
+<nav class="navbar navbar-expand-md navbar-dark bg-secondary shadow-sm" role="navigation" aria-label="Navigation principale">
     <div class="container">
-        <a class="navbar-brand" href="https://family.matthieudevilliers.fr">
+        <a class="navbar-brand" href="https://family.matthieudevilliers.fr" aria-label="Retour à l'accueil">
             <img src="https://family.matthieudevilliers.fr/images/logo.webp" width="30" height="30" class="d-inline-block align-top" alt="Logo du site" loading="lazy">
             Listes d'idées cadeau
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Afficher le menu de navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Right Side Of Navbar -->
-            <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav ms-auto" role="menubar">
                 <?php
 
                 if (isset($_SESSION['id_compte'])) {
@@ -32,30 +32,30 @@
                     }
                     if ($_SESSION['fonction'] == 'admin') {
                 ?>
-                        <li class="nav-item">
-                            <a class="nav-link" href="https://family.matthieudevilliers.fr/pages/admin/">Panel Admin</a>
+                        <li class="nav-item" role="none">
+                            <a class="nav-link" href="https://family.matthieudevilliers.fr/pages/admin/" role="menuitem">Panel Admin</a>
                         </li>
                     <?php
                     }
                     ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://family.matthieudevilliers.fr/pages/listes/">Mes listes</a>
+                    <li class="nav-item" role="none">
+                        <a class="nav-link" href="https://family.matthieudevilliers.fr/pages/listes/" role="menuitem">Mes listes</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://family.matthieudevilliers.fr/pages/compte/">Mon compte</a>
+                    <li class="nav-item" role="none">
+                        <a class="nav-link" href="https://family.matthieudevilliers.fr/pages/compte/" role="menuitem">Mon compte</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://family.matthieudevilliers.fr/scripts/deconnexion/">Déconnexion</a>
+                    <li class="nav-item" role="none">
+                        <a class="nav-link" href="https://family.matthieudevilliers.fr/scripts/deconnexion/" role="menuitem">Déconnexion</a>
                     </li>
                 <?php
                     $req2->closeCursor();
                 } else {
                 ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://family.matthieudevilliers.fr/pages/inscription/">Inscription</a>
+                    <li class="nav-item" role="none">
+                        <a class="nav-link" href="https://family.matthieudevilliers.fr/pages/inscription/" role="menuitem">Inscription</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://family.matthieudevilliers.fr/pages/connexion/">Connexion</a>
+                    <li class="nav-item" role="none">
+                        <a class="nav-link" href="https://family.matthieudevilliers.fr/pages/connexion/" role="menuitem">Connexion</a>
                     </li>
                 <?php
                 }
