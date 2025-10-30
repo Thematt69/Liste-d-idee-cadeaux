@@ -116,6 +116,7 @@ if (isset($_POST['delete'])) {
         $response1->closeCursor();
 
         header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $donnee['lien']);
+        exit();
 
         $response->closeCursor();
     } else {
@@ -144,6 +145,7 @@ if (isset($_POST['delete'])) {
         $donnee = $response->fetch();
 
         header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $donnee['lien']);
+        exit();
 
         $response->closeCursor();
     }
@@ -180,6 +182,7 @@ if (isset($_POST['delete'])) {
         $response->closeCursor();
 
         header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $_GET['liste']);
+        exit();
     } elseif ($donnee2['droit'] == "moderateur") {
         // Création de l'idée par un modérateur
         $sql = 'INSERT INTO lic_idee (id_liste, nom, commentaire, lien, buy_from, price)
@@ -206,6 +209,7 @@ if (isset($_POST['delete'])) {
         $response->closeCursor();
 
         header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $_GET['liste']);
+        exit();
     }
     $response2->closeCursor();
 }

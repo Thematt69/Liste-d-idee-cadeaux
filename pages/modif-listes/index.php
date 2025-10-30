@@ -120,6 +120,7 @@ if (isset($_POST['cancel'])) {
 
     $response->closeCursor();
     header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $_GET['liste']);
+    exit();
 } elseif (isset($_POST['Nom'])) {
 
     // Création de la liste
@@ -190,6 +191,7 @@ if (isset($_POST['cancel'])) {
     $response->closeCursor();
 
     header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $rand);
+    exit();
 } elseif (isset($_POST['share'])) {
     $sql1 = 'SELECT id
             FROM lic_compte
@@ -236,6 +238,7 @@ if (isset($_POST['cancel'])) {
 
     $response->closeCursor();
     header('Location: https://family.matthieudevilliers.fr/pages/modif-listes/?liste=' . $_GET['liste']);
+    exit();
 }
 
 ?>
