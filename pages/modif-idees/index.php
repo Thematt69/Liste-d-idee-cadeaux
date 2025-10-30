@@ -7,6 +7,7 @@ include('../../scripts/mail/index.php');
 
 if (!isset($_SESSION['id_compte'])) {
     header('Location: https://family.matthieudevilliers.fr/pages/connexion/');
+    exit();
 }
 
 if (isset($_POST['delete'])) {
@@ -35,6 +36,7 @@ if (isset($_POST['delete'])) {
     $response->closeCursor();
 
     header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $donnee1['lien']);
+    exit();
 
     $response1->closeCursor();
 } elseif (isset($_POST['Nom']) && $_POST['save'] != "") {

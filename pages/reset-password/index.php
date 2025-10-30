@@ -7,6 +7,7 @@ include('../../scripts/mail/index.php');
 
 if (isset($_SESSION['id_compte'])) {
     header('Location: https://family.matthieudevilliers.fr/pages/listes/');
+    exit();
 }
 
 $alert = false;
@@ -36,6 +37,7 @@ if ($_POST['reset']) {
     $response3->closeCursor();
 
     header('Location: https://family.matthieudevilliers.fr/pages/connexion/');
+    exit();
 } elseif (isset($_POST['Mail'])) {
 
     $url = 'https://www.google.com/recaptcha/api/siteverify';

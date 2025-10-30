@@ -6,6 +6,7 @@ include ('../../scripts/verif/index.php');
 
 if (isset($_SESSION['id_compte'])) {
     header('Location: https://family.matthieudevilliers.fr/pages/listes/');
+    exit();
 }
 
 // Retourne l'adresse IP de l'utilisateur
@@ -53,6 +54,7 @@ if (isset($_POST['Mail'])) {
         $response1->closeCursor();
 
         header('Location: https://family.matthieudevilliers.fr/pages/listes/');
+        exit();
     } else {
         $alert = 'Adresse mail ou mot de passe incorrect !';
     }
