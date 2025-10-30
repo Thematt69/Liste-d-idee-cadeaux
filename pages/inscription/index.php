@@ -94,8 +94,12 @@ if (isset($_POST['Mail'])) {
 
     <body class="d-flex flex-column h-100">
 
+        <!-- RGAA 12.7 - Lien d'évitement -->
+        <a href="#contenu" class="visually-hidden-focusable">Aller au contenu principal</a>
+
         <?php include ('../../widgets/navbar/index.php'); ?>
 
+        <main id="contenu">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-12 col-lg-8">
@@ -104,8 +108,8 @@ if (isset($_POST['Mail'])) {
                     if ($alert) {
                         ?>
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <strong><?php echo $alert; ?></strong>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <strong><?php echo htmlspecialchars($alert, ENT_QUOTES, 'UTF-8'); ?></strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer l'alerte"></button>
                         </div>
                         <?php
                     }
@@ -119,7 +123,7 @@ if (isset($_POST['Mail'])) {
                                     <div class="col-md-6">
                                         <div class="form-floating">
                                             <input name="Prénom" type="text" class="form-control" id="LabelPrénom"
-                                                placeholder="Prénom" required>
+                                                placeholder="Prénom" autocomplete="given-name" required aria-required="true">
                                             <label for="LabelPrénom">Prénom</label>
                                         </div>
                                         <br>
@@ -127,7 +131,7 @@ if (isset($_POST['Mail'])) {
                                     <div class="col-md-6">
                                         <div class="form-floating">
                                             <input name="Nom" type="text" class="form-control" id="LabelNom"
-                                                placeholder="Nom" required>
+                                                placeholder="Nom" autocomplete="family-name" required aria-required="true">
                                             <label for="LabelNom">Nom</label>
                                         </div>
                                         <br>
@@ -135,7 +139,7 @@ if (isset($_POST['Mail'])) {
                                     <div class="col-md-6">
                                         <div class="form-floating">
                                             <input name="MDP" type="password" class="form-control" id="LabelMDP"
-                                                aria-describedby="DescriptionMDP" placeholder="Mot de passe" required>
+                                                aria-describedby="DescriptionMDP" placeholder="Mot de passe" autocomplete="new-password" required aria-required="true">
                                             <label for="LabelMDP">Mot de passe</label>
                                             <small id="DescriptionMDP" class="form-text text-muted">Votre mot de passe
                                                 est enregistré dans un format haché, il est impossible pour nous de le
@@ -146,7 +150,7 @@ if (isset($_POST['Mail'])) {
                                     <div class="col-md-6">
                                         <div class="form-floating">
                                             <input name="Mail" type="email" class="form-control" id="LabelMail"
-                                                aria-describedby="DescriptionMail" placeholder="Adresse mail" required>
+                                                aria-describedby="DescriptionMail" placeholder="Adresse mail" autocomplete="email" required aria-required="true">
                                             <label for="LabelMail">Adresse mail</label>
                                             <small id="DescriptionMail" class="form-text text-muted">Votre adresse mail
                                                 nous permet de vous transmet toutes les informations vous
@@ -157,7 +161,7 @@ if (isset($_POST['Mail'])) {
                                     <div class="col-md-6">
                                         <div class="form-check">
                                             <input name="CGU" class="form-check-input" type="checkbox" id="LabelCGU"
-                                                required>
+                                                required aria-required="true">
                                             <label class="form-check-label" for="LabelCGU">
                                                 J'accepte les <a
                                                     href="https://family.matthieudevilliers.fr/pages/cgu/">Conditions
@@ -183,6 +187,7 @@ if (isset($_POST['Mail'])) {
                 </div>
             </div>
         </div>
+        </main>
 
     </body>
 

@@ -80,6 +80,9 @@ $response1->closeCursor();
 
 <body class="d-flex flex-column h-100">
 
+    <!-- RGAA 12.7 - Lien d'évitement -->
+    <a href="#contenu" class="visually-hidden-focusable">Aller au contenu principal</a>
+
     <?php
     include('../../widgets/navbar/index.php');
 
@@ -95,6 +98,7 @@ $response1->closeCursor();
 
     if ($donnee == null) {
     ?>
+        <main id="contenu">
         <div class="container">
             <div class="row">
                 <div class="col-12">
@@ -107,9 +111,11 @@ $response1->closeCursor();
                 </div>
             </div>
         </div>
+        </main>
     <?php
     } else {
     ?>
+        <main id="contenu">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-12">
@@ -356,6 +362,7 @@ $response1->closeCursor();
                 </div>
             </div>
         </div>
+        </main>
     <?php
     }
 
