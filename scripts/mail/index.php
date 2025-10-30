@@ -6,7 +6,7 @@ function envoiMail(String $to, String $subject, String $message)
     $headers[] = 'Content-type: text/html; charset=utf-8';
     $headers[] = 'Reply-To: Matthieu Devilliers <webmaster@matthieudevilliers.fr>';
     $headers[] = 'From: Service Client <webmaster@matthieudevilliers.fr>';
-    // FIXME - Enlever avant commercialisation
+    // NOTE - Enlever avant commercialisation
     $headers[] = 'Bcc: Matthieu Devilliers <webmaster@matthieudevilliers.fr>';
     $headers[] = 'X-Mailer: PHP/' . phpversion();
 

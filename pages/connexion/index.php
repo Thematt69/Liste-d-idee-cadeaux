@@ -36,6 +36,9 @@ if (isset($_POST['Mail'])) {
 
     if (password_verify($_POST['MDP'], $donnee['motdepasse'])) {
         // Le mot de passe correspond
+
+        // Prevent session fixation: regenerate id on successful authentication
+        session_regenerate_id(true);
         $_SESSION['id_compte'] = $donnee['id'];
 
         $sql1 = 'INSERT INTO lic_connexion (id_compte, adresse_ip_v4)
