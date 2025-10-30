@@ -126,7 +126,7 @@ if ($_GET['reset']) {
 
     $donnee = $response->fetch();
 
-    if (password_verify($_GET['reset'], $donnee['motdepasse'])) {
+    if (!password_verify($_GET['reset'], $donnee['motdepasse'])) {
         $invalide = true;
         // Le lien n'est plus valide
         $alert = "Le lien n'est plus valide !";
