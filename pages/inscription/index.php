@@ -112,7 +112,7 @@ if (isset($_POST['Mail'])) {
                     ?>
                     <h1 class="text-center">Inscription</h1>
                     <br>
-                    <div class="card">
+                    <div class="card shadow-sm">
                         <div class="card-body">
                             <form action="" method="post">
                                 <div class="row">

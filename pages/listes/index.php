@@ -74,7 +74,7 @@ if (!isset($_SESSION['id_compte'])) {
 
                     ?>
                         <div class="col-sm-6 col-md-4 col-lg-3 col-xxl-2" role="listitem">
-                            <div class="card text-dark bg-light" style="min-height: 6rem;">
+                            <div class="card text-dark bg-light shadow-sm" style="min-height: 6rem;">
                                 <a href="https://family.matthieudevilliers.fr/pages/idees/?liste=<?php echo htmlspecialchars($donnees['lien_partage'], ENT_QUOTES, 'UTF-8') ?>" class="stretched-link" aria-label="Voir la liste <?php echo htmlspecialchars($donnees['nom'], ENT_QUOTES, 'UTF-8') ?>"></a>
                                 <div class="card-body d-flex align-items-center justify-content-center text-center">
                                     <p class="card-text">

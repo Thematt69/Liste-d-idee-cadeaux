@@ -185,7 +185,7 @@ $response1->closeCursor();
                     </h1>
                     <br>
 
-                    <div class="card text-dark bg-light">
+                    <div class="card text-dark bg-light shadow-sm">
                         <div class="card-body text-center">
                             <div class="table-responsive">
                                 <table class="table table-light text-center align-middle justify-content-" aria-label="Liste des idées cadeaux">
