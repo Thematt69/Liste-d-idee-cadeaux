@@ -34,6 +34,9 @@
 <!-- Normalize CSS -->
 <link href="https://family.matthieudevilliers.fr/css/normalize.css" rel="stylesheet">
 
+<!-- UX Enhancements JS -->
+<script src="https://family.matthieudevilliers.fr/js/ux-enhancements.js" defer></script>
+
 <!--[if IE]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
