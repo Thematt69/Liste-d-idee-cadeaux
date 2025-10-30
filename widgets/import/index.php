@@ -13,14 +13,18 @@
 
 <link rel="icon" href="https://family.matthieudevilliers.fr/images/logo.webp">
 
-<!-- Bootstrap -->
+<!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://family.matthieudevilliers.fr/css/bootstrap-grid.min.css">
+<link rel="stylesheet" href="https://family.matthieudevilliers.fr/css/bootstrap-reboot.min.css">
 <link rel="stylesheet" href="https://family.matthieudevilliers.fr/css/bootstrap-utilities.min.css">
 <link rel="stylesheet" href="https://family.matthieudevilliers.fr/css/bootstrap.min.css">
+
+<!-- Bootstrap JS -->
 <script src="https://family.matthieudevilliers.fr/js/bootstrap.bundle.min.js"></script>
+<script src="https://family.matthieudevilliers.fr/js/bootstrap.min.js"></script>
 
 <!-- Bootstrap -->
-<script src="https://family.matthieudevilliers.fr/js/jquery-3.5.1.min.js"></script>
+<script src="https://family.matthieudevilliers.fr/js/jquery-3.7.1.min.js"></script>
 
 <!-- Icon FontAwesome -->
 <script src="https://family.matthieudevilliers.fr/js/45afd6dbfc.js"></script>
