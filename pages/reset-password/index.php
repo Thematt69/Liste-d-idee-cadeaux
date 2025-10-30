@@ -90,7 +90,7 @@ if ($_POST['reset']) {
                         <br>
                         <p>Bonjour,</p>
                         <p>Vous avez demandé à réinitialiser votre mot de passe, pour continuer, cliquer sur le lien ci-dessous.</p>
-                        <p><a href="https://family.matthieudevilliers.fr/pages/reset-password/?reset=' . htmlentities($hashedRand) . '">https://family.matthieudevilliers.fr/pages/reset-password/?reset=' . htmlentities($hashedRand) . '</a></p>
+                        <p><a href="https://family.matthieudevilliers.fr/pages/reset-password/?reset=' . htmlentities($rand) . '">https://family.matthieudevilliers.fr/pages/reset-password/?reset=' . htmlentities($rand) . '</a></p>
                         <br>
                         <p>L\'équipe de Listes d\'idées cadeaux</p>
                     </body>
