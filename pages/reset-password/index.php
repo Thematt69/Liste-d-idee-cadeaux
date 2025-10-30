@@ -79,7 +79,7 @@ if ($_POST['reset']) {
             $hashedRand = password_hash(htmlentities($rand), PASSWORD_DEFAULT);
 
             $response1 = $bdd->prepare($sql1);
-            $response1->execute(array(htmlentities($hashedRand), htmlentities($_POST['Mail'])));
+            $response1->execute(array($hashedRand, htmlentities($_POST['Mail'])));
             $response1->closeCursor();
 
             // Contenu du mail
