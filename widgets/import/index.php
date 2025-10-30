@@ -35,7 +35,7 @@
 <link href="https://family.matthieudevilliers.fr/css/normalize.css" rel="stylesheet">
 
 <!-- UX Enhancements (uses jQuery and Bootstrap utilities) -->
-<script src="https://family.matthieudevilliers.fr/js/ux-enhancements.js"></script>
+<script src="https://family.matthieudevilliers.fr/js/ux-enhancements.js" defer></script>
 
 <!--[if IE]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
