@@ -310,7 +310,7 @@ $response1->closeCursor();
                                                 if ($donnee['droit'] != "lecteur") {
                                                 ?>
                                                     <td>
-                                                        <a class="btn btn-outline-secondary" href="https://family.matthieudevilliers.fr/pages/modif-idees/?idee=<?php echo $donnees['id']; ?>" aria-label="Modifier l'idée <?php echo htmlspecialchars($donnees['nom'] ?? 'sans nom', ENT_QUOTES, 'UTF-8'); ?>">
+                                                        <a class="btn btn-outline-secondary" href="https://family.matthieudevilliers.fr/pages/modif-idees/?idee=<?php echo htmlspecialchars($donnees['id'], ENT_QUOTES, 'UTF-8'); ?>" aria-label="Modifier l'idée <?php echo htmlspecialchars($donnees['nom'] ?? 'sans nom', ENT_QUOTES, 'UTF-8'); ?>">
                                                             <i class="far fa-edit" aria-hidden="true"></i>
                                                         </a>
                                                     </td>
