@@ -73,8 +73,7 @@ if ($_POST['reset']) {
                     WHERE mail = ?';
 
             // Lien random de partage
-            $str = rand();
-            $rand = md5($str);
+            $rand = bin2hex(random_bytes(32));
 
             $response1 = $bdd->prepare($sql1);
             $response1->execute(array(htmlentities($rand), htmlentities($_POST['Mail'])));

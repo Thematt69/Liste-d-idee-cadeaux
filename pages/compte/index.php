@@ -40,6 +40,9 @@ if (isset($_POST['Mail'])) {
             $response = $bdd->prepare($sql);
             $response->execute(array($prenom, $nom, $motDePasse, $mail, $mail));
 
+            // Regenerate session ID on password change for security
+            session_regenerate_id(true);
+
             $info = 'Vos informations ont bien été modifiées.';
 
             $response->closeCursor();
@@ -125,7 +128,7 @@ if (isset($_POST['Mail'])) {
                 $donnees = $response->fetch();
 
                 ?>
-                <h1 class="text-center"><?php echo ($donnees['prenom'] . " " . strtoupper($donnees['nom'])); ?></h1>
+                <h1 class="text-center"><?php echo htmlspecialchars($donnees['prenom'] . " " . strtoupper($donnees['nom']), ENT_QUOTES, 'UTF-8'); ?></h1>
                 <br>
                 <div class="card">
                     <div class="card-body">
@@ -133,14 +136,14 @@ if (isset($_POST['Mail'])) {
                             <div class="row">
                                 <div class="col-md-6 col-xl-4">
                                     <div class="form-floating">
-                                        <input name="Prénom" type="text" class="form-control" id="LabelPrénom" placeholder="Prénom" value="<?php echo $donnees['prenom'] ?>" required>
+                                        <input name="Prénom" type="text" class="form-control" id="LabelPrénom" placeholder="Prénom" value="<?php echo htmlspecialchars($donnees['prenom'], ENT_QUOTES, 'UTF-8') ?>" required>
                                         <label for="LabelPrénom">Prénom</label>
                                     </div>
                                     <br>
                                 </div>
                                 <div class="col-md-6 col-xl-4">
                                     <div class="form-floating">
-                                        <input name="Nom" type="text" class="form-control" id="LabelNom" placeholder="Nom" value="<?php echo $donnees['nom'] ?>" required>
+                                        <input name="Nom" type="text" class="form-control" id="LabelNom" placeholder="Nom" value="<?php echo htmlspecialchars($donnees['nom'], ENT_QUOTES, 'UTF-8') ?>" required>
                                         <label for="LabelNom">Nom</label>
                                     </div>
                                     <br>
@@ -162,7 +165,7 @@ if (isset($_POST['Mail'])) {
                                 </div>
                                 <div class="col-md-12 col-xl-8">
                                     <div class="form-floating">
-                                        <input name="Mail" type="email" class="form-control" id="LabelMail" aria-describedby="DescriptionMail" placeholder="Adresse mail" value="<?php echo $donnees['mail'] ?>" required>
+                                        <input name="Mail" type="email" class="form-control" id="LabelMail" aria-describedby="DescriptionMail" placeholder="Adresse mail" value="<?php echo htmlspecialchars($donnees['mail'], ENT_QUOTES, 'UTF-8') ?>" required>
                                         <label for="LabelMail">Adresse mail</label>
                                         <small id="DescriptionMail" class="form-text text-muted">Votre adresse mail nous permet de vous transmet toutes les informations vous concernant.</small>
                                     </div>
@@ -207,8 +210,8 @@ if (isset($_POST['Mail'])) {
                                         $datatime = new DateTime($donnees['connected_to']);
                                     ?>
                                         <tr>
-                                            <td><?php echo ($datatime->format('d/m/Y H:i:s')) ?></td>
-                                            <td><?php echo ($donnees['adresse_ip_v4']) ?></td>
+                                            <td><?php echo htmlspecialchars($datatime->format('d/m/Y H:i:s'), ENT_QUOTES, 'UTF-8') ?></td>
+                                            <td><?php echo htmlspecialchars($donnees['adresse_ip_v4'], ENT_QUOTES, 'UTF-8') ?></td>
                                         </tr>
                                     <?php
                                     }
