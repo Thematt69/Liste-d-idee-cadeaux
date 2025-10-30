@@ -76,9 +76,10 @@ if ($_POST['reset']) {
 
             // Lien random de partage
             $rand = bin2hex(random_bytes(32));
+            $hashedRand = password_hash(htmlentities($rand), PASSWORD_DEFAULT);
 
             $response1 = $bdd->prepare($sql1);
-            $response1->execute(array(htmlentities($rand), htmlentities($_POST['Mail'])));
+            $response1->execute(array(htmlentities($hashedRand), htmlentities($_POST['Mail'])));
             $response1->closeCursor();
 
             // Contenu du mail
@@ -89,7 +90,7 @@ if ($_POST['reset']) {
                         <br>
                         <p>Bonjour,</p>
                         <p>Vous avez demandé à réinitialiser votre mot de passe, pour continuer, cliquer sur le lien ci-dessous.</p>
-                        <p><a href="https://family.matthieudevilliers.fr/pages/reset-password/?reset=' . htmlentities($rand) . '">https://family.matthieudevilliers.fr/pages/reset-password/?reset=' . htmlentities($rand) . '</a></p>
+                        <p><a href="https://family.matthieudevilliers.fr/pages/reset-password/?reset=' . htmlentities($hashedRand) . '">https://family.matthieudevilliers.fr/pages/reset-password/?reset=' . htmlentities($hashedRand) . '</a></p>
                         <br>
                         <p>L\'équipe de Listes d\'idées cadeaux</p>
                     </body>
@@ -125,7 +126,7 @@ if ($_GET['reset']) {
 
     $donnee = $response->fetch();
 
-    if ($donnee['motdepasse'] != $_GET['reset']) {
+    if (password_verify($_GET['reset'], $donnee['motdepasse'])) {
         $invalide = true;
         // Le lien n'est plus valide
         $alert = "Le lien n'est plus valide !";
