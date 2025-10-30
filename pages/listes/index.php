@@ -75,10 +75,10 @@ if (!isset($_SESSION['id_compte'])) {
                     ?>
                         <div class="col-sm-6 col-md-4 col-lg-3 col-xxl-2">
                             <div class="card text-dark bg-light" style="min-height: 6rem;">
-                                <a href="https://family.matthieudevilliers.fr/pages/idees/?liste=<?php echo htmlspecialchars($donnees['lien_partage'], ENT_QUOTES, 'UTF-8') ?>" class="stretched-link"></a>
+                                <a href="https://family.matthieudevilliers.fr/pages/idees/?liste=<?php echo safe_output_url($donnees['lien_partage']) ?>" class="stretched-link"></a>
                                 <div class="card-body d-flex align-items-center justify-content-center text-center">
                                     <p class="card-text">
-                                        <?php echo htmlspecialchars($donnees['nom'], ENT_QUOTES, 'UTF-8') ?>
+                                        <?php echo safe_output($donnees['nom']) ?>
                                         <br>
                                         <small class="text-muted d-flex justify-content-center">de
                                             <?php
@@ -89,7 +89,7 @@ if (!isset($_SESSION['id_compte'])) {
                                                 if ($proprietaire[$i]['id'] == $_SESSION['id_compte']) {
                                                     echo "<strong>&thinsp;vous&thinsp;</strong>";
                                                 } else {
-                                                    echo htmlspecialchars($proprietaire[$i]['prenom'], ENT_QUOTES, 'UTF-8');
+                                                    echo safe_output($proprietaire[$i]['prenom']);
                                                 }
                                             }
 

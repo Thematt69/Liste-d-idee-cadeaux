@@ -129,7 +129,7 @@ $response1->closeCursor();
                                 echo '<i class="fas fa-lock fa-2x" style="font-size: 1.5rem;"></i> ';
                                 break;
                         }
-                        echo htmlspecialchars($donnee['nom'], ENT_QUOTES, 'UTF-8');
+                        echo safe_output($donnee['nom']);
 
 
 
@@ -158,7 +158,7 @@ $response1->closeCursor();
                                 if ($proprietaire[$i]['id'] == $_SESSION['id_compte']) {
                                     echo "<strong>&thinsp;vous&thinsp;</strong>";
                                 } else {
-                                    echo htmlspecialchars($proprietaire[$i]['prenom'], ENT_QUOTES, 'UTF-8');
+                                    echo safe_output($proprietaire[$i]['prenom']);
                                 }
                             }
 
@@ -220,13 +220,13 @@ $response1->closeCursor();
                                                 <td>
                                                     <?php
                                                     if ($donnees['nom'] == null) echo ('//');
-                                                    else echo htmlspecialchars($donnees['nom'], ENT_QUOTES, 'UTF-8');
+                                                    else echo safe_output($donnees['nom']);
                                                     ?>
                                                 </td>
                                                 <td style="max-width: 40rem">
                                                     <?php
                                                     if ($donnees['commentaire'] == null) echo ('//');
-                                                    else echo htmlspecialchars($donnees['commentaire'], ENT_QUOTES, 'UTF-8');
+                                                    else echo safe_output($donnees['commentaire']);
                                                     ?>
                                                 </td>
                                                 <td style="max-width: 40rem;">
@@ -235,12 +235,12 @@ $response1->closeCursor();
                                                         echo ('//');
                                                     else
                                                     ?>
-                                                    <?php $safeHref = htmlspecialchars($donnees['lien'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?>
+                                                    <?php $safeHref = safe_output_url($donnees['lien'] ?? ''); ?>
                                                     <a href="<?php echo $safeHref ?>" target="_blank" rel="noopener noreferrer">
                                                         <?php
                                                         if (!empty($donnees['lien'])) {
                                                             $display = mb_substr($donnees['lien'], 0, 60);
-                                                            echo htmlspecialchars($display, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+                                                            echo safe_output_url($display);
                                                             if (mb_strlen($donnees['lien']) > 60) echo '...';
                                                         }
                                                         ?>
@@ -249,7 +249,7 @@ $response1->closeCursor();
                                                 <td style="min-width: 8rem;">
                                                     <?php
                                                     if ($donnees['price'] == null) echo ('//');
-                                                    else echo htmlspecialchars($donnees['price'], ENT_QUOTES, 'UTF-8');
+                                                    else echo safe_output($donnees['price']);
                                                     ?>
                                                 </td>
                                                 <td>
@@ -275,7 +275,7 @@ $response1->closeCursor();
 
                                                         for ($i = 0; $i < count($proprietaire); $i++) {
                                                             if ($i > 0) echo " et ";
-                                                            echo htmlspecialchars($proprietaire[$i]['prenom'], ENT_QUOTES, 'UTF-8');
+                                                            echo safe_output($proprietaire[$i]['prenom']);
                                                         }
 
                                                         $response2->closeCursor();
@@ -291,7 +291,7 @@ $response1->closeCursor();
                                                         $donnee1 = $response2->fetch();
 
                                                         if ($donnee1) {
-                                                            echo 'Réservé par ' . htmlspecialchars($donnee1['prenom'], ENT_QUOTES, 'UTF-8');
+                                                            echo 'Réservé par ' . safe_output($donnee1['prenom']);
                                                         }
 
                                                         $response2->closeCursor();
