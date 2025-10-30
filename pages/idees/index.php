@@ -228,10 +228,14 @@ $response1->closeCursor();
                                                         echo ('//');
                                                     else
                                                     ?>
-                                                    <a href="<?php echo ($donnees['lien']) ?>" target="_blank">
+                                                    <?php $safeHref = htmlspecialchars($donnees['lien'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?>
+                                                    <a href="<?php echo $safeHref ?>" target="_blank" rel="noopener noreferrer">
                                                         <?php
-                                                        if ($donnees['lien'] != '') echo (substr($donnees['lien'], 0, 60));
-                                                        if (strlen($donnees['lien']) > 60) echo '...';
+                                                        if (!empty($donnees['lien'])) {
+                                                            $display = mb_substr($donnees['lien'], 0, 60);
+                                                            echo htmlspecialchars($display, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+                                                            if (mb_strlen($donnees['lien']) > 60) echo '...';
+                                                        }
                                                         ?>
                                                     </a>
                                                 </td>
