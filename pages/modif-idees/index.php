@@ -11,139 +11,166 @@ if (!isset($_SESSION['id_compte'])) {
 }
 
 if (isset($_POST['delete'])) {
-    // Récupération du lien de la liste qui contient l'idée à supprimer
-    $sql1 = 'SELECT lic_liste.lien_partage as lien
-            FROM lic_liste
-            INNER JOIN lic_idee ON lic_idee.id_liste = lic_liste.id
-            WHERE lic_idee.id = ? AND lic_liste.deleted_to IS NULL AND lic_idee.deleted_to IS NULL';
+    // Vérification des droits du propriétaire avant suppression
+    $sqlAuth = 'SELECT lic_autorisation.type as droit
+                FROM lic_autorisation
+                INNER JOIN lic_idee ON lic_idee.id_liste = lic_autorisation.id_liste
+                WHERE lic_autorisation.id_compte = ? AND lic_idee.id = ? AND lic_idee.deleted_to IS NULL';
+    $responseAuth = $bdd->prepare($sqlAuth);
+    $responseAuth->execute(array($_SESSION['id_compte'], $_POST['delete']));
+    $droitSupp = $responseAuth->fetch();
+    $responseAuth->closeCursor();
+    if ($droitSupp && $droitSupp['droit'] === 'proprietaire') {
+        // Récupération du lien de la liste qui contient l'idée à supprimer
+        $sql1 = 'SELECT lic_liste.lien_partage as lien
+                FROM lic_liste
+                INNER JOIN lic_idee ON lic_idee.id_liste = lic_liste.id
+                WHERE lic_idee.id = ? AND lic_liste.deleted_to IS NULL AND lic_idee.deleted_to IS NULL';
 
-    $response1 = $bdd->prepare($sql1);
-    $response1->execute(array($_POST['delete']));
+        $response1 = $bdd->prepare($sql1);
+        $response1->execute(array($_POST['delete']));
 
-    $donnee1 = $response1->fetch();
+        $donnee1 = $response1->fetch();
 
-    // Enregistrement de la suppresion
-    $sql = 'UPDATE lic_idee
-            SET deleted_to = ?
-            WHERE id = ?';
-
-    $date = new DateTime();
-
-    $response = $bdd->prepare($sql);
-    $response->execute(array($date->format('Y-m-d H:i:s'), $_POST['delete']));
-
-    $response->closeCursor();
-    $response1->closeCursor();
-
-    header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $donnee1['lien']);
-    exit();
-} elseif (isset($_POST['Nom']) && $_POST['save'] != "") {
-
-    if (isset($_POST['Achat'])) {
-        // Modification de l'idée par le propriétaire
-        $isBuy = isset($_POST['Achat']) ? 1 : 0;
+        // Enregistrement de la suppresion
         $sql = 'UPDATE lic_idee
-                SET nom = ?, commentaire = ?, lien = ?, is_buy = ?, price = ?
-                WHERE id = ?;';
+                SET deleted_to = ?
+                WHERE id = ?';
+
+        $date = new DateTime();
 
         $response = $bdd->prepare($sql);
-        $response->execute(array(htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($_POST['Lien']), $isBuy, htmlentities($_POST['Prix']), htmlentities($_POST['save'])));
+        $response->execute(array($date->format('Y-m-d H:i:s'), $_POST['delete']));
 
         $response->closeCursor();
+        $response1->closeCursor();
 
-        $sql = 'SELECT lic_liste.lien_partage as lien
+        header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $donnee1['lien']);
+        exit();
+    } else {
+        header('Location: https://family.matthieudevilliers.fr/pages/erreur/403.php');
+        exit();
+    }
+} elseif (isset($_POST['Nom']) && $_POST['save'] != "") {
+    // Vérification des droits du propriétaire/modérateur avant modification
+    $sqlAuth = 'SELECT lic_autorisation.type as droit
+        FROM lic_autorisation
+        INNER JOIN lic_idee ON lic_idee.id_liste = lic_autorisation.id_liste
+        WHERE lic_autorisation.id_compte = ? AND lic_idee.id = ? AND lic_idee.deleted_to IS NULL';
+    $responseAuth = $bdd->prepare($sqlAuth);
+    $responseAuth->execute(array($_SESSION['id_compte'], $_POST['save']));
+    $droitModif = $responseAuth->fetch();
+    $responseAuth->closeCursor();
+    if ($droitModif && ($droitModif['droit'] === 'proprietaire' || $droitModif['droit'] === 'moderateur')) {
+        if (isset($_POST['Achat'])) {
+            // Modification de l'idée par le propriétaire
+            $isBuy = isset($_POST['Achat']) ? 1 : 0;
+            $sql = 'UPDATE lic_idee
+                    SET nom = ?, commentaire = ?, lien = ?, is_buy = ?, price = ?
+                    WHERE id = ?;';
+
+            $response = $bdd->prepare($sql);
+            $response->execute(array(htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($_POST['Lien']), $isBuy, htmlentities($_POST['Prix']), htmlentities($_POST['save'])));
+
+            $response->closeCursor();
+
+            $sql = 'SELECT lic_liste.lien_partage as lien
+                    FROM lic_liste
+                    INNER JOIN lic_idee ON lic_idee.id_liste = lic_liste.id
+                    WHERE lic_idee.nom = ? AND lic_liste.deleted_to IS NULL AND lic_idee.deleted_to IS NULL';
+
+            $response = $bdd->prepare($sql);
+            $response->execute(array(htmlentities($_POST['Nom'])));
+
+            $donnee = $response->fetch();
+
+            $sql1 = 'SELECT is_buy, buy_from
+                    FROM lic_idee
+                    WHERE nom = ? AND deleted_to IS NULL';
+
+            $response1 = $bdd->prepare($sql1);
+            $response1->execute(array(htmlentities($_POST['Nom'])));
+
+            $donnee1 = $response1->fetch();
+
+            if ($donnee1['is_buy'] == 1 && $donnee1['buy_from'] != null) {
+                // Envoyer un mail à la personne qui avait réservé
+                $sql3 = 'SELECT mail
+                    FROM lic_compte
+                    WHERE id = ? AND deleted_to IS NULL';
+
+                $response3 = $bdd->prepare($sql3);
+                $response3->execute(array($donnee1['buy_from']));
+
+                $donnee3 = $response3->fetch();
+
+                $contenu = '
+                    <html>
+                        <body>
+                            <h3>Annulation de votre réservation d\'idée</h3>
+                            <br>
+                            <p>Bonjour,</p>
+                            <p>
+                                Vous aviez réservé l\'idée intitulée "' . htmlentities($_POST['Nom']) . '" mais le propriétaire vient d\'indiquer qu\'il l\'a finalement acheté par lui-même.
+                                Votre réservation est donc annulée, pour voir la liste d\'idée(s) concernée(s), cliquer sur le lien ci-dessous.
+                            </p>
+                            <p><a href="https://family.matthieudevilliers.fr/pages/idees/?liste=' . $donnee['lien'] . '">https://family.matthieudevilliers.fr/pages/idees/?liste=' . $donnee['lien'] . '</a></p>
+                            <br>
+                            <p>L\'équipe de Listes d\'idées cadeaux</p>
+                        </body>
+                    </html>
+                ';
+
+                if ($donnee3 && $donnee3['mail']) {
+                    envoiMail($donnee3['mail'], "Annulation de votre réservation d'idée - Listes d'idées cadeau", $contenu);
+                }
+                $response3->closeCursor();
+
+                // Supprimer la réservation
+                $sql2 = 'UPDATE lic_idee
+                        SET buy_from = NULL
+                        WHERE nom = ? AND deleted_to IS NULL';
+
+                $response2 = $bdd->prepare($sql2);
+                $response2->execute(array(htmlentities($_POST['Nom'])));
+                $response2->closeCursor();
+            }
+            $response1->closeCursor();
+            $response->closeCursor();
+
+            header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $donnee['lien']);
+            exit();
+        } else {
+            if (htmlentities($_POST['AchatFrom']) == "1") {
+                $buyFrom = $_SESSION['id_compte'];
+            }
+
+            // Modification de l'idée par un modérateur
+            $sql = 'UPDATE lic_idee
+                SET nom = ?, commentaire = ?, lien = ?, buy_from = ?, price = ?
+                WHERE id = ?;';
+
+            $response = $bdd->prepare($sql);
+            $response->execute(array(htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($_POST['Lien']), $buyFrom, htmlentities($_POST['Prix']), htmlentities($_POST['save'])));
+
+            $response->closeCursor();
+
+            $sql = 'SELECT lic_liste.lien_partage as lien
                 FROM lic_liste
                 INNER JOIN lic_idee ON lic_idee.id_liste = lic_liste.id
                 WHERE lic_idee.nom = ? AND lic_liste.deleted_to IS NULL AND lic_idee.deleted_to IS NULL';
 
-        $response = $bdd->prepare($sql);
-        $response->execute(array(htmlentities($_POST['Nom'])));
+            $response = $bdd->prepare($sql);
+            $response->execute(array(htmlentities($_POST['Nom'])));
 
-        $donnee = $response->fetch();
+            $donnee = $response->fetch();
+            $response->closeCursor();
 
-        $sql1 = 'SELECT is_buy, buy_from
-                FROM lic_idee
-                WHERE nom = ? AND deleted_to IS NULL';
-
-        $response1 = $bdd->prepare($sql1);
-        $response1->execute(array(htmlentities($_POST['Nom'])));
-
-        $donnee1 = $response1->fetch();
-
-        if ($donnee1['is_buy'] == 1 && $donnee1['buy_from'] != null) {
-            // Envoyer un mail à la personne qui avait réservé
-            $contenu = '
-                <html>
-                    <body>
-                        <h3>Annulation de votre réservation d\'idée</h3>
-                        <br>
-                        <p>Bonjour,</p>
-                        <p>
-                            Vous aviez réservé l\'idée intitulée "' . htmlentities($_POST['Nom']) . '" mais le propriétaire vient d\'indiquer qu\'il l\'a finalement acheté par lui-même.
-                            Votre réservation est donc annulée, pour voir la liste d\'idée(s) concernée(s), cliquer sur le lien ci-dessous.
-                        </p>
-                        <p><a href="https://family.matthieudevilliers.fr/pages/idees/?liste=' . $donnee['lien'] . '">https://family.matthieudevilliers.fr/pages/idees/?liste=' . $donnee['lien'] . '</a></p>
-                        <br>
-                        <p>L\'équipe de Listes d\'idées cadeaux</p>
-                    </body>
-                </html>
-            ';
-
-
-            $sql3 = 'SELECT mail
-                FROM lic_compte
-                WHERE id = ? AND deleted_to IS NULL';
-
-            $response3 = $bdd->prepare($sql3);
-            $response3->execute(array($_SESSION['id_compte']));
-
-            $donnee3 = $response3->fetch();
-
-            envoiMail($donnee3['mail'], "Annulation de votre réservation d'idée - Listes d'idées cadeau", $contenu);
-
-            $response3->closeCursor();
-
-            // Supprimer la réservation
-            $sql2 = 'UPDATE lic_idee
-                    SET buy_from = NULL
-                    WHERE nom = ? AND deleted_to IS NULL';
-
-            $response2 = $bdd->prepare($sql2);
-            $response2->execute(array(htmlentities($_POST['Nom'])));
-            $response2->closeCursor();
+            header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $donnee['lien']);
+            exit();
         }
-        $response1->closeCursor();
-        $response->closeCursor();
-
-        header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $donnee['lien']);
-        exit();
     } else {
-        if (htmlentities($_POST['AchatFrom']) == "1") {
-            $buyFrom = $_SESSION['id_compte'];
-        }
-
-        // Modification de l'idée par un modérateur
-        $sql = 'UPDATE lic_idee
-            SET nom = ?, commentaire = ?, lien = ?, buy_from = ?, price = ?
-            WHERE id = ?;';
-
-        $response = $bdd->prepare($sql);
-        $response->execute(array(htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($_POST['Lien']), $buyFrom, htmlentities($_POST['Prix']), htmlentities($_POST['save'])));
-
-        $response->closeCursor();
-
-        $sql = 'SELECT lic_liste.lien_partage as lien
-            FROM lic_liste
-            INNER JOIN lic_idee ON lic_idee.id_liste = lic_liste.id
-            WHERE lic_idee.nom = ? AND lic_liste.deleted_to IS NULL AND lic_idee.deleted_to IS NULL';
-
-        $response = $bdd->prepare($sql);
-        $response->execute(array(htmlentities($_POST['Nom'])));
-
-        $donnee = $response->fetch();
-        $response->closeCursor();
-
-        header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $donnee['lien']);
+        header('Location: https://family.matthieudevilliers.fr/pages/erreur/403.php');
         exit();
     }
 } elseif (isset($_POST['Nom'])) {
