@@ -11,7 +11,6 @@ if (!isset($_SESSION['id_compte'])) {
 }
 
 if (isset($_POST['delete'])) {
-
     // Récupération du lien de la liste qui contient l'idée à supprimer
     $sql1 = 'SELECT lic_liste.lien_partage as lien
             FROM lic_liste
@@ -42,12 +41,13 @@ if (isset($_POST['delete'])) {
 
     if (isset($_POST['Achat'])) {
         // Modification de l'idée par le propriétaire
+        $isBuy = isset($_POST['Achat']) ? 1 : 0;
         $sql = 'UPDATE lic_idee
-            SET nom = ?, commentaire = ?, lien = ?, is_buy = ?, price = ?
-            WHERE id = ?;';
+                SET nom = ?, commentaire = ?, lien = ?, is_buy = ?, price = ?
+                WHERE id = ?;';
 
         $response = $bdd->prepare($sql);
-        $response->execute(array(htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($_POST['Lien']), htmlentities($_POST['Achat']) ?? 0, htmlentities($_POST['Prix']), htmlentities($_POST['save'])));
+        $response->execute(array(htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($_POST['Lien']), $isBuy, htmlentities($_POST['Prix']), htmlentities($_POST['save'])));
 
         $response->closeCursor();
 
