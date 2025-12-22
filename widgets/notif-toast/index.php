@@ -22,7 +22,7 @@ while ($notification = $req_toast->fetch()) {
         <div class="toast-header bg-info text-white">
             <i class="fas fa-bell me-2"></i>
             <strong class="me-auto"><?php echo $notifTitre; ?></strong>
-            <small><?php echo htmlspecialchars($notifDate, ENT_QUOTES, 'UTF-8'); ?></small>
+            <small><?php echo $notifDate; ?></small>
             <button type="button" class="btn-close btn-close-white ms-2" data-bs-dismiss="toast" aria-label="Close" onclick="markNotificationAsRead(<?php echo $notifId; ?>)"></button>
         </div>
         <div class="toast-body">
