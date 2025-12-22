@@ -1,3 +1,10 @@
+<?php
+// Inclure le widget de notifications toast pour les utilisateurs connectés
+if (isset($_SESSION['id_compte'])) {
+    include(__DIR__ . '/../notif-toast/index.php');
+}
+?>
+
 <footer class="footer mt-auto py-3 bg-secondary">
     <div class="container text-light text-center">
         <span>

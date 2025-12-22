@@ -28,6 +28,9 @@
 <!-- Icon FontAwesome -->
 <script src="https://family.matthieudevilliers.fr/js/45afd6dbfc.js"></script>
 
+<!-- Notifications JS -->
+<script src="https://family.matthieudevilliers.fr/js/notifications.js"></script>
+
 <!-- Style CSS -->
 <link href="https://family.matthieudevilliers.fr/css/style.css" rel="stylesheet">
 
