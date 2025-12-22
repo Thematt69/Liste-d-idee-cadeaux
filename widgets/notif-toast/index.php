@@ -1,6 +1,6 @@
 <?php
 // Vérifier que $bdd est disponible
-if (!isset($bdd)) {
+if (!isset($bdd) || !($bdd instanceof PDO)) {
     return;
 }
 
