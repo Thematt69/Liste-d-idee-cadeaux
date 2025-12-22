@@ -28,7 +28,7 @@
 /* Notifications toast */
 
 .toast-container {
-    z-index: 1055;
+    z-index: 1055 !important;
 }
 
 .toast {
@@ -37,8 +37,8 @@
     margin-bottom: 0.5rem;
 }
 
-.toast-header {
-    background-color: #6c757d !important;
+.toast-header.bg-info {
+    color: white;
 }
 
 @media only screen and (max-width:576px) {
