@@ -1,4 +1,9 @@
 <?php
+// Vérifier que $bdd est disponible
+if (!isset($bdd)) {
+    return;
+}
+
 // Récupérer les notifications non-lues
 $sqlreq_toast = 'SELECT id, titre, message, created_to
                 FROM lic_notif
@@ -23,7 +28,7 @@ while ($notification = $req_toast->fetch()) {
             <i class="fas fa-bell me-2"></i>
             <strong class="me-auto"><?php echo $notifTitre; ?></strong>
             <small><?php echo $notifDate; ?></small>
-            <button type="button" class="btn-close btn-close-white ms-2" data-bs-dismiss="toast" aria-label="Close" onclick="markNotificationAsRead(<?php echo $notifId; ?>)"></button>
+            <button type="button" class="btn-close btn-close-white ms-2 notif-close-btn" aria-label="Close"></button>
         </div>
         <div class="toast-body">
             <?php echo $notifMessage; ?>

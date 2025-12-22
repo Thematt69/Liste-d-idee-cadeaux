@@ -3,6 +3,9 @@ session_start();
 
 include('../verif/index.php');
 
+// Définir le type de contenu JSON
+header('Content-Type: application/json');
+
 // Vérifier que l'utilisateur est connecté
 if (!isset($_SESSION['id_compte'])) {
     http_response_code(401);
@@ -17,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['notif_id'])) {
     // Mettre à jour la notification pour la marquer comme lue
     $sqlreq = 'UPDATE lic_notif 
                 SET etat = "lu"
-                WHERE id = ? AND id_compte = ? AND etat = "non-lu"';
+                WHERE id = ? AND id_compte = ? AND etat = "non-lu" AND deleted_to IS NULL';
     
     $req = $bdd->prepare($sqlreq);
     $req->execute(array($notif_id, $_SESSION['id_compte']));

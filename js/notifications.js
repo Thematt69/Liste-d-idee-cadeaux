@@ -8,7 +8,13 @@ function markNotificationAsRead(notifId) {
         },
         body: 'notif_id=' + notifId
     })
-    .then(response => response.json())
+    .then(response => {
+        // Vérifier que la réponse est OK avant de parser le JSON
+        if (!response.ok) {
+            throw new Error('Erreur HTTP: ' + response.status);
+        }
+        return response.json();
+    })
     .then(data => {
         if (data.success) {
             // Fermer le toast
@@ -36,5 +42,18 @@ document.addEventListener('DOMContentLoaded', function() {
         new bootstrap.Toast(toastElement, {
             autohide: false // Ne pas masquer automatiquement
         });
+    });
+    
+    // Attacher les gestionnaires d'événements de fermeture aux boutons
+    document.addEventListener('click', function(event) {
+        if (event.target.classList.contains('notif-close-btn')) {
+            const toastElement = event.target.closest('.toast');
+            if (toastElement) {
+                const notifId = toastElement.getAttribute('data-notif-id');
+                if (notifId) {
+                    markNotificationAsRead(parseInt(notifId, 10));
+                }
+            }
+        }
     });
 });
