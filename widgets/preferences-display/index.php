@@ -14,22 +14,24 @@ while ($owner = $response_owners->fetch()) {
 }
 $response_owners->closeCursor();
 
-// Get preferences for all owners
+// Get preferences for all owners in a single query
 $preferences_data = array();
-foreach ($owner_ids as $owner_id) {
-    $sql_pref = 'SELECT p.*, c.prenom, c.nom
+if (count($owner_ids) > 0) {
+    // Build placeholders for IN clause
+    $placeholders = implode(',', array_fill(0, count($owner_ids), '?'));
+    
+    $sql_pref = "SELECT p.*, c.prenom, c.nom
                  FROM lic_preferences p
                  INNER JOIN lic_compte c ON p.id_compte = c.id
-                 WHERE p.id_compte = ? AND p.deleted_to IS NULL AND c.deleted_to IS NULL';
+                 WHERE p.id_compte IN ($placeholders) AND p.deleted_to IS NULL AND c.deleted_to IS NULL";
     
     $response_pref = $bdd->prepare($sql_pref);
-    $response_pref->execute(array($owner_id));
-    $pref = $response_pref->fetch();
-    $response_pref->closeCursor();
+    $response_pref->execute($owner_ids);
     
-    if ($pref) {
+    while ($pref = $response_pref->fetch()) {
         $preferences_data[] = $pref;
     }
+    $response_pref->closeCursor();
 }
 
 // Display preferences summary and modal for each owner
