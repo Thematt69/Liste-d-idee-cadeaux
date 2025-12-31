@@ -42,6 +42,9 @@
                         <a class="nav-link" href="https://family.matthieudevilliers.fr/pages/listes/">Mes listes</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="https://family.matthieudevilliers.fr/pages/profil-cadeau/">Mon Profil Cadeau</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="https://family.matthieudevilliers.fr/pages/compte/">Mon compte</a>
                     </li>
                     <li class="nav-item">

@@ -185,6 +185,12 @@ $response1->closeCursor();
                     </h1>
                     <br>
 
+                    <?php
+                    // Display owner preferences
+                    $liste_id = $donnee['id'];
+                    include('../../widgets/preferences-display/index.php');
+                    ?>
+
                     <div class="card text-dark bg-light">
                         <div class="card-body text-center">
                             <div class="table-responsive">
