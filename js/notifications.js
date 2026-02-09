@@ -1,7 +1,14 @@
-// Fonction pour marquer une notification comme lue
+/**
+ * Marque une notification comme lue côté serveur et met à jour l'interface.
+ *
+ * Envoie une requête POST pour marquer la notification comme lue, puis
+ * masque le toast Bootstrap correspondant dans le DOM si l'opération réussit.
+ *
+ * @param {number} notifId - Identifiant numérique de la notification à marquer comme lue.
+ */
 function markNotificationAsRead(notifId) {
     // Envoyer la requête AJAX pour marquer la notification comme lue
-    fetch('https://family.matthieudevilliers.fr/scripts/mark-notif-read/', {
+    fetch('/scripts/mark-notif-read/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',

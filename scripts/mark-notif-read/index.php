@@ -17,6 +17,13 @@ if (!isset($_SESSION['id_compte'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['notif_id'])) {
     $notif_id = intval($_POST['notif_id']);
     
+    // Valider que l'ID de notification est un entier strictement positif
+    if ($notif_id <= 0) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'ID de notification invalide']);
+        exit();
+    }
+    
     // Mettre à jour la notification pour la marquer comme lue
     $sqlreq = 'UPDATE lic_notif 
                 SET etat = "lu"
@@ -30,12 +37,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['notif_id'])) {
     
     if ($affected_rows > 0) {
         echo json_encode(['success' => true]);
+        exit();
     } else {
         http_response_code(400);
         echo json_encode(['success' => false, 'message' => 'Notification non trouvée ou déjà lue']);
+        exit();
     }
 } else {
     http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'Requête invalide']);
+    exit();
 }
 ?>

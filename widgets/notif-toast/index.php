@@ -4,6 +4,11 @@ if (!isset($bdd) || !($bdd instanceof PDO)) {
     return;
 }
 
+// Vérifier que la session est disponible
+if (!isset($_SESSION['id_compte'])) {
+    return;
+}
+
 // Récupérer les notifications non-lues
 $sqlreq_toast = 'SELECT id, titre, message, created_to
                 FROM lic_notif
@@ -13,10 +18,15 @@ $sqlreq_toast = 'SELECT id, titre, message, created_to
 $req_toast = $bdd->prepare($sqlreq_toast);
 $req_toast->execute(array($_SESSION['id_compte']));
 
-// Conteneur pour les toasts (position fixe en bas à droite)
-echo '<div class="toast-container position-fixed bottom-0 end-0 p-3">';
+// Récupérer toutes les notifications pour vérifier s'il y en a
+$notifications = $req_toast->fetchAll();
 
-while ($notification = $req_toast->fetch()) {
+// Ne créer le conteneur que s'il y a des notifications
+if (count($notifications) > 0) {
+    // Conteneur pour les toasts (position fixe en bas à droite)
+    echo '<div class="toast-container position-fixed bottom-0 end-0 p-3">';
+
+    foreach ($notifications as $notification) {
     $datetime = new DateTime($notification["created_to"]);
     $notifId = intval($notification["id"]);
     $notifTitre = htmlspecialchars($notification["titre"], ENT_QUOTES, 'UTF-8');
@@ -35,9 +45,10 @@ while ($notification = $req_toast->fetch()) {
         </div>
     </div>
 <?php
-}
+    }
 
-echo '</div>';
+    echo '</div>';
+}
 
 $req_toast->closeCursor();
 ?>

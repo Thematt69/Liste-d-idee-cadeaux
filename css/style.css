@@ -28,7 +28,7 @@
 /* Notifications toast */
 
 .toast-container {
-    z-index: 1055 !important;
+    z-index: 1055;
 }
 
 .toast {
