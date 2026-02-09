@@ -16,11 +16,16 @@ function markNotificationAsRead(notifId) {
         body: 'notif_id=' + notifId
     })
     .then(response => {
-        // Vérifier que la réponse est OK avant de parser le JSON
-        if (!response.ok) {
-            throw new Error('Erreur HTTP: ' + response.status);
-        }
-        return response.json();
+        // Tenter de parser le JSON même en cas d'erreur HTTP
+        return response.json()
+            .catch(() => null)
+            .then(data => {
+                if (!response.ok) {
+                    const message = data && data.message ? data.message : 'Erreur HTTP: ' + response.status;
+                    throw new Error(message);
+                }
+                return data;
+            });
     })
     .then(data => {
         if (data.success) {
