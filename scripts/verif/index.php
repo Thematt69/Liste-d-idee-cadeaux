@@ -9,7 +9,8 @@ if (session_status() === PHP_SESSION_NONE) {
 
 try {
     if (!$_SERVER['HTTPS']) {
-        header('Location: https://family.matthieudevilliers.fr' . $_SERVER['PHP_SELF']);
+        header('Location: https://family.matthieudevilliers.fr' . $_SERVER['PHP_SELF'], true, 307);
+        exit();
     }
 
     // On se connecte à MySQL

@@ -1,6 +1,14 @@
 <?php
 session_start();
 
+// Vérifier HTTPS avant d'inclure verif/index.php pour éviter une redirection en GET
+if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
+    header('Content-Type: application/json');
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'HTTPS requis']);
+    exit();
+}
+
 include('../verif/index.php');
 
 // Définir le type de contenu JSON
