@@ -29,8 +29,8 @@ if (count($notifications) > 0) {
     foreach ($notifications as $notification) {
     $datetime = new DateTime($notification["created_to"]);
     $notifId = intval($notification["id"]);
-    $notifTitre = htmlspecialchars($notification["titre"], ENT_QUOTES, 'UTF-8');
-    $notifMessage = htmlspecialchars($notification["message"], ENT_QUOTES, 'UTF-8');
+    $notifTitre = safe_output($notification["titre"]);
+    $notifMessage = safe_output($notification["message"]);
     $notifDate = $datetime->format("d/m/Y H:i");
 ?>
     <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true" id="toast-<?php echo $notifId; ?>" data-notif-id="<?php echo $notifId; ?>">
