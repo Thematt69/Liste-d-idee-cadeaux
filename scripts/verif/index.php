@@ -8,7 +8,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 try {
-    if (!$_SERVER['HTTPS']) {
+    if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
         header('Location: https://family.matthieudevilliers.fr' . $_SERVER['PHP_SELF'], true, 307);
         exit();
     }
