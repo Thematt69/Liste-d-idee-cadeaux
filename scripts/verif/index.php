@@ -23,8 +23,6 @@ try {
 /// Helper: decode stored HTML entities, escape for HTML output.
 function safe_output($str)
 {
-    // First decode any HTML entities stored in DB, using UTF-8
-    $decoded = html_entity_decode($str, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-    // Then escape for HTML output
-    return htmlspecialchars($decoded, ENT_QUOTES, 'UTF-8');
+    if ($str === null || $str === '') return '';
+    return htmlspecialchars($str, ENT_QUOTES | ENT_HTML5, 'UTF-8');
 }

@@ -21,7 +21,7 @@ if ($_POST['reset']) {
             WHERE mail = ? AND motdepasse = ?';
 
     $response2 = $bdd->prepare($sql2);
-    $response2->execute(array(password_hash(htmlentities($_POST['MDP']), PASSWORD_DEFAULT), htmlentities($_POST['Mail']), htmlentities($_POST['reset'])));
+    $response2->execute(array(password_hash($_POST['MDP'], PASSWORD_DEFAULT), $_POST['Mail'], $_POST['reset']));
     $response2->closeCursor();
 
     $info = "Votre mot de passe a bien été modifié.";
@@ -33,7 +33,7 @@ if ($_POST['reset']) {
         "Votre mot de passe vient d'être modifié, si vous n'êtes pas à l'origine de ce changement, nous vous recommandons de le modifier directement dans l'onglet \"Mon compte\" ou en contactant le support.";
 
     $response3 = $bdd->prepare($sql3);
-    $response3->execute(array(htmlentities($_POST['Mail']), 'Mot de passe modifié', $msg));
+    $response3->execute(array($_POST['Mail'], 'Mot de passe modifié', $msg));
     $response3->closeCursor();
 
     header('Location: https://family.matthieudevilliers.fr/pages/connexion/');
@@ -63,7 +63,7 @@ if ($_POST['reset']) {
                 WHERE mail = ? AND deleted_to IS NULL';
 
         $response = $bdd->prepare($sql);
-        $response->execute(array(htmlentities($_POST['Mail'])));
+        $response->execute(array($_POST['Mail']));
 
         $donnee = $response->fetch();
 
@@ -76,10 +76,10 @@ if ($_POST['reset']) {
 
             // Lien random de partage
             $rand = bin2hex(random_bytes(32));
-            $hashedRand = password_hash(htmlentities($rand), PASSWORD_DEFAULT);
+            $hashedRand = password_hash($rand, PASSWORD_DEFAULT);
 
             $response1 = $bdd->prepare($sql1);
-            $response1->execute(array($hashedRand, htmlentities($_POST['Mail'])));
+            $response1->execute(array($hashedRand, $_POST['Mail']));
             $response1->closeCursor();
 
             // Contenu du mail
@@ -90,13 +90,13 @@ if ($_POST['reset']) {
                         <br>
                         <p>Bonjour,</p>
                         <p>Vous avez demandé à réinitialiser votre mot de passe, pour continuer, cliquer sur le lien ci-dessous.</p>
-                        <p><a href="https://family.matthieudevilliers.fr/pages/reset-password/?reset=' . htmlentities($rand) . '">https://family.matthieudevilliers.fr/pages/reset-password/?reset=' . htmlentities($rand) . '</a></p>
+                        <p><a href="https://family.matthieudevilliers.fr/pages/reset-password/?reset=' . urlencode($rand) . '">https://family.matthieudevilliers.fr/pages/reset-password/?reset=' . urlencode($rand) . '</a></p>
                         <br>
                         <p>L\'équipe de Listes d\'idées cadeaux</p>
                     </body>
                 </html>
             ';
-            if (envoiMail(htmlentities($_POST['Mail']), "Mot de passe oublié - Listes d'idées cadeau", $contenu)) {
+            if (envoiMail($_POST['Mail'], "Mot de passe oublié - Listes d'idées cadeau", $contenu)) {
                 // Le mail a bien été envoyé
                 $info = "Un mail va prochainement vous être envoyé à l'adresse fournie.";
             } else {
@@ -122,7 +122,7 @@ if ($_GET['reset']) {
             WHERE motdepasse = ? AND deleted_to IS NULL';
 
     $response = $bdd->prepare($sql);
-    $response->execute(array(htmlentities($_GET['reset'])));
+    $response->execute(array($_GET['reset']));
 
     $donnee = $response->fetch();
 

@@ -2,7 +2,7 @@
 
 session_start();
 
-include ('../../scripts/verif/index.php');
+include('../../scripts/verif/index.php');
 
 if (isset($_SESSION['id_compte'])) {
     header('Location: https://family.matthieudevilliers.fr/pages/listes/');
@@ -39,8 +39,30 @@ if (isset($_POST['Mail'])) {
 
     $donnee = $response->fetch();
 
-    if ($donnee && password_verify($_POST['MDP'], $donnee['motdepasse'])) {
-        // Le mot de passe correspond
+    $loginSuccess = false;
+    $needsRehash = false;
+
+    if ($donnee) {
+        // Tenter avec le nouveau format (sans htmlentities)
+        if (password_verify($_POST['MDP'], $donnee['motdepasse'])) {
+            $loginSuccess = true;
+        }
+        // Tenter avec l'ancien format (avec htmlentities) pour migration automatique
+        elseif (password_verify(htmlentities($_POST['MDP']), $donnee['motdepasse'])) {
+            $loginSuccess = true;
+            $needsRehash = true;
+        }
+    }
+
+    if ($loginSuccess) {
+        // Migration automatique : rehash le mot de passe si nécessaire
+        if ($needsRehash) {
+            $newHash = password_hash($_POST['MDP'], PASSWORD_DEFAULT);
+            $sqlUpdate = 'UPDATE lic_compte SET motdepasse = ? WHERE id = ?';
+            $stmtUpdate = $bdd->prepare($sqlUpdate);
+            $stmtUpdate->execute(array($newHash, $donnee['id']));
+            $stmtUpdate->closeCursor();
+        }
 
         // Prevent session fixation: regenerate id on successful authentication
         session_regenerate_id(true);
@@ -66,74 +88,74 @@ if (isset($_POST['Mail'])) {
 <!DOCTYPE html>
 <html lang="fr" class="h-100">
 
-    <head>
-        <title>Listes d'idées cadeau - Connexion</title>
+<head>
+    <title>Listes d'idées cadeau - Connexion</title>
 
-        <!-- Import -->
-        <?php include ('../../widgets/import/index.php'); ?>
-    </head>
+    <!-- Import -->
+    <?php include('../../widgets/import/index.php'); ?>
+</head>
 
-    <body class="d-flex flex-column h-100">
+<body class="d-flex flex-column h-100">
 
-        <?php include ('../../widgets/navbar/index.php'); ?>
+    <?php include('../../widgets/navbar/index.php'); ?>
 
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-sm-12 col-md-9 col-lg-6">
-                    <br>
-                    <?php
-                    if ($alert) {
-                        ?>
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <strong><?php echo $alert; ?></strong>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                        <?php
-                    }
-                    ?>
-                    <h1 class="text-center">Connexion</h1>
-                    <br>
-                    <div class="card">
-                        <div class="card-body">
-                            <form action="" method="post">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-floating">
-                                            <input name="Mail" type="email" class="form-control" id="LabelMail"
-                                                placeholder="name@example.com" required>
-                                            <label for="LabelMail">Adresse mail</label>
-                                        </div>
-                                        <br>
-                                        <div class="form-floating">
-                                            <input name="MDP" type="password" class="form-control" id="LabelMDP"
-                                                aria-describedby="DescriptionMDP" placeholder="Mot de passe" required>
-                                            <label for="LabelMDP">Mot de passe</label>
-                                            <small id="DescriptionMDP" class="form-text text-muted"><a
-                                                    href="https://family.matthieudevilliers.fr/pages/reset-password/">Mot
-                                                    de passe oublié</a></small>
-                                        </div>
-                                        <br>
-                                        <div class="text-center">
-                                            <button type="submit" class="btn btn-primary">Se connecter</button>
-                                        </div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-sm-12 col-md-9 col-lg-6">
+                <br>
+                <?php
+                if ($alert) {
+                ?>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong><?php echo $alert; ?></strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                <?php
+                }
+                ?>
+                <h1 class="text-center">Connexion</h1>
+                <br>
+                <div class="card">
+                    <div class="card-body">
+                        <form action="" method="post">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-floating">
+                                        <input name="Mail" type="email" class="form-control" id="LabelMail"
+                                            placeholder="name@example.com" required>
+                                        <label for="LabelMail">Adresse mail</label>
+                                    </div>
+                                    <br>
+                                    <div class="form-floating">
+                                        <input name="MDP" type="password" class="form-control" id="LabelMDP"
+                                            aria-describedby="DescriptionMDP" placeholder="Mot de passe" required>
+                                        <label for="LabelMDP">Mot de passe</label>
+                                        <small id="DescriptionMDP" class="form-text text-muted"><a
+                                                href="https://family.matthieudevilliers.fr/pages/reset-password/">Mot
+                                                de passe oublié</a></small>
+                                    </div>
+                                    <br>
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-primary">Se connecter</button>
                                     </div>
                                 </div>
-                            </form>
-                        </div>
+                            </div>
+                        </form>
                     </div>
-                    <br>
-                    <div class="text-center">
-                        <a href="https://family.matthieudevilliers.fr/pages/inscription/">
-                            Pas de compte ? Je m'inscris
-                        </a>
-                    </div>
-                    <br>
                 </div>
+                <br>
+                <div class="text-center">
+                    <a href="https://family.matthieudevilliers.fr/pages/inscription/">
+                        Pas de compte ? Je m'inscris
+                    </a>
+                </div>
+                <br>
             </div>
         </div>
+    </div>
 
-    </body>
+</body>
 
-    <?php include ('../../widgets/footer/index.php'); ?>
+<?php include('../../widgets/footer/index.php'); ?>
 
 </html>

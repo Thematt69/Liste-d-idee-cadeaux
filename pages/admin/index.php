@@ -26,7 +26,7 @@ if (isset($_POST['Comptes'])) {
                         VALUES (?, ?, ?)';
 
                 $response3 = $bdd->prepare($sql3);
-                $response3->execute(array($value, htmlentities(htmlentities($_POST['Titre'])), htmlentities($_POST['Message'])));
+                $response3->execute(array($value, $_POST['Titre'], $_POST['Message']));
                 $response3->closeCursor();
             } else {
 
@@ -42,7 +42,7 @@ if (isset($_POST['Comptes'])) {
                         VALUES (?, ?, ?)';
 
                     $response2 = $bdd->prepare($sql2);
-                    $response2->execute(array($donnees['id'], htmlentities($_POST['Titre']), htmlentities($_POST['Message'])));
+                    $response2->execute(array($donnees['id'], $_POST['Titre'], $_POST['Message']));
                     $response2->closeCursor();
                 }
 
