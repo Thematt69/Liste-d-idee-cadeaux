@@ -83,17 +83,37 @@ if (!isset($_SESSION['id_compte'])) {
                                         <br>
                                         <small class="text-muted d-flex justify-content-center">de
                                             <?php
-                                            for ($i = 0; $i < count($proprietaire); $i++) {
-                                                if ($i > 0) {
-                                                    echo " et ";
+                                            $totalCount = count($proprietaire);
+
+                                            if ($totalCount <= 2) {
+                                                // Affichage normal pour 1 ou 2 propriétaires
+                                                for ($i = 0; $i < $totalCount; $i++) {
+                                                    if ($i > 0) echo " et ";
+                                                    if ($proprietaire[$i]['id'] == $_SESSION['id_compte']) {
+                                                        echo "<strong>&thinsp;vous&thinsp;</strong>";
+                                                    } else {
+                                                        echo safe_output($proprietaire[$i]['prenom']);
+                                                    }
                                                 }
-                                                if ($proprietaire[$i]['id'] == $_SESSION['id_compte']) {
+                                            } else {
+                                                // Plus de 2 propriétaires : affichage limité
+                                                $isUserOwner = false;
+                                                foreach ($proprietaire as $owner) {
+                                                    if ($owner['id'] == $_SESSION['id_compte']) {
+                                                        $isUserOwner = true;
+                                                        break;
+                                                    }
+                                                }
+
+                                                if ($isUserOwner) {
                                                     echo "<strong>&thinsp;vous&thinsp;</strong>";
                                                 } else {
-                                                    echo safe_output($proprietaire[$i]['prenom']);
+                                                    echo safe_output($proprietaire[0]['prenom']);
                                                 }
-                                            }
 
+                                                $remaining = $totalCount - 1;
+                                                echo " et " . $remaining . " autre" . ($remaining > 1 ? "s" : "");
+                                            }
                                             ?>
                                         </small>
                                     </p>

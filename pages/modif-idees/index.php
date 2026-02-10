@@ -61,20 +61,17 @@ if (isset($_POST['delete'])) {
     $responseAuth->execute(array($_SESSION['id_compte'], $_POST['save']));
     $droitModif = $responseAuth->fetch();
     $responseAuth->closeCursor();
-    if ($droitModif && ($droitModif['droit'] === 'proprietaire' || $droitModif['droit'] === 'moderateur')) {
+
+    if ($droitModif['droit'] === 'proprietaire') {
         $isBuy = htmlentities($_POST['Achat']) == "1";
 
-        if (htmlentities($_POST['AchatFrom']) == "1") {
-            $buyFrom = $_SESSION['id_compte'];
-        }
-
-        // Modification de l'idée par un propriétaire ou un modérateur
+        // Modification de l'idée par un propriétaire
         $sql = 'UPDATE lic_idee
-                SET nom = ?, commentaire = ?, lien = ?, is_buy = ?, buy_from = ?, price = ?
+                SET nom = ?, commentaire = ?, lien = ?, is_buy = ?, price = ?
                 WHERE id = ?;';
 
         $response = $bdd->prepare($sql);
-        $response->execute(array(htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($_POST['Lien']), $isBuy, $buyFrom, htmlentities($_POST['Prix']), htmlentities($_POST['save'])));
+        $response->execute(array(htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($_POST['Lien']), $isBuy,  htmlentities($_POST['Prix']), htmlentities($_POST['save'])));
 
         $response->closeCursor();
 
@@ -144,6 +141,34 @@ if (isset($_POST['delete'])) {
             }
             $response1->closeCursor();
         }
+
+        header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $donnee['lien']);
+        exit();
+    } else if (isset($droitModif['droit']) && $droitModif['droit'] !== 'proprietaire') {
+        if (htmlentities($_POST['AchatFrom']) == "1") {
+            $buyFrom = $_SESSION['id_compte'];
+        }
+
+        // Modification de l'idée par un modérateur ou un lecteur
+        $sql = 'UPDATE lic_idee
+                SET nom = ?, commentaire = ?, lien = ?, buy_from = ?, price = ?
+                WHERE id = ?;';
+
+        $response = $bdd->prepare($sql);
+        $response->execute(array(htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($_POST['Lien']), $buyFrom, htmlentities($_POST['Prix']), htmlentities($_POST['save'])));
+
+        $response->closeCursor();
+
+        $sql = 'SELECT lic_liste.lien_partage as lien
+                FROM lic_liste
+                INNER JOIN lic_idee ON lic_idee.id_liste = lic_liste.id
+                WHERE lic_idee.nom = ? AND lic_liste.deleted_to IS NULL AND lic_idee.deleted_to IS NULL';
+
+        $response = $bdd->prepare($sql);
+        $response->execute(array(htmlentities($_POST['Nom'])));
+
+        $donnee = $response->fetch();
+        $response->closeCursor();
 
         header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $donnee['lien']);
         exit();

@@ -14,9 +14,6 @@
 
                 if (isset($_SESSION['id_compte'])) {
 
-                    // NOTE - Notification
-                    include('../../widgets/notif/index.php');
-
                     if (!isset($_SESSION['fonction'])) {
                         $sqlreq4 = 'SELECT fonction
                                     FROM lic_compte
@@ -51,7 +48,6 @@
                         <a class="nav-link" href="https://family.matthieudevilliers.fr/scripts/deconnexion/">Déconnexion</a>
                     </li>
                 <?php
-                    $req2->closeCursor();
                 } else {
                 ?>
                     <li class="nav-item">

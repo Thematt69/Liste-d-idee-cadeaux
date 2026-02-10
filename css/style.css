@@ -25,6 +25,30 @@
 }
 
 
+/* Notifications toast */
+
+.toast-container {
+    z-index: 1055;
+}
+
+.toast {
+    min-width: 300px;
+    max-width: 350px;
+    margin-bottom: 0.5rem;
+}
+
+.toast-header.bg-info {
+    color: white;
+}
+
+@media only screen and (max-width:576px) {
+    .toast {
+        min-width: 250px;
+        max-width: 300px;
+    }
+}
+
+
 /* Preferences Feature Styling */
 
 .preferences-banner {

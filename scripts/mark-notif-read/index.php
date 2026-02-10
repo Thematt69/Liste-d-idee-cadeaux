@@ -1,0 +1,59 @@
+<?php
+session_start();
+
+// Vérifier HTTPS avant d'inclure verif/index.php pour éviter une redirection en GET
+if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
+    header('Content-Type: application/json');
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'HTTPS requis']);
+    exit();
+}
+
+include('../verif/index.php');
+
+// Définir le type de contenu JSON
+header('Content-Type: application/json');
+
+// Vérifier que l'utilisateur est connecté
+if (!isset($_SESSION['id_compte'])) {
+    http_response_code(401);
+    echo json_encode(['success' => false, 'message' => 'Non autorisé']);
+    exit();
+}
+
+// Vérifier que c'est une requête POST avec un ID de notification
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['notif_id'])) {
+    $notif_id = intval($_POST['notif_id']);
+    
+    // Valider que l'ID de notification est un entier strictement positif
+    if ($notif_id <= 0) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'ID de notification invalide']);
+        exit();
+    }
+    
+    // Mettre à jour la notification pour la marquer comme lue
+    $sqlreq = 'UPDATE lic_notif 
+                SET etat = "lu"
+                WHERE id = ? AND id_compte = ? AND etat = "non-lu" AND deleted_to IS NULL';
+    
+    $req = $bdd->prepare($sqlreq);
+    $req->execute(array($notif_id, $_SESSION['id_compte']));
+    
+    $affected_rows = $req->rowCount();
+    $req->closeCursor();
+    
+    if ($affected_rows > 0) {
+        echo json_encode(['success' => true]);
+        exit();
+    } else {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'Notification non trouvée ou déjà lue']);
+        exit();
+    }
+} else {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'Requête invalide']);
+    exit();
+}
+?>
