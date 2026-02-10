@@ -24,5 +24,8 @@ try {
 function safe_output($str)
 {
     if ($str === null || $str === '') return '';
-    return htmlspecialchars($str, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    // First decode any HTML entities stored in DB (legacy data like "Id&eacute;e")
+    $decoded = html_entity_decode((string)$str, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    // Then escape for HTML output
+    return htmlspecialchars($decoded, ENT_QUOTES | ENT_HTML5, 'UTF-8');
 }
