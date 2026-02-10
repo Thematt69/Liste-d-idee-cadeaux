@@ -8,8 +8,9 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 try {
-    if (!$_SERVER['HTTPS']) {
-        header('Location: https://family.matthieudevilliers.fr' . $_SERVER['PHP_SELF']);
+    if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
+        header('Location: https://family.matthieudevilliers.fr' . $_SERVER['PHP_SELF'], true, 307);
+        exit();
     }
 
     // On se connecte à MySQL
@@ -22,8 +23,50 @@ try {
 /// Helper: decode stored HTML entities, escape for HTML output.
 function safe_output($str)
 {
-    // First decode any HTML entities stored in DB, using UTF-8
-    $decoded = html_entity_decode($str, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    if ($str === null || $str === '') return '';
+    // First decode any HTML entities stored in DB (legacy data like "Id&eacute;e")
+    $decoded = html_entity_decode((string)$str, ENT_QUOTES | ENT_HTML5, 'UTF-8');
     // Then escape for HTML output
-    return htmlspecialchars($decoded, ENT_QUOTES, 'UTF-8');
+    return htmlspecialchars($decoded, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+}
+
+/// Helper: cleanup old connexions (called on login and from admin panel)
+function cleanup_old_connexions($bdd, $id_compte = null)
+{
+    try {
+        if ($id_compte) {
+            // For a specific user (on login) - more efficient
+            // Delete entries older than 1 year, and keep only the 10 most recent
+            $sql = "DELETE FROM lic_connexion 
+                    WHERE id_compte = ? 
+                    AND (
+                        connected_to < DATE_SUB(NOW(), INTERVAL 1 YEAR)
+                        OR id NOT IN (
+                            SELECT id FROM (
+                                SELECT id FROM lic_connexion 
+                                WHERE id_compte = ?
+                                ORDER BY connected_to DESC 
+                                LIMIT 10
+                            ) temp
+                        )
+                    )";
+
+            $stmt = $bdd->prepare($sql);
+            $stmt->execute(array($id_compte, $id_compte));
+        } else {
+            // For all users (on signup) - global cleanup
+            // Delete entries older than 1 year, and keep only the 10 most recent per user
+            $sql = "DELETE FROM lic_connexion 
+                    WHERE connected_to < DATE_SUB(NOW(), INTERVAL 1 YEAR)
+                    OR (SELECT COUNT(*) FROM lic_connexion co2 
+                        WHERE co2.id_compte = lic_connexion.id_compte 
+                        AND co2.connected_to >= lic_connexion.connected_to) > 10
+                    LIMIT 1000";
+
+            $bdd->exec($sql);
+        }
+    } catch (Exception $e) {
+        // Silently log errors to avoid breaking login/signup
+        error_log("cleanup_old_connexions error: " . $e->getMessage());
+    }
 }

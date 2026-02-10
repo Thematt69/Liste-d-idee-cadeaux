@@ -21,7 +21,7 @@ if (isset($_POST['cancel'])) {
             WHERE id = ?';
 
     $response1 = $bdd->prepare($sql1);
-    $response1->execute(array(htmlentities($_POST['share_delete'])));
+    $response1->execute(array($_POST['share_delete']));
 
     $response1->closeCursor();
 } elseif (isset($_POST['delete'])) {
@@ -31,7 +31,7 @@ if (isset($_POST['cancel'])) {
             WHERE id_liste = ?';
 
     $response1 = $bdd->prepare($sql1);
-    $response1->execute(array(htmlentities($_POST['delete'])));
+    $response1->execute(array($_POST['delete']));
 
     $response1->closeCursor();
 
@@ -43,25 +43,25 @@ if (isset($_POST['cancel'])) {
     $date = new DateTime();
 
     $response = $bdd->prepare($sql);
-    $response->execute(array($date->format('Y-m-d H:i:s'), htmlentities($_POST['delete'])));
+    $response->execute(array($date->format('Y-m-d H:i:s'), $_POST['delete']));
 
     $response->closeCursor();
 
     header('Location: https://family.matthieudevilliers.fr/pages/listes/');
     exit();
-} elseif (isset($_POST['Nom']) && htmlentities($_POST['save']) != "") {
+} elseif (isset($_POST['Nom']) && $_POST['save'] != "") {
 
     $sql = 'SELECT partage
             FROM lic_liste
             WHERE id = ?';
 
     $response1 = $bdd->prepare($sql);
-    $response1->execute(array(htmlentities($_POST['save'])));
+    $response1->execute(array($_POST['save']));
 
     $donnees = $response1->fetch();
 
     // Modification des autorisations en fonction du partage
-    switch (htmlentities($_POST['Partage'])) {
+    switch ($_POST['Partage']) {
         case 'prive':
             switch ($donnees['partage']) {
                 case 'prive': # Privé -> Privé : Nothing to do
@@ -73,7 +73,7 @@ if (isset($_POST['cancel'])) {
                             WHERE id_liste = ? AND type != "proprietaire"';
 
                     $response2 = $bdd->prepare($sql2);
-                    $response2->execute(array(htmlentities($_POST['save'])));
+                    $response2->execute(array($_POST['save']));
                     $response2->closeCursor();
                     break;
             }
@@ -100,8 +100,9 @@ if (isset($_POST['cancel'])) {
                             VALUES ((SELECT id FROM `lic_compte` WHERE fonction = "admin"), ?, "moderateur")';
 
                     $response2 = $bdd->prepare($sql2);
-                    $response2->execute(array(htmlentities($_POST['save'])));
+                    $response2->execute(array($_POST['save']));
                     $response2->closeCursor();
+                    break;
                 case 'limite': # Limité -> Public : Nothing to do
                 case 'public': # Public -> Public : Nothing to do
                     break;
@@ -116,7 +117,7 @@ if (isset($_POST['cancel'])) {
             WHERE id = ?';
 
     $response = $bdd->prepare($sql);
-    $response->execute(array(htmlentities($_POST['Nom']), htmlentities($_POST['Partage']), htmlentities($_POST['save'])));
+    $response->execute(array($_POST['Nom'], $_POST['Partage'], $_POST['save']));
 
     $response->closeCursor();
     header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $_GET['liste']);
