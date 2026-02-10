@@ -30,33 +30,37 @@ function safe_output($str)
     return htmlspecialchars($decoded, ENT_QUOTES | ENT_HTML5, 'UTF-8');
 }
 
-/// Helper: cleanup old connexions (keep 10 per user, remove older than 1 year)
+/// Helper: cleanup old connexions (called on login and from admin panel)
 function cleanup_old_connexions($bdd, $id_compte = null)
 {
     try {
         if ($id_compte) {
             // For a specific user (on login) - more efficient
+            // Delete entries older than 1 year, and keep only the 10 most recent
             $sql = "DELETE FROM lic_connexion 
                     WHERE id_compte = ? 
-                    AND connected_to < DATE_SUB(NOW(), INTERVAL 1 YEAR)
-                    AND id NOT IN (
-                        SELECT id FROM (
-                            SELECT id FROM lic_connexion 
-                            WHERE id_compte = ?
-                            ORDER BY connected_to DESC 
-                            LIMIT 10
-                        ) temp
+                    AND (
+                        connected_to < DATE_SUB(NOW(), INTERVAL 1 YEAR)
+                        OR id NOT IN (
+                            SELECT id FROM (
+                                SELECT id FROM lic_connexion 
+                                WHERE id_compte = ?
+                                ORDER BY connected_to DESC 
+                                LIMIT 10
+                            ) temp
+                        )
                     )";
 
             $stmt = $bdd->prepare($sql);
             $stmt->execute(array($id_compte, $id_compte));
         } else {
             // For all users (on signup) - global cleanup
+            // Delete entries older than 1 year, and keep only the 10 most recent per user
             $sql = "DELETE FROM lic_connexion 
                     WHERE connected_to < DATE_SUB(NOW(), INTERVAL 1 YEAR)
-                    AND (SELECT COUNT(*) FROM lic_connexion co2 
-                         WHERE co2.id_compte = lic_connexion.id_compte 
-                         AND co2.connected_to >= lic_connexion.connected_to) > 10
+                    OR (SELECT COUNT(*) FROM lic_connexion co2 
+                        WHERE co2.id_compte = lic_connexion.id_compte 
+                        AND co2.connected_to >= lic_connexion.connected_to) > 10
                     LIMIT 1000";
 
             $bdd->exec($sql);
