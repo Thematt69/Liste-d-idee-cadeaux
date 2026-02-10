@@ -29,3 +29,40 @@ function safe_output($str)
     // Then escape for HTML output
     return htmlspecialchars($decoded, ENT_QUOTES | ENT_HTML5, 'UTF-8');
 }
+
+/// Helper: cleanup old connexions (keep 10 per user, remove older than 1 year)
+function cleanup_old_connexions($bdd, $id_compte = null)
+{
+    try {
+        if ($id_compte) {
+            // For a specific user (on login) - more efficient
+            $sql = "DELETE FROM lic_connexion 
+                    WHERE id_compte = ? 
+                    AND connected_to < DATE_SUB(NOW(), INTERVAL 1 YEAR)
+                    AND id NOT IN (
+                        SELECT id FROM (
+                            SELECT id FROM lic_connexion 
+                            WHERE id_compte = ?
+                            ORDER BY connected_to DESC 
+                            LIMIT 10
+                        ) temp
+                    )";
+
+            $stmt = $bdd->prepare($sql);
+            $stmt->execute(array($id_compte, $id_compte));
+        } else {
+            // For all users (on signup) - global cleanup
+            $sql = "DELETE FROM lic_connexion 
+                    WHERE connected_to < DATE_SUB(NOW(), INTERVAL 1 YEAR)
+                    AND (SELECT COUNT(*) FROM lic_connexion co2 
+                         WHERE co2.id_compte = lic_connexion.id_compte 
+                         AND co2.connected_to >= lic_connexion.connected_to) > 10
+                    LIMIT 1000";
+
+            $bdd->exec($sql);
+        }
+    } catch (Exception $e) {
+        // Silently log errors to avoid breaking login/signup
+        error_log("cleanup_old_connexions error: " . $e->getMessage());
+    }
+}

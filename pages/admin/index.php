@@ -15,6 +15,16 @@ if (!isset($_SESSION['id_compte'])) {
 $alert = false;
 $info = false;
 
+// Nettoyage de l'historique de connexion
+if (isset($_POST['cleanup_connexions'])) {
+    try {
+        cleanup_old_connexions($bdd);
+        $info = 'Historique de connexion nettoyé avec succès ! Les connexions de plus d\'un an et au-delà des 10 dernières par utilisateur ont été supprimées.';
+    } catch (Exception $e) {
+        $alert = 'Erreur lors du nettoyage : ' . htmlspecialchars($e->getMessage());
+    }
+}
+
 if (isset($_POST['Comptes'])) {
     if ($_POST['Comptes'][0] == 'tous' && count($_POST['Comptes']) > 1) {
         $alert = 'Vous ne pouvez pas sélectionner "Tous les comptes" et d\'autres comptes !';
@@ -146,10 +156,28 @@ if (isset($_POST['Comptes'])) {
                     </div>
                     </form>
                 </div>
+                <br>
+                <h3 class="text-center">Maintenance</h3>
+                <br>
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Nettoyage de l'historique de connexion</h5>
+                        <p style="color: #666; font-size: 14px;">
+                            Supprime les connexions de plus d'un an et conserve seulement les 10 dernières par utilisateur.
+                        </p>
+                        <form action="" method="post" style="display: inline;">
+                            <button type="submit" name="cleanup_connexions" value="1" class="btn btn-warning">
+                                🧹 Nettoyer l'historique
+                            </button>
+                        </form>
+                        <p style="color: #999; font-size: 12px; margin-top: 10px;">
+                            ⚠️ Cette opération ne peut pas être annulée
+                        </p>
+                    </div>
+                </div>
             </div>
             <br>
         </div>
-    </div>
     </div>
 
 </body>

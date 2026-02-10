@@ -75,6 +75,9 @@ if (isset($_POST['Mail'])) {
         $response1->execute(array($_SESSION['id_compte'], getIp()));
         $response1->closeCursor();
 
+        // Cleanup old login records for this user
+        cleanup_old_connexions($bdd, $_SESSION['id_compte']);
+
         header('Location: https://family.matthieudevilliers.fr/pages/listes/');
         exit();
     } else {
