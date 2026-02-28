@@ -47,3 +47,22 @@
         max-width: 300px;
     }
 }
+
+
+/* Preferences Feature Styling */
+
+.preferences-banner {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+}
+
+.modal-header.bg-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+.preferences-section-header {
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}

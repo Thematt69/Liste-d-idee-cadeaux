@@ -28,6 +28,7 @@ if (!isset($_SESSION['id_compte'])) {
         <div class="row justify-content-center">
             <div class="col-md-12 col-lg-10">
                 <br>
+                <?php include('../../widgets/preferences-banner/index.php'); ?>
                 <h1 class="text-center">Mes listes</h1>
                 <br>
                 <div class="row">
