@@ -63,7 +63,9 @@ if (isset($_POST['Comptes'])) {
                 $response4->closeCursor();
 
                 if ($donnees4 && $donnees4['mail']) {
-                    envoiMail($donnees4['mail'], "Nouvelle notification - Listes d'idées cadeau", $contenu);
+                    if (!envoiMail($donnees4['mail'], "Nouvelle notification - Listes d'idées cadeau", $contenu)) {
+                        $alert = 'Une erreur est survenue lors de l\'envoi d\'un ou plusieurs mails.';
+                    }
                 }
             } else {
 
