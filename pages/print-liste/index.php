@@ -41,7 +41,7 @@ if (!isset($_SESSION['id_compte'])) {
             <div class="row">
                 <div class="col-12">
                     <br>
-                    <div class="alert alert-danger" role="alert">
+                    <div class="alert theme-danger" role="alert">
                         Nous sommes désolées, mais nous n'avons pas trouvé votre liste. Merci de revenir à <a href="https://family.matthieudevilliers.fr/pages/listes/" class="alert-link">vos listes</a>.<br>
                         Il se peut aussi que vous n'ayez pas les droits nécessaires pour y accéder.
                     </div>
@@ -56,10 +56,10 @@ if (!isset($_SESSION['id_compte'])) {
             <div class="row justify-content-center">
                 <div class="col-12">
                     <br>
-                    <div class="card text-dark bg-light">
+                    <div class="card bg-body">
                         <div class="card-body text-center">
                             <div class="table-responsive">
-                                <table class="table table-light text-center align-middle justify-content-">
+                                <table class="table text-center align-middle">
                                     <thead>
                                         <tr>
                                             <th>Nom</th>

@@ -14,14 +14,14 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-md-12">
+            <div class="md:col-12">
                 <br>
                 <h1 class="text-center">Erreur 404</h1>
                 <br>
                 <div class="text-center">
                     <h4>Visiblement... Cette page n'existe pas...</h4>
                     <br>
-                    <a class="btn btn-outline-primary" href="https://family.matthieudevilliers.fr">
+                    <a class="btn-outline theme-primary" href="https://family.matthieudevilliers.fr">
                         Revenir au site
                     </a>
                     <br>

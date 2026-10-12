@@ -27,7 +27,7 @@ include('../../scripts/verif/index.php');
                 <div class="col-12">
                     <h1 class="text-center">Déclaration d’accessibilité</h1>
 
-                    <div class="card text-dark bg-light">
+                    <div class="card bg-body">
                         <div class="card-body">
                             <p><strong>DEVILLIERS Matthieu</strong> s’engage à rendre ses sites internet, intranet, extranet et ses progiciels accessibles (et ses applications mobiles et mobilier urbain numérique) conformément à l’article 47 de la loi n°2005-102 du 11 février 2005.</p>
 

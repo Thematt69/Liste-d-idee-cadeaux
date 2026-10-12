@@ -259,22 +259,22 @@ if (isset($_POST['cancel'])) {
 
     <div class="container">
         <div class="row  justify-content-center">
-            <div class="col-md-12 col-lg-10">
+            <div class="md:col-12 lg:col-10">
 
                 <br>
                 <?php
                 if ($alert) {
                 ?>
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <div class="alert theme-danger fade show" role="alert">
                         <strong><?php echo $alert; ?></strong>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
                     </div>
                 <?php
                 } elseif ($info) {
                 ?>
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <div class="alert theme-success fade show" role="alert">
                         <?php echo $info; ?>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
                     </div>
                 <?php
                 }
@@ -293,9 +293,9 @@ if (isset($_POST['cancel'])) {
                 ?>
                     <div class="container">
                         <div class="row">
-                            <div class="col-sm-12">
+                            <div class="sm:col-12">
                                 <br>
-                                <div class="alert alert-danger" role="alert">
+                                <div class="alert theme-danger" role="alert">
                                     <strong>Vous n'avez pas les droits !</strong> Nous sommes désolées, mais il semblerait que vous n'ayez pas les droits pour cette idée. Merci de revenir à <a href="https://family.matthieudevilliers.fr/pages/listes/" class="alert-link">vos listes</a>.
                                 </div>
                                 <br>
@@ -316,15 +316,15 @@ if (isset($_POST['cancel'])) {
                         <div class="card-body">
                             <form action="" method="post">
                                 <div class="row">
-                                    <div class="col-md-8">
+                                    <div class="md:col-8">
                                         <div class="form-floating">
                                             <input name="Nom" value="<?php echo $donnees['nom'] ?>" type="text" class="form-control" id="LabelNom" placeholder="Nom de la liste" required>
                                             <label for="LabelNom">Nom de la liste</label>
                                         </div>
                                         <br>
                                     </div>
-                                    <div class="col-md-4">
-                                        <select class="form-select" name="Partage" aria-label="Paramètres de partage">
+                                    <div class="md:col-4">
+                                        <select class="form-control" name="Partage" aria-label="Paramètres de partage">
                                             <option <?php if ($donnees['partage'] == 'prive') echo ('selected') ?> value="prive">Privé</option>
                                             <option <?php if ($donnees['partage'] == 'limite') echo ('selected') ?> value="limite">Limité</option>
                                             <option <?php if ($donnees['partage'] == 'public') echo ('selected') ?> value="public">Public</option>
@@ -332,25 +332,25 @@ if (isset($_POST['cancel'])) {
                                         <br>
                                     </div>
                                     <div class="btn-group" role="group">
-                                        <div class="col-md-6 text-center">
-                                            <button type="submit" name="save" value="<?php echo $donnees['id'] ?>" class="btn btn-primary">Enregistrer</button>
-                                            <button type="submit" name="cancel" value="<?php echo $donnees['id'] ?>" class="btn btn-secondary">Annuler</button>
+                                        <div class="md:col-6 text-center">
+                                            <button type="submit" name="save" value="<?php echo $donnees['id'] ?>" class="btn-solid theme-primary">Enregistrer</button>
+                                            <button type="submit" name="cancel" value="<?php echo $donnees['id'] ?>" class="btn-solid theme-secondary">Annuler</button>
                                         </div>
                                         <?php
                                         if (isset($_GET['liste']) && $donnees != null) {
                                         ?>
                                             <br>
                                             <br>
-                                            <div class="col-md-6 text-center">
-                                                <button type="submit" name="delete" value="<?php echo $donnees['id'] ?>" class="btn btn-danger">Supprimer</button>
+                                            <div class="md:col-6 text-center">
+                                                <button type="submit" name="delete" value="<?php echo $donnees['id'] ?>" class="btn-solid theme-danger">Supprimer</button>
                                             </div>
                                         <?php
                                         } elseif (isset($_GET['type']) && $_GET['type'] == 'duo') {
                                         ?>
                                             <br>
                                             <br>
-                                            <div class="col-md-6">
-                                                <select class="form-select" name="Co-propriétaire" aria-label="Co-propriétaire">
+                                            <div class="md:col-6">
+                                                <select class="form-control" name="Co-propriétaire" aria-label="Co-propriétaire">
                                                     <?php
 
                                                     $sql1 = 'SELECT id,prenom,nom,mail
@@ -387,7 +387,7 @@ if (isset($_POST['cancel'])) {
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="md:col-12">
                                 <h3>Type de partage</h3>
                                 <p>Les administrateurs ont un accès par défaut pour tout partage de type "Limité" ou "Public".</p>
                                 <ul>
@@ -418,7 +418,7 @@ if (isset($_POST['cancel'])) {
                                 <form action="" method="post">
                                     <div class="input-group">
                                         <input type="email" class="form-control" name="share_email" placeholder="Adresse mail" aria-label="Adresse mail" aria-describedby="email" required aria-required="true">
-                                        <button type="submit" name="share" value="<?php echo $donnees['id'] ?>" id="email" class="btn btn-outline-primary">Ajouter</button>
+                                        <button type="submit" name="share" value="<?php echo $donnees['id'] ?>" id="email" class="btn-outline theme-primary">Ajouter</button>
                                     </div>
                                 </form>
                                 <br>
@@ -460,20 +460,20 @@ if (isset($_POST['cancel'])) {
                                                     <?php
                                                     echo ($donnees1['mail']);
                                                     if ($donnees1['fonction'] == 'admin') {
-                                                        echo ('  <span class="badge rounded-pill bg-danger">ADMIN</span>');
+                                                        echo ('  <span class="badge rounded-pill theme-danger">ADMIN</span>');
                                                     }
                                                     ?>
                                                 </td>
                                                 <td>
                                                     <form action="" method="post">
                                                         <div class="input-group input-group-sm">
-                                                            <select class=" form-select form-select-sm" name="new_droit" <?php if ($donnees1['fonction'] == 'admin' || $donnees1['droit'] == 'proprietaire') echo "disabled"; ?>>
+                                                            <select class="form-control" name="new_droit" <?php if ($donnees1['fonction'] == 'admin' || $donnees1['droit'] == 'proprietaire') echo "disabled"; ?>>
                                                                 <option disabled <?php if ($donnees1['droit'] == 'proprietaire') echo "selected"; ?> value="proprietaire">Propriétaire</option>
                                                                 <option <?php if ($donnees1['droit'] == 'moderateur') echo "selected"; ?> value="moderateur">Modérateur</option>
                                                                 <option <?php if ($donnees1['droit'] == 'lecteur') echo "selected"; ?> value="lecteur">Lecteur</option>
                                                             </select>
 
-                                                            <button class="btn btn-outline-secondary" name="new_droit_auth_id" value="<?php echo $donnees1['authId'] ?>" <?php if ($donnees1['fonction'] == 'admin' || $donnees1['droit'] == 'proprietaire') echo "disabled"; ?> type="submit"><i class="fas fa-check"></i></button>
+                                                            <button class="btn-outline theme-secondary" name="new_droit_auth_id" value="<?php echo $donnees1['authId'] ?>" <?php if ($donnees1['fonction'] == 'admin' || $donnees1['droit'] == 'proprietaire') echo "disabled"; ?> type="submit"><i class="fas fa-check"></i></button>
                                                         </div>
                                                     </form>
                                                 </td>
@@ -488,7 +488,7 @@ if (isset($_POST['cancel'])) {
                                                     }
                                                 ?>
                                                     <td>
-                                                        <button type="submit" name="share_delete" value="<?php echo $donnees1['authId'] ?>" class="btn btn-outline-danger" <?php if ($disable) echo ('disabled'); ?>>
+                                                        <button type="submit" name="share_delete" value="<?php echo $donnees1['authId'] ?>" class="btn-outline theme-danger" <?php if ($disable) echo ('disabled'); ?>>
                                                             <i class="far fa-trash-alt"></i>
                                                         </button>
                                                     </td>

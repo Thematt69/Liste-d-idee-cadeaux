@@ -1,3 +1,5 @@
+import { Toast } from '/js/bootstrap.bundle.min.js';
+
 /**
  * Marque une notification comme lue côté serveur et met à jour l'interface.
  *
@@ -32,7 +34,7 @@ function markNotificationAsRead(notifId) {
             // Fermer le toast
             const toastElement = document.getElementById('toast-' + notifId);
             if (toastElement) {
-                const toast = bootstrap.Toast.getInstance(toastElement);
+                const toast = Toast.getInstance(toastElement);
                 if (toast) {
                     toast.hide();
                 }
@@ -51,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const toastElements = document.querySelectorAll('.toast');
     toastElements.forEach(function(toastElement) {
         // Créer une instance Bootstrap Toast pour chaque élément
-        new bootstrap.Toast(toastElement, {
+        new Toast(toastElement, {
             autohide: false // Ne pas masquer automatiquement
         });
     });

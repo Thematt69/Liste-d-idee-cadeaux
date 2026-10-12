@@ -115,21 +115,21 @@ if (isset($_POST['Comptes'])) {
 
     <div class="container">
         <div class="row">
-            <div class="col-md-12">
+            <div class="md:col-12">
                 <br>
                 <?php
                 if ($alert) {
                 ?>
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <div class="alert theme-danger fade show" role="alert">
                         <strong><?php echo $alert; ?></strong>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
                     </div>
                 <?php
                 } elseif ($info) {
                 ?>
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <div class="alert theme-success fade show" role="alert">
                         <?php echo $info; ?>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
                     </div>
                 <?php
                 }
@@ -142,15 +142,15 @@ if (isset($_POST['Comptes'])) {
                     <div class="card-body">
                         <form action="" method="post">
                             <div class="row">
-                                <div class="col-md-5">
+                                <div class="md:col-5">
                                     <div class="form-floating">
                                         <input name="Titre" type="text" class="form-control" id="LabelTitre" placeholder="Titre" required>
                                         <label for="LabelTitre">Titre</label>
                                     </div>
                                     <br>
                                 </div>
-                                <div class="col-md-7">
-                                    <select class="form-select" name="Comptes[]" multiple required>
+                                <div class="md:col-7">
+                                    <select class="form-control" name="Comptes[]" multiple required>
                                         <option selected value="tous">Tous les comptes</option>
                                         <?php
 
@@ -173,16 +173,16 @@ if (isset($_POST['Comptes'])) {
                                     </select>
                                     <br>
                                 </div>
-                                <div class="col-md-12">
+                                <div class="md:col-12">
                                     <div class="form-floating">
                                         <textarea name="Message" class="form-control" id="LabelMessage" aria-describedby="DescriptionMessage" placeholder="Message" required></textarea>
                                         <label for="LabelMessage">Message</label>
                                     </div>
                                     <br>
                                 </div>
-                                <div class="col-md-12">
+                                <div class="md:col-12">
                                     <div class="text-center">
-                                        <button type="submit" class="btn btn-primary">Créer & Envoyer</button>
+                                        <button type="submit" class="btn-solid theme-primary">Créer & Envoyer</button>
                                     </div>
                                 </div>
                             </div>
@@ -199,7 +199,7 @@ if (isset($_POST['Comptes'])) {
                             Supprime les connexions de plus d'un an et conserve seulement les 10 dernières par utilisateur.
                         </p>
                         <form action="" method="post" style="display: inline;">
-                            <button type="submit" name="cleanup_connexions" value="1" class="btn btn-warning">
+                            <button type="submit" name="cleanup_connexions" value="1" class="btn-solid theme-warning">
                                 🧹 Nettoyer l'historique
                             </button>
                         </form>

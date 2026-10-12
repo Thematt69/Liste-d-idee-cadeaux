@@ -9,7 +9,7 @@
 <meta name="reply-to" content="devilliers.matthieu@gmail.com">
 <meta name="revisit-after" content="30">
 
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <link rel="icon" href="https://family.matthieudevilliers.fr/images/logo.webp">
 
@@ -20,7 +20,7 @@
 <link rel="stylesheet" href="https://family.matthieudevilliers.fr/css/bootstrap.min.css">
 
 <!-- Bootstrap JS -->
-<script src="https://family.matthieudevilliers.fr/js/bootstrap.bundle.min.js"></script>
+<script type="module" src="https://family.matthieudevilliers.fr/js/bootstrap.bundle.min.js"></script>
 
 <!-- Bootstrap -->
 <script src="https://family.matthieudevilliers.fr/js/jquery.min.js"></script>
@@ -29,7 +29,7 @@
 <script src="https://family.matthieudevilliers.fr/js/45afd6dbfc.js"></script>
 
 <!-- Notifications JS -->
-<script src="https://family.matthieudevilliers.fr/js/notifications.js"></script>
+<script type="module" src="https://family.matthieudevilliers.fr/js/notifications.js"></script>
 
 <!-- Style CSS -->
 <link href="https://family.matthieudevilliers.fr/css/style.css" rel="stylesheet">
