@@ -35,7 +35,7 @@ if (count($notifications) > 0) {
 ?>
     <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true" id="toast-<?php echo $notifId; ?>" data-notif-id="<?php echo $notifId; ?>">
         <div class="toast-header theme-info">
-            <i class="fas fa-bell me-3"></i>
+            <i class="bi bi-bell me-3"></i>
             <strong class="me-auto"><?php echo $notifTitre; ?></strong>
             <small><?php echo $notifDate; ?></small>
             <button type="button" class="btn-close ms-3 notif-close-btn" aria-label="Fermer"></button>
