@@ -3,6 +3,7 @@
 session_start();
 
 include('../../scripts/verif/index.php');
+include('../../scripts/mail/index.php');
 
 if (!isset($_SESSION['id_compte'])) {
     header('Location: https://family.matthieudevilliers.fr/pages/connexion/');
@@ -29,6 +30,19 @@ if (isset($_POST['Comptes'])) {
     if ($_POST['Comptes'][0] == 'tous' && count($_POST['Comptes']) > 1) {
         $alert = 'Vous ne pouvez pas sélectionner "Tous les comptes" et d\'autres comptes !';
     } else {
+        $contenu = '
+            <html>
+                <body>
+                    <h3>' . htmlspecialchars($_POST['Titre'], ENT_QUOTES, 'UTF-8') . '</h3>
+                    <br>
+                    <p>Bonjour,</p>
+                    <p>' . nl2br(htmlspecialchars($_POST['Message'], ENT_QUOTES, 'UTF-8')) . '</p>
+                    <br>
+                    <p>L\'équipe de Listes d\'idées cadeaux</p>
+                </body>
+            </html>
+        ';
+
         foreach ($_POST['Comptes'] as $value) {
             if ($value != 'tous') {
 
@@ -38,9 +52,24 @@ if (isset($_POST['Comptes'])) {
                 $response3 = $bdd->prepare($sql3);
                 $response3->execute(array($value, $_POST['Titre'], $_POST['Message']));
                 $response3->closeCursor();
+
+                $sql4 = 'SELECT mail
+                        FROM lic_compte
+                        WHERE id = ? AND deleted_to IS NULL';
+
+                $response4 = $bdd->prepare($sql4);
+                $response4->execute(array($value));
+                $donnees4 = $response4->fetch();
+                $response4->closeCursor();
+
+                if ($donnees4 && $donnees4['mail']) {
+                    if (!envoiMail($donnees4['mail'], "Nouvelle notification - Listes d'idées cadeau", $contenu)) {
+                        $alert = 'Une erreur est survenue lors de l\'envoi d\'un ou plusieurs mails.';
+                    }
+                }
             } else {
 
-                $sql1 = 'SELECT id
+                $sql1 = 'SELECT id, mail
                         FROM lic_compte
                         WHERE deleted_to IS NULL';
 
@@ -54,6 +83,10 @@ if (isset($_POST['Comptes'])) {
                     $response2 = $bdd->prepare($sql2);
                     $response2->execute(array($donnees['id'], $_POST['Titre'], $_POST['Message']));
                     $response2->closeCursor();
+
+                    if ($donnees['mail']) {
+                        envoiMail($donnees['mail'], "Nouvelle notification - Listes d'idées cadeau", $contenu);
+                    }
                 }
 
                 $response1->closeCursor();
