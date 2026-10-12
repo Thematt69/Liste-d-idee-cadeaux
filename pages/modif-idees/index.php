@@ -53,7 +53,7 @@ if (isset($_POST['delete'])) {
             $response3->execute(array($donnee1['buy_from']));
             $donnee3 = $response3->fetch();
 
-            $nomIdee = htmlspecialchars($donnee1['nom'], ENT_QUOTES, 'UTF-8');
+            $nomIdee = safe_output($donnee1['nom']);
             $lienListe = urlencode($donnee1['lien']);
             $contenu = '
                 <html>
