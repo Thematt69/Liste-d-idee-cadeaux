@@ -473,7 +473,7 @@ if (isset($_POST['cancel'])) {
                                                                 <option <?php if ($donnees1['droit'] == 'lecteur') echo "selected"; ?> value="lecteur">Lecteur</option>
                                                             </select>
 
-                                                            <button class="btn-outline theme-secondary" name="new_droit_auth_id" value="<?php echo $donnees1['authId'] ?>" <?php if ($donnees1['fonction'] == 'admin' || $donnees1['droit'] == 'proprietaire') echo "disabled"; ?> type="submit"><i class="fas fa-check"></i></button>
+                                                            <button class="btn-outline theme-secondary" name="new_droit_auth_id" value="<?php echo $donnees1['authId'] ?>" <?php if ($donnees1['fonction'] == 'admin' || $donnees1['droit'] == 'proprietaire') echo "disabled"; ?> type="submit"><i class="bi bi-check-lg"></i></button>
                                                         </div>
                                                     </form>
                                                 </td>
@@ -489,7 +489,7 @@ if (isset($_POST['cancel'])) {
                                                 ?>
                                                     <td>
                                                         <button type="submit" name="share_delete" value="<?php echo $donnees1['authId'] ?>" class="btn-outline theme-danger" <?php if ($disable) echo ('disabled'); ?>>
-                                                            <i class="far fa-trash-alt"></i>
+                                                            <i class="bi bi-trash"></i>
                                                         </button>
                                                     </td>
                                                 <?php

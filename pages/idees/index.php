@@ -118,15 +118,15 @@ $response1->closeCursor();
                         <?php
                         switch ($donnee['partage']) {
                             case 'public':
-                                echo '<i class="fas fa-users fa-2x" style="font-size: 1.5rem;"></i> ';
+                                echo '<i class="bi bi-people-fill" style="font-size: 1.5rem;"></i> ';
                                 break;
 
                             case 'limite':
-                                echo '<i class="fas fa-user-lock fa-2x" style="font-size: 1.5rem;"></i> ';
+                                echo '<i class="bi bi-person-lock" style="font-size: 1.5rem;"></i> ';
                                 break;
 
                             default:
-                                echo '<i class="fas fa-lock fa-2x" style="font-size: 1.5rem;"></i> ';
+                                echo '<i class="bi bi-lock-fill" style="font-size: 1.5rem;"></i> ';
                                 break;
                         }
                         echo safe_output($donnee['nom']);
@@ -171,7 +171,7 @@ $response1->closeCursor();
                         if ($donnee['droit'] == "proprietaire") {
                         ?>
                             <a href="https://family.matthieudevilliers.fr/pages/modif-listes/?liste=<?php echo ($_GET['liste']) ?>">
-                                <i class="fas fa-pen fa-2x" style="font-size: 1.5rem;"></i>
+                                <i class="bi bi-pencil-fill" style="font-size: 1.5rem;"></i>
                             </a>
                         <?php
                         }
@@ -179,7 +179,7 @@ $response1->closeCursor();
 
 
                         <a href="https://family.matthieudevilliers.fr/pages/print-liste/?liste=<?php echo ($_GET['liste']) ?>">
-                            <i class="fas fa-print fa-2x" style="font-size: 1.5rem;"></i>
+                            <i class="bi bi-printer-fill" style="font-size: 1.5rem;"></i>
                         </a>
 
                     </h1>
@@ -305,7 +305,7 @@ $response1->closeCursor();
                                                 ?>
                                                     <td>
                                                         <a class="btn-outline theme-secondary" href="https://family.matthieudevilliers.fr/pages/modif-idees/?idee=<?php echo $donnees['id']; ?>">
-                                                            <i class="far fa-edit"></i>
+                                                            <i class="bi bi-pencil-square"></i>
                                                         </a>
                                                     </td>
                                                     <?php
