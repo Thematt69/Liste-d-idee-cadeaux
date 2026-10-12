@@ -30,8 +30,11 @@ h3 {
     letter-spacing: -0.025em;
 }
 
-.site-navbar {
+.site-navbar-container {
     container-type: inline-size;
+}
+
+.site-navbar {
     --bs-navbar-color: #f4f7f4;
     --bs-navbar-hover-color: #fff;
     --bs-navbar-active-color: #fff;

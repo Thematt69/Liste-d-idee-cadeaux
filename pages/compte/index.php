@@ -188,7 +188,7 @@ if (isset($_POST['Mail'])) {
                 <div class="card">
                     <div class="card-body text-center">
                         <div class="table-responsive">
-                            <table class="table text-center align-middle justify-content-">
+                            <table class="table text-center align-middle">
                                 <thead>
                                     <tr>
                                         <th class="col">Date</th>

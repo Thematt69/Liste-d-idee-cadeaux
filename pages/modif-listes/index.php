@@ -426,7 +426,7 @@ if (isset($_POST['cancel'])) {
                             }
                             ?>
                             <div class="table-responsive">
-                                <table class="table text-center align-middle justify-content-">
+                                <table class="table text-center align-middle">
                                     <thead>
                                         <tr>
                                             <th class="col">Adresse mail</th>
