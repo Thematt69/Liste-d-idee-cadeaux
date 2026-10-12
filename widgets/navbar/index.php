@@ -1,13 +1,18 @@
-<nav class="navbar navbar-expand-md navbar-dark bg-secondary shadow-sm">
+<nav class="navbar md:navbar-expand site-navbar shadow-sm">
     <div class="container">
         <a class="navbar-brand" href="https://family.matthieudevilliers.fr">
             <img src="https://family.matthieudevilliers.fr/images/logo.webp" width="30" height="30" class="d-inline-block align-top" alt="Logo du site" loading="lazy">
             Listes d'idées cadeau
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="drawer" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Ouvrir le menu">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <dialog class="drawer drawer-end" id="navbarSupportedContent" aria-label="Navigation principale">
+            <div class="drawer-header">
+                <span class="navbar-brand">Menu</span>
+                <button type="button" class="btn-close" data-bs-dismiss="drawer" aria-label="Fermer le menu"></button>
+            </div>
+            <div class="drawer-body">
             <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ms-auto">
                 <?php
@@ -57,6 +62,7 @@
                 }
                 ?>
             </ul>
-        </div>
+            </div>
+        </dialog>
     </div>
 </nav>

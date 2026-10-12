@@ -99,7 +99,7 @@ $response1->closeCursor();
             <div class="row">
                 <div class="col-12">
                     <br>
-                    <div class="alert alert-danger" role="alert">
+                    <div class="alert theme-danger" role="alert">
                         Nous sommes désolées, mais nous n'avons pas trouvé votre liste. Merci de revenir à <a href="https://family.matthieudevilliers.fr/pages/listes/" class="alert-link">vos listes</a>.<br>
                         Il se peut aussi que vous n'ayez pas les droits nécessaires pour y accéder.
                     </div>
@@ -149,7 +149,7 @@ $response1->closeCursor();
                         }
 
                         ?>
-                        <small class="text-muted">de
+                        <small class="fg-secondary">de
                             <?php
                             for ($i = 0; $i < count($proprietaire); $i++) {
                                 if ($i > 0) {
@@ -170,7 +170,7 @@ $response1->closeCursor();
 
                         if ($donnee['droit'] == "proprietaire") {
                         ?>
-                            <a href="https://family.matthieudevilliers.fr/pages/modif-listes/?liste=<?php echo ($_GET['liste']) ?>" class="link-dark">
+                            <a href="https://family.matthieudevilliers.fr/pages/modif-listes/?liste=<?php echo ($_GET['liste']) ?>">
                                 <i class="fas fa-pen fa-2x" style="font-size: 1.5rem;"></i>
                             </a>
                         <?php
@@ -178,17 +178,17 @@ $response1->closeCursor();
                         ?>
 
 
-                        <a href="https://family.matthieudevilliers.fr/pages/print-liste/?liste=<?php echo ($_GET['liste']) ?>" class="link-dark">
+                        <a href="https://family.matthieudevilliers.fr/pages/print-liste/?liste=<?php echo ($_GET['liste']) ?>">
                             <i class="fas fa-print fa-2x" style="font-size: 1.5rem;"></i>
                         </a>
 
                     </h1>
                     <br>
 
-                    <div class="card text-dark bg-light">
+                    <div class="card bg-body">
                         <div class="card-body text-center">
                             <div class="table-responsive">
-                                <table class="table table-light text-center align-middle justify-content-">
+                                <table class="table text-center align-middle">
                                     <thead>
                                         <tr>
                                             <th>Nom</th>
@@ -304,7 +304,7 @@ $response1->closeCursor();
                                                 if ($donnee['droit'] != "lecteur") {
                                                 ?>
                                                     <td>
-                                                        <a class="btn btn-outline-secondary" href="https://family.matthieudevilliers.fr/pages/modif-idees/?idee=<?php echo $donnees['id']; ?>">
+                                                        <a class="btn-outline theme-secondary" href="https://family.matthieudevilliers.fr/pages/modif-idees/?idee=<?php echo $donnees['id']; ?>">
                                                             <i class="far fa-edit"></i>
                                                         </a>
                                                     </td>
@@ -313,7 +313,7 @@ $response1->closeCursor();
                                                     if ($donnees['is_buy'] || (isset($donnees['buy_from']) && $donnees['buy_from'] != $_SESSION['id_compte'])) {
                                                     ?>
                                                         <td>
-                                                            <input class="form-check-input" type="checkbox" checked disabled>
+                                                            <input class="check" type="checkbox" aria-label="Idée déjà achetée ou réservée" checked disabled>
                                                         </td>
                                                     <?php
                                                     } else {
@@ -321,7 +321,7 @@ $response1->closeCursor();
                                                         <td>
                                                             <form action="" method="post">
                                                                 <input name='AchatFrom' value="<?php echo $donnees['id']; ?>" type='hidden'>
-                                                                <input name="AchatFrom" value="<?php echo $donnees['id']; ?>" class="form-check-input" type="checkbox" onChange="submit();" <?php if ($donnees['buy_from'] == $_SESSION['id_compte']) echo 'checked'; ?> />
+                                                                <input name="AchatFrom" value="<?php echo $donnees['id']; ?>" class="check" type="checkbox" aria-label="Réserver <?php echo safe_output($donnees['nom']); ?>" onChange="submit();" <?php if ($donnees['buy_from'] == $_SESSION['id_compte']) echo 'checked'; ?> />
                                                             </form>
                                                         </td>
                                                     <?php
@@ -344,7 +344,7 @@ $response1->closeCursor();
                             if ($donnee['droit'] == "proprietaire" || $donnee['droit'] == "moderateur") {
                             ?>
                                 <br>
-                                <a class="btn btn-primary" href="https://family.matthieudevilliers.fr/pages/modif-idees/?liste=<?php echo $_GET['liste']; ?>">
+                                <a class="btn-solid theme-primary" href="https://family.matthieudevilliers.fr/pages/modif-idees/?liste=<?php echo $_GET['liste']; ?>">
                                     Ajouter une idée
                                 </a>
                             <?php

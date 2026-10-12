@@ -154,21 +154,21 @@ if ($_GET['reset']) {
 
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-sm-12 col-md-9 col-lg-6">
+            <div class="col-12 md:col-9 lg:col-6">
                 <br>
                 <?php
                 if ($alert) {
                 ?>
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <div class="alert theme-danger fade show" role="alert">
                         <strong><?php echo $alert; ?></strong>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
                     </div>
                 <?php
                 } elseif ($info) {
                 ?>
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <div class="alert theme-success fade show" role="alert">
                         <?php echo $info; ?>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
                     </div>
                 <?php
                 }
@@ -182,7 +182,7 @@ if ($_GET['reset']) {
                         <div class="card-body">
                             <form action="" method="post">
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="md:col-12">
                                         <div class="form-floating">
                                             <input name="Mail" type="email" class="form-control" id="LabelMail" placeholder="name@example.com" required <?php if ($invalide) echo 'disabled aria-disabled' ?>>
                                             <label for="LabelMail">Adresse mail</label>
@@ -198,7 +198,7 @@ if ($_GET['reset']) {
                                         </div>
                                         <br>
                                         <div class="text-center">
-                                            <button type="submit" name="reset" value="<?php echo $_GET['reset'] ?>" class="btn btn-primary" <?php if ($invalide) echo 'disabled aria-disabled' ?>>Réinitialiser le mot de passe</button>
+                                            <button type="submit" name="reset" value="<?php echo $_GET['reset'] ?>" class="btn-solid theme-primary" <?php if ($invalide) echo 'disabled aria-disabled' ?>>Réinitialiser le mot de passe</button>
                                         </div>
                                     </div>
                                 </div>
@@ -212,7 +212,7 @@ if ($_GET['reset']) {
                         <div class="card-body">
                             <form action="" method="post">
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="md:col-12">
                                         <div class="form-floating">
                                             <input name="Mail" type="email" class="form-control" id="LabelMail" placeholder="name@example.com" required <?php if ($invalide) echo 'disabled aria-disabled' ?>>
                                             <label for="LabelMail">Adresse mail</label>
@@ -223,7 +223,7 @@ if ($_GET['reset']) {
                                         </div>
                                         <br>
                                         <div class="text-center">
-                                            <button type="submit" class="btn btn-primary" <?php if ($invalide) echo 'disabled aria-disabled' ?>>Demander la réinitialisation</button>
+                                            <button type="submit" class="btn-solid theme-primary" <?php if ($invalide) echo 'disabled aria-disabled' ?>>Demander la réinitialisation</button>
                                         </div>
                                     </div>
                                 </div>

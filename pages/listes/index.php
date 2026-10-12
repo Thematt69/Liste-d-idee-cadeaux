@@ -26,16 +26,16 @@ if (!isset($_SESSION['id_compte'])) {
 
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-12 col-lg-10">
+            <div class="md:col-12 lg:col-10">
                 <br>
                 <h1 class="text-center">Mes listes</h1>
                 <br>
                 <div class="row">
                     <div class="col-6 text-center">
-                        <a class="btn btn-primary btn-lg" href="https://family.matthieudevilliers.fr/pages/modif-listes/?type=solo" role="button">Créer une liste</a>
+                        <a class="btn-solid theme-primary btn-lg" href="https://family.matthieudevilliers.fr/pages/modif-listes/?type=solo" role="button">Créer une liste</a>
                     </div>
                     <div class="col-6 text-center">
-                        <a class="btn btn-primary btn-lg" href="https://family.matthieudevilliers.fr/pages/modif-listes/?type=duo" role="button">Créer une liste en duo</a>
+                        <a class="btn-solid theme-primary btn-lg" href="https://family.matthieudevilliers.fr/pages/modif-listes/?type=duo" role="button">Créer une liste en duo</a>
                     </div>
                 </div>
                 <br>
@@ -73,14 +73,14 @@ if (!isset($_SESSION['id_compte'])) {
                         }
 
                     ?>
-                        <div class="col-sm-6 col-md-4 col-lg-3 col-xxl-2">
-                            <div class="card text-dark bg-light" style="min-height: 6rem;">
+                        <div class="sm:col-6 md:col-4 lg:col-3 2xl:col-2">
+                            <div class="card bg-body" style="min-height: 6rem;">
                                 <a href="https://family.matthieudevilliers.fr/pages/idees/?liste=<?php echo safe_output($donnees['lien_partage']) ?>" class="stretched-link"></a>
                                 <div class="card-body d-flex align-items-center justify-content-center text-center">
                                     <p class="card-text">
                                         <?php echo safe_output($donnees['nom']) ?>
                                         <br>
-                                        <small class="text-muted d-flex justify-content-center">de
+                                        <small class="fg-secondary d-flex justify-content-center">de
                                             <?php
                                             $totalCount = count($proprietaire);
 

@@ -100,21 +100,21 @@ if (isset($_POST['Mail'])) {
 
     <div class="container">
         <div class="row">
-            <div class="col-md-12">
+            <div class="md:col-12">
                 <br>
                 <?php
                 if ($alert) {
                 ?>
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <div class="alert theme-danger fade show" role="alert">
                         <strong><?php echo $alert; ?></strong>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
                     </div>
                 <?php
                 } elseif ($info) {
                 ?>
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <div class="alert theme-success fade show" role="alert">
                         <?php echo $info; ?>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
                     </div>
                 <?php
                 }
@@ -135,45 +135,45 @@ if (isset($_POST['Mail'])) {
                     <div class="card-body">
                         <form action="" method="post">
                             <div class="row">
-                                <div class="col-md-6 col-xl-4">
+                                <div class="md:col-6 xl:col-4">
                                     <div class="form-floating">
                                         <input name="Prénom" type="text" class="form-control" id="LabelPrénom" placeholder="Prénom" value="<?php echo safe_output($donnees['prenom']) ?>" required>
                                         <label for="LabelPrénom">Prénom</label>
                                     </div>
                                     <br>
                                 </div>
-                                <div class="col-md-6 col-xl-4">
+                                <div class="md:col-6 xl:col-4">
                                     <div class="form-floating">
                                         <input name="Nom" type="text" class="form-control" id="LabelNom" placeholder="Nom" value="<?php echo safe_output($donnees['nom']) ?>" required>
                                         <label for="LabelNom">Nom</label>
                                     </div>
                                     <br>
                                 </div>
-                                <div class="col-md-6 col-xl-4">
+                                <div class="md:col-6 xl:col-4">
                                     <div class="form-floating">
                                         <input name="MDP" type="password" class="form-control" id="LabelMDP" aria-describedby="DescriptionMDP" placeholder="Mot de passe" required>
                                         <label for="LabelMDP">Mot de passe actuel</label>
-                                        <small id="DescriptionMDP" class="form-text text-muted">Votre mot de passe est enregistré dans un format haché, il est impossible pour nous de le récupérer.</small>
+                                        <small id="DescriptionMDP" class="fg-secondary">Votre mot de passe est enregistré dans un format haché, il est impossible pour nous de le récupérer.</small>
                                     </div>
                                     <br>
                                 </div>
-                                <div class="col-md-6 col-xl-4">
+                                <div class="md:col-6 xl:col-4">
                                     <div class="form-floating">
                                         <input name="NewMDP" type="password" class="form-control" id="LabelNewMDP" aria-describedby="DescriptionMDP" placeholder="Nouveau mot de passe">
                                         <label for="LabelNewMDP">Nouveau mot de passe</label>
                                     </div>
                                     <br>
                                 </div>
-                                <div class="col-md-12 col-xl-8">
+                                <div class="md:col-12 xl:col-8">
                                     <div class="form-floating">
                                         <input name="Mail" type="email" class="form-control" id="LabelMail" aria-describedby="DescriptionMail" placeholder="Adresse mail" value="<?php echo safe_output($donnees['mail']) ?>" required>
                                         <label for="LabelMail">Adresse mail</label>
-                                        <small id="DescriptionMail" class="form-text text-muted">Votre adresse mail nous permet de vous transmet toutes les informations vous concernant.</small>
+                                        <small id="DescriptionMail" class="fg-secondary">Votre adresse mail nous permet de vous transmet toutes les informations vous concernant.</small>
                                     </div>
                                     <br>
                                 </div>
-                                <div class="col-md-12 text-center">
-                                    <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+                                <div class="md:col-12 text-center">
+                                    <button type="submit" class="btn-solid theme-primary">Enregistrer les modifications</button>
                                 </div>
                             </div>
                             <?php $response->closeCursor(); ?>

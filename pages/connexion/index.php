@@ -104,14 +104,14 @@ if (isset($_POST['Mail'])) {
 
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-sm-12 col-md-9 col-lg-6">
+            <div class="col-12 md:col-9 lg:col-6">
                 <br>
                 <?php
                 if ($alert) {
                 ?>
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <div class="alert theme-danger fade show" role="alert">
                         <strong><?php echo $alert; ?></strong>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
                     </div>
                 <?php
                 }
@@ -122,7 +122,7 @@ if (isset($_POST['Mail'])) {
                     <div class="card-body">
                         <form action="" method="post">
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="md:col-12">
                                     <div class="form-floating">
                                         <input name="Mail" type="email" class="form-control" id="LabelMail"
                                             placeholder="name@example.com" required>
@@ -133,13 +133,13 @@ if (isset($_POST['Mail'])) {
                                         <input name="MDP" type="password" class="form-control" id="LabelMDP"
                                             aria-describedby="DescriptionMDP" placeholder="Mot de passe" required>
                                         <label for="LabelMDP">Mot de passe</label>
-                                        <small id="DescriptionMDP" class="form-text text-muted"><a
+                                        <small id="DescriptionMDP" class="fg-secondary"><a
                                                 href="https://family.matthieudevilliers.fr/pages/reset-password/">Mot
                                                 de passe oublié</a></small>
                                     </div>
                                     <br>
                                     <div class="text-center">
-                                        <button type="submit" class="btn btn-primary">Se connecter</button>
+                                        <button type="submit" class="btn-solid theme-primary">Se connecter</button>
                                     </div>
                                 </div>
                             </div>

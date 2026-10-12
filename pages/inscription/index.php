@@ -98,14 +98,14 @@ if (isset($_POST['Mail'])) {
 
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-md-12 col-lg-8">
+                <div class="md:col-12 lg:col-8">
                     <br>
                     <?php
                     if ($alert) {
                         ?>
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <div class="alert theme-danger fade show" role="alert">
                             <strong><?php echo $alert; ?></strong>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
                         </div>
                         <?php
                     }
@@ -116,7 +116,7 @@ if (isset($_POST['Mail'])) {
                         <div class="card-body">
                             <form action="" method="post">
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="md:col-6">
                                         <div class="form-floating">
                                             <input name="Prénom" type="text" class="form-control" id="LabelPrénom"
                                                 placeholder="Prénom" required>
@@ -124,7 +124,7 @@ if (isset($_POST['Mail'])) {
                                         </div>
                                         <br>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="md:col-6">
                                         <div class="form-floating">
                                             <input name="Nom" type="text" class="form-control" id="LabelNom"
                                                 placeholder="Nom" required>
@@ -132,33 +132,33 @@ if (isset($_POST['Mail'])) {
                                         </div>
                                         <br>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="md:col-6">
                                         <div class="form-floating">
                                             <input name="MDP" type="password" class="form-control" id="LabelMDP"
                                                 aria-describedby="DescriptionMDP" placeholder="Mot de passe" required>
                                             <label for="LabelMDP">Mot de passe</label>
-                                            <small id="DescriptionMDP" class="form-text text-muted">Votre mot de passe
+                                            <small id="DescriptionMDP" class="fg-secondary">Votre mot de passe
                                                 est enregistré dans un format haché, il est impossible pour nous de le
                                                 récupérer.</small>
                                         </div>
                                         <br>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="md:col-6">
                                         <div class="form-floating">
                                             <input name="Mail" type="email" class="form-control" id="LabelMail"
                                                 aria-describedby="DescriptionMail" placeholder="Adresse mail" required>
                                             <label for="LabelMail">Adresse mail</label>
-                                            <small id="DescriptionMail" class="form-text text-muted">Votre adresse mail
+                                            <small id="DescriptionMail" class="fg-secondary">Votre adresse mail
                                                 nous permet de vous transmet toutes les informations vous
                                                 concernant.</small>
                                         </div>
                                         <br>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="form-check">
-                                            <input name="CGU" class="form-check-input" type="checkbox" id="LabelCGU"
+                                    <div class="md:col-6">
+                                        <div class="form-field">
+                                            <input name="CGU" class="check" type="checkbox" id="LabelCGU"
                                                 required>
-                                            <label class="form-check-label" for="LabelCGU">
+                                            <label for="LabelCGU">
                                                 J'accepte les <a
                                                     href="https://family.matthieudevilliers.fr/pages/cgu/">Conditions
                                                     Général d'Utilisation</a>
@@ -166,8 +166,8 @@ if (isset($_POST['Mail'])) {
                                         </div>
                                         <br>
                                     </div>
-                                    <div class="col-md-12 text-center">
-                                        <button type="submit" class="btn btn-primary">S'inscrire</button>
+                                    <div class="md:col-12 text-center">
+                                        <button type="submit" class="btn-solid theme-primary">S'inscrire</button>
                                     </div>
                                 </div>
                             </form>

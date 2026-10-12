@@ -258,7 +258,7 @@ if (isset($_POST['delete'])) {
 
     <div class="container">
         <div class="row  justify-content-center">
-            <div class="col-md-12 col-lg-8">
+            <div class="md:col-12 lg:col-8">
                 <br>
                 <?php
 
@@ -284,9 +284,9 @@ if (isset($_POST['delete'])) {
                 ?>
                     <div class="container">
                         <div class="row">
-                            <div class="col-sm-12">
+                            <div class="sm:col-12">
                                 <br>
-                                <div class="alert alert-danger" role="alert">
+                                <div class="alert theme-danger" role="alert">
                                     <strong>Vous n'avez pas les droits !</strong> Nous sommes désolées, mais il semblerait que vous n'ayez pas les droits pour cette idée. Merci de revenir à <a href="https://family.matthieudevilliers.fr/pages/listes/" class="alert-link">vos listes</a>.
                                 </div>
                                 <br>
@@ -299,9 +299,9 @@ if (isset($_POST['delete'])) {
                 ?>
                     <div class="container">
                         <div class="row">
-                            <div class="col-sm-12">
+                            <div class="sm:col-12">
                                 <br>
-                                <div class="alert alert-danger" role="alert">
+                                <div class="alert theme-danger" role="alert">
                                     <strong>Idée introuvable !</strong> Nous sommes désolées, mais nous n'avons pas trouvé votre idée. Merci de revenir à <a href="https://family.matthieudevilliers.fr/pages/listes/" class="alert-link">vos listes</a>.
                                 </div>
                                 <br>
@@ -333,64 +333,64 @@ if (isset($_POST['delete'])) {
                         <div class="card-body">
                             <form action="" method="post">
                                 <div class="row">
-                                    <div class="col-md-7">
+                                    <div class="md:col-7">
                                         <div class="form-floating">
                                             <input name="Nom" type="text" value="<?php echo ($donnees['nom']) ?>" class="form-control" id="LabelNom" placeholder="Nom de l'idée" required>
                                             <label for="LabelNom">Nom de l'idée *</label>
                                         </div>
                                         <br>
                                     </div>
-                                    <div class="col-md-5">
+                                    <div class="md:col-5">
                                         <div class="form-floating">
                                             <input name="Prix" type="text" value="<?php echo ($donnees['price']) ?>" class="form-control" id="LabelPrix" placeholder="Prix de l'idée">
                                             <label for="LabelPrix">Prix de l'idée</label>
                                         </div>
                                         <br>
                                     </div>
-                                    <div class="col-md-12">
+                                    <div class="md:col-12">
                                         <div class="form-floating">
                                             <input name="Commentaire" type="text" value="<?php echo ($donnees['commentaire']) ?>" class="form-control" id="LabelCommentaire" placeholder="Commentaire">
                                             <label for="LabelCommentaire">Commentaire</label>
                                         </div>
                                         <br>
                                     </div>
-                                    <div class="col-md-7">
+                                    <div class="md:col-7">
                                         <div class="form-floating">
                                             <input name="Lien" type="url" value="<?php echo ($donnees['lien']) ?>" class="form-control" id="LabelLien" placeholder="Lien de l'idée">
                                             <label for="LabelLien">Lien de l'idée</label>
                                         </div>
                                         <br>
                                     </div>
-                                    <div class="col-md-5">
-                                        <div class="form-check">
+                                    <div class="md:col-5">
+                                        <div class="form-field">
                                             <?php
 
                                             if ($donnee['droit'] == "proprietaire") {
                                             ?>
-                                                <input name="Achat" value="1" class="form-check-input" type="checkbox" id="LabelAchat" <?php if ($donnees['is_buy']) echo 'checked' ?>>
-                                                <label class="form-check-label" for="LabelAchat">
+                                                <input name="Achat" value="1" class="check" type="checkbox" id="LabelAchat" <?php if ($donnees['is_buy']) echo 'checked' ?>>
+                                                <label for="LabelAchat">
                                                     J'ai acheté cette idée
                                                 </label>
                                                 <?php
                                             } else {
                                                 if ($donnees['is_buy']) {
                                                 ?>
-                                                    <input class="form-check-input" type="checkbox" id="LabelAchat" checked disabled>
-                                                    <label class="form-check-label" for="LabelAchat">
+                                                    <input class="check" type="checkbox" id="LabelAchat" checked disabled>
+                                                    <label for="LabelAchat">
                                                         Déjà acheté par le propriétaire
                                                     </label>
                                                 <?php
                                                 } elseif (isset($donnees['buy_from']) && $donnees['buy_from'] != $_SESSION['id_compte']) {
                                                 ?>
-                                                    <input name="AchatFrom" value="1" class="form-check-input" type="checkbox" id="LabelAchat" checked disabled>
-                                                    <label class="form-check-label" for="LabelAchat">
+                                                    <input name="AchatFrom" value="1" class="check" type="checkbox" id="LabelAchat" checked disabled>
+                                                    <label for="LabelAchat">
                                                         Déjà réservé
                                                     </label>
                                                 <?php
                                                 } else {
                                                 ?>
-                                                    <input name="AchatFrom" value="1" class="form-check-input" type="checkbox" id="LabelAchat" <?php if ($donnees['buy_from'] == $_SESSION['id_compte']) echo 'checked' ?>>
-                                                    <label class="form-check-label" for="LabelAchat">
+                                                    <input name="AchatFrom" value="1" class="check" type="checkbox" id="LabelAchat" <?php if ($donnees['buy_from'] == $_SESSION['id_compte']) echo 'checked' ?>>
+                                                    <label for="LabelAchat">
                                                         Je réserve cette idée
                                                     </label>
                                             <?php
@@ -401,9 +401,9 @@ if (isset($_POST['delete'])) {
                                         <br>
                                     </div>
                                     <div class="btn-group" role="group">
-                                        <div class="col-md-8 text-center">
-                                            <button type="submit" name="save" value="<?php echo $donnees['id'] ?>" class="btn btn-primary">Enregistrer</button>
-                                            <a class="btn btn-secondary" href="https://family.matthieudevilliers.fr/pages/idees/?liste=<?php echo $_GET['liste'] ?? $donnee['partage']; ?>">
+                                        <div class="md:col-8 text-center">
+                                            <button type="submit" name="save" value="<?php echo $donnees['id'] ?>" class="btn-solid theme-primary">Enregistrer</button>
+                                            <a class="btn-solid theme-secondary" href="https://family.matthieudevilliers.fr/pages/idees/?liste=<?php echo $_GET['liste'] ?? $donnee['partage']; ?>">
                                                 Annuler
                                             </a>
                                         </div>
@@ -412,8 +412,8 @@ if (isset($_POST['delete'])) {
                                         ?>
                                             <br>
                                             <br>
-                                            <div class="col-md-4 text-center">
-                                                <button type="submit" name="delete" value="<?php echo $donnees['id'] ?>" class="btn btn-danger">Supprimer</button>
+                                            <div class="md:col-4 text-center">
+                                                <button type="submit" name="delete" value="<?php echo $donnees['id'] ?>" class="btn-solid theme-danger">Supprimer</button>
                                             </div>
                                         <?php
                                         }

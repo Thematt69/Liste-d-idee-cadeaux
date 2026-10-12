@@ -24,7 +24,7 @@ $notifications = $req_toast->fetchAll();
 // Ne créer le conteneur que s'il y a des notifications
 if (count($notifications) > 0) {
     // Conteneur pour les toasts (position fixe en bas à droite)
-    echo '<div class="toast-container position-fixed bottom-0 end-0 p-3">';
+    echo '<div class="toast-container position-fixed bottom-0 end-0 p-5">';
 
     foreach ($notifications as $notification) {
     $datetime = new DateTime($notification["created_to"]);
@@ -34,11 +34,11 @@ if (count($notifications) > 0) {
     $notifDate = $datetime->format("d/m/Y H:i");
 ?>
     <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true" id="toast-<?php echo $notifId; ?>" data-notif-id="<?php echo $notifId; ?>">
-        <div class="toast-header bg-info text-white">
-            <i class="fas fa-bell me-2"></i>
+        <div class="toast-header theme-info">
+            <i class="fas fa-bell me-3"></i>
             <strong class="me-auto"><?php echo $notifTitre; ?></strong>
             <small><?php echo $notifDate; ?></small>
-            <button type="button" class="btn-close btn-close-white ms-2 notif-close-btn" aria-label="Close"></button>
+            <button type="button" class="btn-close ms-3 notif-close-btn" aria-label="Fermer"></button>
         </div>
         <div class="toast-body">
             <?php echo $notifMessage; ?>
