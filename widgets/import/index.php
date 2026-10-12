@@ -14,9 +14,6 @@
 <link rel="icon" href="https://family.matthieudevilliers.fr/images/logo.webp">
 
 <!-- Bootstrap CSS -->
-<link rel="stylesheet" href="https://family.matthieudevilliers.fr/css/bootstrap-grid.min.css">
-<link rel="stylesheet" href="https://family.matthieudevilliers.fr/css/bootstrap-reboot.min.css">
-<link rel="stylesheet" href="https://family.matthieudevilliers.fr/css/bootstrap-utilities.min.css">
 <link rel="stylesheet" href="https://family.matthieudevilliers.fr/css/bootstrap.min.css">
 
 <!-- Bootstrap JS -->
@@ -33,9 +30,6 @@
 
 <!-- Style CSS -->
 <link href="https://family.matthieudevilliers.fr/css/style.css" rel="stylesheet">
-
-<!-- Normalize CSS -->
-<link href="https://family.matthieudevilliers.fr/css/normalize.css" rel="stylesheet">
 
 <!--[if IE]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>

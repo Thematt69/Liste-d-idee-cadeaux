@@ -1,3 +1,4 @@
+<div class="site-navbar-container">
 <nav class="navbar md:navbar-expand site-navbar shadow-sm">
     <div class="container">
         <a class="navbar-brand" href="https://family.matthieudevilliers.fr">
@@ -66,3 +67,4 @@
         </dialog>
     </div>
 </nav>
+</div>
