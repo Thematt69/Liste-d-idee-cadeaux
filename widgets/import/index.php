@@ -15,15 +15,13 @@
 
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/bootstrap-icons/bootstrap-icons.css">
 
 <!-- Bootstrap JS -->
 <script type="module" src="/js/bootstrap.bundle.min.js"></script>
 
 <!-- Bootstrap -->
 <script src="/js/jquery.min.js"></script>
-
-<!-- Icon FontAwesome -->
-<script src="/js/45afd6dbfc.js"></script>
 
 <!-- Notifications JS -->
 <script type="module" src="/js/notifications.js"></script>
