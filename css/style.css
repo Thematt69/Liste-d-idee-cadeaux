@@ -31,6 +31,7 @@ h3 {
 }
 
 .site-navbar {
+    container-type: inline-size;
     --bs-navbar-color: #f4f7f4;
     --bs-navbar-hover-color: #fff;
     --bs-navbar-active-color: #fff;
