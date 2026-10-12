@@ -21,8 +21,8 @@ if (isset($_POST['delete'])) {
     $droitSupp = $responseAuth->fetch();
     $responseAuth->closeCursor();
     if ($droitSupp && $droitSupp['droit'] === 'proprietaire') {
-        // Récupération du lien de la liste qui contient l'idée à supprimer
-        $sql1 = 'SELECT lic_liste.lien_partage as lien
+        // Récupération des informations de l'idée et de sa liste
+        $sql1 = 'SELECT lic_liste.lien_partage as lien, lic_idee.nom as nom, lic_idee.buy_from as buy_from
                 FROM lic_liste
                 INNER JOIN lic_idee ON lic_idee.id_liste = lic_liste.id
                 WHERE lic_idee.id = ? AND lic_liste.deleted_to IS NULL AND lic_idee.deleted_to IS NULL';
@@ -43,6 +43,50 @@ if (isset($_POST['delete'])) {
         $response->execute(array($date->format('Y-m-d H:i:s'), $_POST['delete']));
 
         $response->closeCursor();
+
+        if ($donnee1 && $donnee1['buy_from'] !== null && $donnee1['buy_from'] != $_SESSION['id_compte']) {
+            $sql3 = 'SELECT mail
+                    FROM lic_compte
+                    WHERE id = ? AND deleted_to IS NULL';
+
+            $response3 = $bdd->prepare($sql3);
+            $response3->execute(array($donnee1['buy_from']));
+            $donnee3 = $response3->fetch();
+
+            $nomIdee = safe_output($donnee1['nom']);
+            $lienListe = urlencode($donnee1['lien']);
+            $contenu = '
+                <html>
+                    <body>
+                        <h3>Suppression d\'une idée réservée</h3>
+                        <br>
+                        <p>Bonjour,</p>
+                        <p>
+                            L\'idée intitulée "' . $nomIdee . '" que vous aviez réservée vient d\'être supprimée par le propriétaire de la liste.
+                        </p>
+                        <p><a href="https://family.matthieudevilliers.fr/pages/idees/?liste=' . $lienListe . '">Consulter la liste</a></p>
+                        <br>
+                        <p>L\'équipe de Listes d\'idées cadeaux</p>
+                    </body>
+                </html>
+            ';
+
+            if ($donnee3 && $donnee3['mail']) {
+                envoiMail($donnee3['mail'], "Suppression d'une idée réservée - Listes d'idées cadeau", $contenu);
+            }
+            $response3->closeCursor();
+
+            $sql4 = 'INSERT INTO lic_notif (id_compte, titre, message)
+                    VALUES (?, ?, ?)';
+            $response4 = $bdd->prepare($sql4);
+            $response4->execute(array(
+                $donnee1['buy_from'],
+                'Suppression d\'une idée réservée',
+                'L\'idée "' . $donnee1['nom'] . '" que vous aviez réservée a été supprimée par le propriétaire de la liste.'
+            ));
+            $response4->closeCursor();
+        }
+
         $response1->closeCursor();
 
         header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $donnee1['lien']);
