@@ -379,29 +379,29 @@ if (isset($_POST['delete'])) {
                                 <div class="row">
                                     <div class="md:col-7">
                                         <div class="form-floating">
-                                            <input name="Nom" type="text" value="<?php echo ($donnees['nom']) ?>" class="form-control" id="LabelNom" placeholder="Nom de l'idée" required>
                                             <label for="LabelNom">Nom de l'idée *</label>
+                                            <input name="Nom" type="text" value="<?php echo ($donnees['nom']) ?>" class="form-control" id="LabelNom" placeholder="Nom de l'idée" required>
                                         </div>
                                         <br>
                                     </div>
                                     <div class="md:col-5">
                                         <div class="form-floating">
-                                            <input name="Prix" type="text" value="<?php echo ($donnees['price']) ?>" class="form-control" id="LabelPrix" placeholder="Prix de l'idée">
                                             <label for="LabelPrix">Prix de l'idée</label>
+                                            <input name="Prix" type="text" value="<?php echo ($donnees['price']) ?>" class="form-control" id="LabelPrix" placeholder="Prix de l'idée">
                                         </div>
                                         <br>
                                     </div>
                                     <div class="md:col-12">
                                         <div class="form-floating">
-                                            <input name="Commentaire" type="text" value="<?php echo ($donnees['commentaire']) ?>" class="form-control" id="LabelCommentaire" placeholder="Commentaire">
                                             <label for="LabelCommentaire">Commentaire</label>
+                                            <input name="Commentaire" type="text" value="<?php echo ($donnees['commentaire']) ?>" class="form-control" id="LabelCommentaire" placeholder="Commentaire">
                                         </div>
                                         <br>
                                     </div>
                                     <div class="md:col-7">
                                         <div class="form-floating">
-                                            <input name="Lien" type="url" value="<?php echo ($donnees['lien']) ?>" class="form-control" id="LabelLien" placeholder="Lien de l'idée">
                                             <label for="LabelLien">Lien de l'idée</label>
+                                            <input name="Lien" type="url" value="<?php echo ($donnees['lien']) ?>" class="form-control" id="LabelLien" placeholder="Lien de l'idée">
                                         </div>
                                         <br>
                                     </div>

@@ -318,8 +318,8 @@ if (isset($_POST['cancel'])) {
                                 <div class="row">
                                     <div class="md:col-8">
                                         <div class="form-floating">
-                                            <input name="Nom" value="<?php echo $donnees['nom'] ?>" type="text" class="form-control" id="LabelNom" placeholder="Nom de la liste" required>
                                             <label for="LabelNom">Nom de la liste</label>
+                                            <input name="Nom" value="<?php echo $donnees['nom'] ?>" type="text" class="form-control" id="LabelNom" placeholder="Nom de la liste" required>
                                         </div>
                                         <br>
                                     </div>

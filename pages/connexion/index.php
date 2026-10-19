@@ -124,15 +124,15 @@ if (isset($_POST['Mail'])) {
                             <div class="row">
                                 <div class="md:col-12">
                                     <div class="form-floating">
+                                        <label for="LabelMail">Adresse mail</label>
                                         <input name="Mail" type="email" class="form-control" id="LabelMail"
                                             placeholder="name@example.com" required>
-                                        <label for="LabelMail">Adresse mail</label>
                                     </div>
                                     <br>
                                     <div class="form-floating">
+                                        <label for="LabelMDP">Mot de passe</label>
                                         <input name="MDP" type="password" class="form-control" id="LabelMDP"
                                             aria-describedby="DescriptionMDP" placeholder="Mot de passe" required>
-                                        <label for="LabelMDP">Mot de passe</label>
                                         <small id="DescriptionMDP" class="fg-secondary"><a
                                                 href="https://family.matthieudevilliers.fr/pages/reset-password/">Mot
                                                 de passe oublié</a></small>
