@@ -14,7 +14,7 @@ if (isset($_SESSION['id_compte'])) {
             |
             <a href="https://matthieudevilliers.fr/" target="_blank">Matthieu Devilliers</a>
             | Copyright ©2020-2025 All rights reserved |
-            <a href="mailto:devilliers.matthieu@gmail.com" target="_blank">Contactez-moi</a>
+            <a href="mailto:webmaster@matthieudevilliers.fr" target="_blank">Contactez-moi</a>
         </span>
     </div>
 </footer>

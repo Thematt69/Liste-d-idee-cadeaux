@@ -6,7 +6,7 @@
 <meta name="keywords" content="idée,idee,cadeaux,noël,noel,anniversaire">
 <meta name="owner" content="Matthieu Devilliers">
 <meta name="robots" content="noindex">
-<meta name="reply-to" content="devilliers.matthieu@gmail.com">
+<meta name="reply-to" content="webmaster@matthieudevilliers.fr">
 <meta name="revisit-after" content="30">
 
 <meta name="viewport" content="width=device-width, initial-scale=1">

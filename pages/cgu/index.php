@@ -65,7 +65,7 @@
             <p>
                 Les informations fournies sont utilisées pour faire fonctionner le compte et les fonctionnalités
                 de partage. Pour toute question relative à vos données ou à l'application de ces conditions,
-                <a href="mailto:devilliers.matthieu@gmail.com">contactez-nous par e-mail</a>.
+                <a href="mailto:webmaster@matthieudevilliers.fr">contactez-nous par e-mail</a>.
             </p>
         </section>
 
