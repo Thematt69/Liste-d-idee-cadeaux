@@ -137,37 +137,37 @@ if (isset($_POST['Mail'])) {
                             <div class="row">
                                 <div class="md:col-6 xl:col-4">
                                     <div class="form-floating">
-                                        <input name="Prénom" type="text" class="form-control" id="LabelPrénom" placeholder="Prénom" value="<?php echo safe_output($donnees['prenom']) ?>" required>
                                         <label for="LabelPrénom">Prénom</label>
+                                        <input name="Prénom" type="text" class="form-control" id="LabelPrénom" placeholder="Prénom" value="<?php echo safe_output($donnees['prenom']) ?>" required>
                                     </div>
                                     <br>
                                 </div>
                                 <div class="md:col-6 xl:col-4">
                                     <div class="form-floating">
-                                        <input name="Nom" type="text" class="form-control" id="LabelNom" placeholder="Nom" value="<?php echo safe_output($donnees['nom']) ?>" required>
                                         <label for="LabelNom">Nom</label>
+                                        <input name="Nom" type="text" class="form-control" id="LabelNom" placeholder="Nom" value="<?php echo safe_output($donnees['nom']) ?>" required>
                                     </div>
                                     <br>
                                 </div>
                                 <div class="md:col-6 xl:col-4">
                                     <div class="form-floating">
-                                        <input name="MDP" type="password" class="form-control" id="LabelMDP" aria-describedby="DescriptionMDP" placeholder="Mot de passe" required>
                                         <label for="LabelMDP">Mot de passe actuel</label>
+                                        <input name="MDP" type="password" class="form-control" id="LabelMDP" aria-describedby="DescriptionMDP" placeholder="Mot de passe" required>
                                         <small id="DescriptionMDP" class="fg-secondary">Votre mot de passe est enregistré dans un format haché, il est impossible pour nous de le récupérer.</small>
                                     </div>
                                     <br>
                                 </div>
                                 <div class="md:col-6 xl:col-4">
                                     <div class="form-floating">
-                                        <input name="NewMDP" type="password" class="form-control" id="LabelNewMDP" aria-describedby="DescriptionMDP" placeholder="Nouveau mot de passe">
                                         <label for="LabelNewMDP">Nouveau mot de passe</label>
+                                        <input name="NewMDP" type="password" class="form-control" id="LabelNewMDP" aria-describedby="DescriptionMDP" placeholder="Nouveau mot de passe">
                                     </div>
                                     <br>
                                 </div>
                                 <div class="md:col-12 xl:col-8">
                                     <div class="form-floating">
-                                        <input name="Mail" type="email" class="form-control" id="LabelMail" aria-describedby="DescriptionMail" placeholder="Adresse mail" value="<?php echo safe_output($donnees['mail']) ?>" required>
                                         <label for="LabelMail">Adresse mail</label>
+                                        <input name="Mail" type="email" class="form-control" id="LabelMail" aria-describedby="DescriptionMail" placeholder="Adresse mail" value="<?php echo safe_output($donnees['mail']) ?>" required>
                                         <small id="DescriptionMail" class="fg-secondary">Votre adresse mail nous permet de vous transmet toutes les informations vous concernant.</small>
                                     </div>
                                     <br>

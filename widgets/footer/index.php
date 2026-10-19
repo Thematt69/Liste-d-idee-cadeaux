@@ -6,7 +6,7 @@ if (isset($_SESSION['id_compte'])) {
 ?>
 
 <footer class="footer mt-auto py-5 site-footer">
-    <div class="container fg-inverse text-center">
+    <div class="container text-center">
         <span>
             <a href="https://family.matthieudevilliers.fr/pages/accessibilite/">Accessibilité : partiellement conforme</a>
             |

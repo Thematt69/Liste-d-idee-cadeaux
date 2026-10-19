@@ -144,8 +144,8 @@ if (isset($_POST['Comptes'])) {
                             <div class="row">
                                 <div class="md:col-5">
                                     <div class="form-floating">
-                                        <input name="Titre" type="text" class="form-control" id="LabelTitre" placeholder="Titre" required>
                                         <label for="LabelTitre">Titre</label>
+                                        <input name="Titre" type="text" class="form-control" id="LabelTitre" placeholder="Titre" required>
                                     </div>
                                     <br>
                                 </div>
@@ -175,8 +175,8 @@ if (isset($_POST['Comptes'])) {
                                 </div>
                                 <div class="md:col-12">
                                     <div class="form-floating">
-                                        <textarea name="Message" class="form-control" id="LabelMessage" aria-describedby="DescriptionMessage" placeholder="Message" required></textarea>
                                         <label for="LabelMessage">Message</label>
+                                        <textarea name="Message" class="form-control" id="LabelMessage" aria-describedby="DescriptionMessage" placeholder="Message" required></textarea>
                                     </div>
                                     <br>
                                 </div>

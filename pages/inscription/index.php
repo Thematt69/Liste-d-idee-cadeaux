@@ -118,25 +118,25 @@ if (isset($_POST['Mail'])) {
                                 <div class="row">
                                     <div class="md:col-6">
                                         <div class="form-floating">
+                                            <label for="LabelPrénom">Prénom</label>
                                             <input name="Prénom" type="text" class="form-control" id="LabelPrénom"
                                                 placeholder="Prénom" required>
-                                            <label for="LabelPrénom">Prénom</label>
                                         </div>
                                         <br>
                                     </div>
                                     <div class="md:col-6">
                                         <div class="form-floating">
+                                            <label for="LabelNom">Nom</label>
                                             <input name="Nom" type="text" class="form-control" id="LabelNom"
                                                 placeholder="Nom" required>
-                                            <label for="LabelNom">Nom</label>
                                         </div>
                                         <br>
                                     </div>
                                     <div class="md:col-6">
                                         <div class="form-floating">
+                                            <label for="LabelMDP">Mot de passe</label>
                                             <input name="MDP" type="password" class="form-control" id="LabelMDP"
                                                 aria-describedby="DescriptionMDP" placeholder="Mot de passe" required>
-                                            <label for="LabelMDP">Mot de passe</label>
                                             <small id="DescriptionMDP" class="fg-secondary">Votre mot de passe
                                                 est enregistré dans un format haché, il est impossible pour nous de le
                                                 récupérer.</small>
@@ -145,9 +145,9 @@ if (isset($_POST['Mail'])) {
                                     </div>
                                     <div class="md:col-6">
                                         <div class="form-floating">
+                                            <label for="LabelMail">Adresse mail</label>
                                             <input name="Mail" type="email" class="form-control" id="LabelMail"
                                                 aria-describedby="DescriptionMail" placeholder="Adresse mail" required>
-                                            <label for="LabelMail">Adresse mail</label>
                                             <small id="DescriptionMail" class="fg-secondary">Votre adresse mail
                                                 nous permet de vous transmet toutes les informations vous
                                                 concernant.</small>
