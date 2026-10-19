@@ -1,159 +1,197 @@
 :root {
-    --bs-primary-base: #00c8e6;
-    --bs-primary-fg: #173b44;
-    --bs-primary-fg-emphasis: #102f36;
-    --bs-primary-bg: #00c8e6;
-    --bs-primary-bg-subtle: #e4f9fc;
-    --bs-primary-bg-muted: #d2e1e9;
-    --bs-primary-border: #70dce9;
-    --bs-primary-focus-ring: rgba(0, 200, 230, 0.35);
-    --bs-primary-contrast: #173b44;
-    --bs-bg-body: #fff;
-    --bs-fg-body: #173b44;
-    --bs-border-color: #d2e1e9;
+  --bs-body-color: #173b44;
+  --bs-body-bg: #e4f9fc;
+  --bs-link-color: #173b44;
+  --bs-link-color-rgb: 23, 59, 68;
+  --bs-link-hover-color: #102f36;
+  --bs-link-hover-color-rgb: 16, 47, 54;
+  --bs-border-color: #d2e1e9;
 }
 
 body {
-    color: var(--bs-fg-body);
-    background-color: var(--bs-primary-bg-subtle);
+  color: var(--bs-body-color);
+  background-color: var(--bs-body-bg);
 }
 
 main {
-    flex: 1 0 auto;
-    padding-block: 1.5rem;
+  flex: 1 0 auto;
+  padding-block: 1.5rem;
+}
+
+main:focus {
+  outline: 3px solid #173b44;
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: fixed;
+  inset-block-start: 1rem;
+  inset-inline-start: 1rem;
+  z-index: 2000;
+  padding: 0.75rem 1rem;
+  color: #fff;
+  background-color: #173b44;
+  transform: translateY(calc(-100% - 1rem));
+}
+
+.skip-link:focus {
+  color: #fff;
+  transform: translateY(0);
+}
+
+.stretched-link:focus-visible::after {
+  outline: 3px solid #173b44;
+  outline-offset: 3px;
 }
 
 h1,
 h2,
 h3 {
-    color: #173b44;
-    letter-spacing: -0.025em;
+  color: #173b44;
+  letter-spacing: -0.025em;
 }
 
 .site-navbar-container {
-    container-type: inline-size;
+  container-type: inline-size;
 }
 
 .site-navbar {
-    --bs-navbar-color: #173b44;
-    --bs-navbar-hover-color: #102f36;
-    --bs-navbar-active-color: #102f36;
-    --bs-navbar-brand-color: #173b44;
-    --bs-navbar-brand-hover-color: #102f36;
-    --bs-navbar-bg: #fff;
-    color: #173b44;
-    background-color: var(--bs-navbar-bg);
+  --bs-navbar-color: #173b44;
+  --bs-navbar-hover-color: #102f36;
+  --bs-navbar-active-color: #102f36;
+  --bs-navbar-brand-color: #173b44;
+  --bs-navbar-brand-hover-color: #102f36;
+  color: #173b44;
+  background-color: #fff;
 }
 
 .site-navbar .navbar-brand,
 .site-navbar .nav-link {
-    color: #173b44;
+  color: #173b44;
 }
 
 .site-navbar .nav-link:hover,
 .site-navbar .nav-link:focus-visible {
-    color: #102f36;
-    text-decoration: underline;
-    text-underline-offset: 0.2em;
-    text-decoration-color: #ffc400;
+  color: #102f36;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  text-decoration-color: #ffc400;
 }
 
 .site-navbar .navbar-toggler {
-    color: #173b44;
+  color: #173b44;
 }
 
-.site-navbar .drawer {
-    color: #173b44;
-    background-color: var(--bs-navbar-bg);
+.site-navbar .offcanvas {
+  color: #173b44;
+  background-color: #fff;
 }
 
-.site-navbar .drawer-header {
-    border-bottom: 1px solid rgb(23 59 68 / 20%);
+.site-navbar .offcanvas-header {
+  border-bottom: 1px solid rgb(23 59 68 / 20%);
 }
 
 .site-footer {
-    color: #173b44;
-    background-color: #d2e1e9;
+  color: #173b44;
+  background-color: #d2e1e9;
 }
 
 .site-footer a {
-    color: #173b44;
+  color: #173b44;
 }
 
 .site-footer a:hover,
 .site-footer a:focus-visible {
-    color: #a84c00;
+  color: #173b44;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 
 .card {
-    border-color: var(--bs-border-color);
-    border-radius: 1rem;
-    box-shadow: 0 0.5rem 1.5rem rgb(38 51 44 / 7%);
+  border-color: var(--bs-border-color);
+  border-radius: 1rem;
+  box-shadow: 0 0.5rem 1.5rem rgb(38 51 44 / 7%);
 }
 
 .card-body {
-    padding: clamp(1rem, 2.5vw, 1.75rem);
+  padding: clamp(1rem, 2.5vw, 1.75rem);
 }
 
+
+
+
 .alert:has(> .btn-close) {
-    position: relative;
-    padding-inline-end: 3rem;
+  position: relative;
+  padding-inline-end: 3rem;
 }
 
 .alert:has(> .btn-close) > .btn-close {
-    position: absolute;
-    inset-block-start: 0.75rem;
-    inset-inline-end: 0.75rem;
+  position: absolute;
+  inset-block-start: 0.75rem;
+  inset-inline-end: 0.75rem;
 }
 
-.btn-solid.theme-primary,
-.btn-outline.theme-primary {
-    --bs-theme-base: #00c8e6;
-    --bs-theme-fg: #173b44;
-    --bs-theme-fg-emphasis: #102f36;
-    --bs-theme-bg: #00c8e6;
-    --bs-theme-bg-subtle: #e4f9fc;
-    --bs-theme-border: #70dce9;
-    --bs-theme-focus-ring: rgba(0, 200, 230, 0.35);
-    --bs-theme-contrast: #173b44;
+.btn-primary {
+  --bs-btn-color: #173b44;
+  --bs-btn-bg: #00c8e6;
+  --bs-btn-border-color: #70dce9;
+  --bs-btn-hover-color: #102f36;
+  --bs-btn-hover-bg: #70dce9;
+  --bs-btn-hover-border-color: #70dce9;
+  --bs-btn-focus-shadow-rgb: 0, 200, 230;
+  --bs-btn-active-color: #102f36;
+  --bs-btn-active-bg: #70dce9;
+  --bs-btn-active-border-color: #70dce9;
+}
+
+.btn-outline-primary {
+  --bs-btn-color: #173b44;
+  --bs-btn-border-color: #00c8e6;
+  --bs-btn-hover-color: #173b44;
+  --bs-btn-hover-bg: #00c8e6;
+  --bs-btn-hover-border-color: #00c8e6;
+  --bs-btn-focus-shadow-rgb: 0, 200, 230;
+  --bs-btn-active-color: #173b44;
+  --bs-btn-active-bg: #00c8e6;
+  --bs-btn-active-border-color: #00c8e6;
 }
 
 .toast-container {
-    z-index: 1055;
+  z-index: 1055;
 }
 
 .toast {
-    min-width: 300px;
-    max-width: 350px;
-    margin-bottom: 0.5rem;
+  min-width: 300px;
+  max-width: 350px;
+  margin-bottom: 0.5rem;
 }
 
-.toast-header.theme-info {
-    color: #173b44;
+.toast-header.bg-info-subtle.text-info-emphasis {
+  color: #173b44;
 }
 
 @media (max-width: 989px) {
-    .image {
-        display: none;
-    }
+  .image {
+    display: none;
+  }
 }
 
 @media (max-width: 500px) {
-    .lien {
-        display: none;
-    }
+  .lien {
+    display: none;
+  }
 
-    .toast {
-        min-width: 250px;
-        max-width: 300px;
-    }
+  .toast {
+    min-width: 250px;
+    max-width: 300px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        scroll-behavior: auto !important;
-        transition-duration: 0.01ms !important;
-    }
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }

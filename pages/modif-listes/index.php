@@ -257,263 +257,265 @@ if (isset($_POST['cancel'])) {
 
     <?php include('../../widgets/navbar/index.php'); ?>
 
-    <div class="container">
-        <div class="row  justify-content-center">
-            <div class="md:col-12 lg:col-10">
+    <main id="main-content" tabindex="-1">
+        <div class="container">
+            <div class="row  justify-content-center">
+                <div class="col-md-12 col-lg-10">
 
-                <br>
-                <?php
-                if ($alert) {
-                ?>
-                    <div class="alert theme-danger fade show" role="alert">
-                        <strong><?php echo $alert; ?></strong>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
-                    </div>
-                <?php
-                } elseif ($info) {
-                ?>
-                    <div class="alert theme-success fade show" role="alert">
-                        <?php echo $info; ?>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
-                    </div>
-                <?php
-                }
+                    <br>
+                    <?php
+                    if ($alert) {
+                    ?>
+                        <div class="alert alert-danger fade show" role="alert">
+                            <strong><?php echo $alert; ?></strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+                        </div>
+                    <?php
+                    } elseif ($info) {
+                    ?>
+                        <div class="alert alert-success fade show" role="alert">
+                            <?php echo $info; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+                        </div>
+                    <?php
+                    }
 
-                $sql = 'SELECT lic_autorisation.type as droit, lic_liste.id as id, lic_liste.nom as nom, lic_liste.partage as partage
+                    $sql = 'SELECT lic_autorisation.type as droit, lic_liste.id as id, lic_liste.nom as nom, lic_liste.partage as partage
                         FROM lic_autorisation
                         INNER JOIN lic_liste ON lic_liste.id = lic_autorisation.id_liste
                         WHERE lic_autorisation.id_compte = ? AND lic_liste.lien_partage = ? AND lic_liste.deleted_to IS NULL';
 
-                $response1 = $bdd->prepare($sql);
-                $response1->execute(array($_SESSION['id_compte'], $_GET['liste']));
+                    $response1 = $bdd->prepare($sql);
+                    $response1->execute(array($_SESSION['id_compte'], $_GET['liste']));
 
-                $donnees = $response1->fetch();
+                    $donnees = $response1->fetch();
 
-                if (isset($_GET['liste']) && ($donnees == null || $donnees['droit'] != "proprietaire")) {
-                ?>
-                    <div class="container">
-                        <div class="row">
-                            <div class="sm:col-12">
-                                <br>
-                                <div class="alert theme-danger" role="alert">
-                                    <strong>Vous n'avez pas les droits !</strong> Nous sommes désolées, mais il semblerait que vous n'ayez pas les droits pour cette idée. Merci de revenir à <a href="https://family.matthieudevilliers.fr/pages/listes/" class="alert-link">vos listes</a>.
+                    if (isset($_GET['liste']) && ($donnees == null || $donnees['droit'] != "proprietaire")) {
+                    ?>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <br>
+                                    <div class="alert alert-danger" role="alert">
+                                        <strong>Vous n'avez pas les droits !</strong> Nous sommes désolées, mais il semblerait que vous n'ayez pas les droits pour cette idée. Merci de revenir à <a href="https://family.matthieudevilliers.fr/pages/listes/" class="alert-link">vos listes</a>.
+                                    </div>
+                                    <br>
                                 </div>
-                                <br>
                             </div>
                         </div>
-                    </div>
 
-                <?php
-                } else {
-                    if (isset($_GET['liste'])) {
-                        echo ('<h1 class="text-center">Modification de liste</h1>');
+                    <?php
                     } else {
-                        echo ('<h1 class="text-center">Création de liste</h1>');
-                    }
-                ?>
-                    <br>
-                    <div class="card">
-                        <div class="card-body">
-                            <form action="" method="post">
-                                <div class="row">
-                                    <div class="md:col-8">
-                                        <div class="form-floating">
-                                            <label for="LabelNom">Nom de la liste</label>
-                                            <input name="Nom" value="<?php echo $donnees['nom'] ?>" type="text" class="form-control" id="LabelNom" placeholder="Nom de la liste" required>
-                                        </div>
-                                        <br>
-                                    </div>
-                                    <div class="md:col-4">
-                                        <select class="form-control" name="Partage" aria-label="Paramètres de partage">
-                                            <option <?php if ($donnees['partage'] == 'prive') echo ('selected') ?> value="prive">Privé</option>
-                                            <option <?php if ($donnees['partage'] == 'limite') echo ('selected') ?> value="limite">Limité</option>
-                                            <option <?php if ($donnees['partage'] == 'public') echo ('selected') ?> value="public">Public</option>
-                                        </select>
-                                        <br>
-                                    </div>
-                                    <div class="btn-group" role="group">
-                                        <div class="md:col-6 text-center">
-                                            <button type="submit" name="save" value="<?php echo $donnees['id'] ?>" class="btn-solid theme-primary">Enregistrer</button>
-                                            <button type="submit" name="cancel" value="<?php echo $donnees['id'] ?>" class="btn-solid theme-secondary">Annuler</button>
-                                        </div>
-                                        <?php
-                                        if (isset($_GET['liste']) && $donnees != null) {
-                                        ?>
-                                            <br>
-                                            <br>
-                                            <div class="md:col-6 text-center">
-                                                <button type="submit" name="delete" value="<?php echo $donnees['id'] ?>" class="btn-solid theme-danger">Supprimer</button>
+                        if (isset($_GET['liste'])) {
+                            echo ('<h1 class="text-center">Modification de liste</h1>');
+                        } else {
+                            echo ('<h1 class="text-center">Création de liste</h1>');
+                        }
+                    ?>
+                        <br>
+                        <div class="card">
+                            <div class="card-body">
+                                <form action="" method="post">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="form-floating">
+                                                <label for="LabelNom">Nom de la liste</label>
+                                                <input name="Nom" value="<?php echo $donnees['nom'] ?>" type="text" class="form-control" id="LabelNom" placeholder="Nom de la liste" required>
                                             </div>
-                                        <?php
-                                        } elseif (isset($_GET['type']) && $_GET['type'] == 'duo') {
-                                        ?>
                                             <br>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select class="form-control" name="Partage" aria-label="Paramètres de partage">
+                                                <option <?php if ($donnees['partage'] == 'prive') echo ('selected') ?> value="prive">Privé</option>
+                                                <option <?php if ($donnees['partage'] == 'limite') echo ('selected') ?> value="limite">Limité</option>
+                                                <option <?php if ($donnees['partage'] == 'public') echo ('selected') ?> value="public">Public</option>
+                                            </select>
                                             <br>
-                                            <div class="md:col-6">
-                                                <select class="form-control" name="Co-propriétaire" aria-label="Co-propriétaire">
-                                                    <?php
+                                        </div>
+                                        <div class="btn-group" role="group">
+                                            <div class="col-md-6 text-center">
+                                                <button type="submit" name="save" value="<?php echo $donnees['id'] ?>" class="btn btn-primary">Enregistrer</button>
+                                                <button type="submit" name="cancel" value="<?php echo $donnees['id'] ?>" class="btn btn-secondary">Annuler</button>
+                                            </div>
+                                            <?php
+                                            if (isset($_GET['liste']) && $donnees != null) {
+                                            ?>
+                                                <br>
+                                                <br>
+                                                <div class="col-md-6 text-center">
+                                                    <button type="submit" name="delete" value="<?php echo $donnees['id'] ?>" class="btn btn-danger">Supprimer</button>
+                                                </div>
+                                            <?php
+                                            } elseif (isset($_GET['type']) && $_GET['type'] == 'duo') {
+                                            ?>
+                                                <br>
+                                                <br>
+                                                <div class="col-md-6">
+                                                    <select class="form-control" name="Co-propriétaire" aria-label="Co-propriétaire">
+                                                        <?php
 
-                                                    $sql1 = 'SELECT id,prenom,nom,mail
+                                                        $sql1 = 'SELECT id,prenom,nom,mail
                                                             FROM lic_compte
                                                             WHERE id != ? AND deleted_to IS NULL';
 
-                                                    $response1 = $bdd->prepare($sql1);
-                                                    $response1->execute(array($_SESSION['id_compte']));
+                                                        $response1 = $bdd->prepare($sql1);
+                                                        $response1->execute(array($_SESSION['id_compte']));
 
-                                                    while ($donnees = $response1->fetch()) {
-                                                    ?>
-                                                        <option value="<?php echo ($donnees['id']) ?>"><?php echo ($donnees['prenom'] . " " . strtoupper($donnees['nom']) . " - " . $donnees['mail']); ?></option>
-                                                    <?php
-                                                    }
+                                                        while ($donnees = $response1->fetch()) {
+                                                        ?>
+                                                            <option value="<?php echo ($donnees['id']) ?>"><?php echo ($donnees['prenom'] . " " . strtoupper($donnees['nom']) . " - " . $donnees['mail']); ?></option>
+                                                        <?php
+                                                        }
 
-                                                    $response1->closeCursor();
+                                                        $response1->closeCursor();
 
-                                                    ?>
-                                                </select>
-                                                <br>
-                                            </div>
-                                        <?php
-                                        }
-                                        ?>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                <?php
-                }
-                ?>
-                <br>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="md:col-12">
-                                <h3>Type de partage</h3>
-                                <p>Les administrateurs ont un accès par défaut pour tout partage de type "Limité" ou "Public".</p>
-                                <ul>
-                                    <li><strong>Privé</strong> - La liste n'est accessible que par vous.</li>
-                                    <li><strong>Limité</strong> - Seules les personnes que vous avez autorisées pourront avoir accès à votre liste.</li>
-                                    <li><strong>Public</strong> - Toutes les personnes disposants du lien pourront accéder à votre liste.</li>
-                                </ul>
-                                <?php
-                                if (isset($_GET['liste'])) {
-                                    echo ("<p>Un modérateur a la possibilité d'ajouter et modifier les idées de votre liste ; par contre, il ne pourra pas gérer, modifier ou supprimer votre liste.</p>");
-                                }
-                                ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <br>
-                <?php
-                if ($donnees['droit'] == "proprietaire" && $donnees['partage'] != 'prive') {
-                ?>
-                    <div class="card">
-                        <div class="card-body text-center">
-                            <h3 class="text-center">Les personnes à qui vous partagez votre liste</h3>
-                            <br>
-                            <?php
-                            if ($donnees['partage'] == 'limite') {
-                            ?>
-                                <form action="" method="post">
-                                    <div class="input-group">
-                                        <input type="email" class="form-control" name="share_email" placeholder="Adresse mail" aria-label="Adresse mail" aria-describedby="email" required aria-required="true">
-                                        <button type="submit" name="share" value="<?php echo $donnees['id'] ?>" id="email" class="btn-outline theme-primary">Ajouter</button>
-                                    </div>
-                                </form>
-                                <br>
-                            <?php
-                            }
-                            ?>
-                            <div class="table-responsive">
-                                <table class="table text-center align-middle">
-                                    <thead>
-                                        <tr>
-                                            <th class="col">Adresse mail</th>
-                                            <th class="col">Droit</th>
-                                            <th class="col">Depuis le</th>
-                                            <?php
-                                            if ($donnees['droit'] != "lecteur") {
-                                            ?>
-                                                <th>Actions</th>
+                                                        ?>
+                                                    </select>
+                                                    <br>
+                                                </div>
                                             <?php
                                             }
                                             ?>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php
-
-                                        $sql1 = 'SELECT lic_compte.id as compteId, lic_autorisation.id as authId, lic_compte.mail as mail, lic_autorisation.type as droit, lic_autorisation.created_to as created_to, lic_compte.fonction as fonction
-                                            FROM lic_compte
-                                            INNER JOIN lic_autorisation ON lic_autorisation.id_compte = lic_compte.id
-                                            WHERE lic_autorisation.id_liste = ?  AND lic_compte.deleted_to IS NULL';
-
-                                        $response1 = $bdd->prepare($sql1);
-                                        $response1->execute(array($donnees['id']));
-
-                                        while ($donnees1 = $response1->fetch()) {
-                                            $datetime = new DateTime($donnees1['created_to']);
-                                        ?>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    <?php
+                    }
+                    ?>
+                    <br>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h3>Type de partage</h3>
+                                    <p>Les administrateurs ont un accès par défaut pour tout partage de type "Limité" ou "Public".</p>
+                                    <ul>
+                                        <li><strong>Privé</strong> - La liste n'est accessible que par vous.</li>
+                                        <li><strong>Limité</strong> - Seules les personnes que vous avez autorisées pourront avoir accès à votre liste.</li>
+                                        <li><strong>Public</strong> - Toutes les personnes disposants du lien pourront accéder à votre liste.</li>
+                                    </ul>
+                                    <?php
+                                    if (isset($_GET['liste'])) {
+                                        echo ("<p>Un modérateur a la possibilité d'ajouter et modifier les idées de votre liste ; par contre, il ne pourra pas gérer, modifier ou supprimer votre liste.</p>");
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <?php
+                    if ($donnees['droit'] == "proprietaire" && $donnees['partage'] != 'prive') {
+                    ?>
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h3 id="personnes-partage-liste" class="text-center">Les personnes à qui vous partagez votre liste</h3>
+                                <br>
+                                <?php
+                                if ($donnees['partage'] == 'limite') {
+                                ?>
+                                    <form action="" method="post">
+                                        <div class="input-group">
+                                            <input type="email" class="form-control" name="share_email" placeholder="Adresse mail" aria-label="Adresse mail" aria-describedby="email" required aria-required="true">
+                                            <button type="submit" name="share" value="<?php echo $donnees['id'] ?>" id="email" class="btn btn-outline-primary">Ajouter</button>
+                                        </div>
+                                    </form>
+                                    <br>
+                                <?php
+                                }
+                                ?>
+                                <div class="table-responsive">
+                                    <table class="table text-center align-middle" aria-labelledby="personnes-partage-liste">
+                                        <thead>
                                             <tr>
-                                                <td>
-                                                    <?php
-                                                    echo ($donnees1['mail']);
-                                                    if ($donnees1['fonction'] == 'admin') {
-                                                        echo ('  <span class="badge rounded-pill theme-danger">ADMIN</span>');
-                                                    }
-                                                    ?>
-                                                </td>
-                                                <td>
-                                                    <form action="" method="post">
-                                                        <div class="input-group input-group-sm">
-                                                            <select class="form-control" name="new_droit" <?php if ($donnees1['fonction'] == 'admin' || $donnees1['droit'] == 'proprietaire') echo "disabled"; ?>>
-                                                                <option disabled <?php if ($donnees1['droit'] == 'proprietaire') echo "selected"; ?> value="proprietaire">Propriétaire</option>
-                                                                <option <?php if ($donnees1['droit'] == 'moderateur') echo "selected"; ?> value="moderateur">Modérateur</option>
-                                                                <option <?php if ($donnees1['droit'] == 'lecteur') echo "selected"; ?> value="lecteur">Lecteur</option>
-                                                            </select>
-
-                                                            <button class="btn-outline theme-secondary" name="new_droit_auth_id" value="<?php echo $donnees1['authId'] ?>" <?php if ($donnees1['fonction'] == 'admin' || $donnees1['droit'] == 'proprietaire') echo "disabled"; ?> type="submit"><i class="bi bi-check-lg"></i></button>
-                                                        </div>
-                                                    </form>
-                                                </td>
-                                                <td><?php echo ($datetime->format('d/m/Y H:i:s')) ?></td>
+                                                <th class="col" scope="col">Adresse mail</th>
+                                                <th class="col" scope="col">Droit</th>
+                                                <th class="col" scope="col">Depuis le</th>
                                                 <?php
                                                 if ($donnees['droit'] != "lecteur") {
-                                                    -$disable = false;
-                                                    if ($donnees1['droit']  == 'proprietaire') {
-                                                        $disable = true;
-                                                    } elseif ($donnees1['compteId']  == $_SESSION['id_compte']) {
-                                                        $disable = true;
-                                                    }
                                                 ?>
-                                                    <td>
-                                                        <button type="submit" name="share_delete" value="<?php echo $donnees1['authId'] ?>" class="btn-outline theme-danger" <?php if ($disable) echo ('disabled'); ?>>
-                                                            <i class="bi bi-trash"></i>
-                                                        </button>
-                                                    </td>
+                                                    <th scope="col">Actions</th>
                                                 <?php
                                                 }
                                                 ?>
                                             </tr>
-                                        <?php
-                                        }
+                                        </thead>
+                                        <tbody>
+                                            <?php
 
-                                        $response1->closeCursor();
-                                        ?>
-                                    </tbody>
-                                </table>
+                                            $sql1 = 'SELECT lic_compte.id as compteId, lic_autorisation.id as authId, lic_compte.mail as mail, lic_autorisation.type as droit, lic_autorisation.created_to as created_to, lic_compte.fonction as fonction
+                                            FROM lic_compte
+                                            INNER JOIN lic_autorisation ON lic_autorisation.id_compte = lic_compte.id
+                                            WHERE lic_autorisation.id_liste = ?  AND lic_compte.deleted_to IS NULL';
+
+                                            $response1 = $bdd->prepare($sql1);
+                                            $response1->execute(array($donnees['id']));
+
+                                            while ($donnees1 = $response1->fetch()) {
+                                                $datetime = new DateTime($donnees1['created_to']);
+                                            ?>
+                                                <tr>
+                                                    <td>
+                                                        <?php
+                                                        echo ($donnees1['mail']);
+                                                        if ($donnees1['fonction'] == 'admin') {
+                                                            echo ('  <span class="badge rounded-pill bg-danger">ADMIN</span>');
+                                                        }
+                                                        ?>
+                                                    </td>
+                                                    <td>
+                                                        <form action="" method="post">
+                                                            <div class="input-group input-group-sm">
+                                                                <select class="form-control" name="new_droit" <?php if ($donnees1['fonction'] == 'admin' || $donnees1['droit'] == 'proprietaire') echo "disabled"; ?>>
+                                                                    <option disabled <?php if ($donnees1['droit'] == 'proprietaire') echo "selected"; ?> value="proprietaire">Propriétaire</option>
+                                                                    <option <?php if ($donnees1['droit'] == 'moderateur') echo "selected"; ?> value="moderateur">Modérateur</option>
+                                                                    <option <?php if ($donnees1['droit'] == 'lecteur') echo "selected"; ?> value="lecteur">Lecteur</option>
+                                                                </select>
+
+                                                                <button class="btn btn-outline-secondary" name="new_droit_auth_id" value="<?php echo $donnees1['authId'] ?>" aria-label="Enregistrer le rôle de <?php echo safe_output($donnees1['mail']); ?>" <?php if ($donnees1['fonction'] == 'admin' || $donnees1['droit'] == 'proprietaire') echo "disabled"; ?> type="submit"><i class="bi bi-check-lg" aria-hidden="true"></i></button>
+                                                            </div>
+                                                        </form>
+                                                    </td>
+                                                    <td><?php echo ($datetime->format('d/m/Y H:i:s')) ?></td>
+                                                    <?php
+                                                    if ($donnees['droit'] != "lecteur") {
+                                                        $disable = false;
+                                                        if ($donnees1['droit']  == 'proprietaire') {
+                                                            $disable = true;
+                                                        } elseif ($donnees1['compteId']  == $_SESSION['id_compte']) {
+                                                            $disable = true;
+                                                        }
+                                                    ?>
+                                                        <td>
+                                                            <button type="submit" name="share_delete" value="<?php echo $donnees1['authId'] ?>" class="btn btn-outline-danger" aria-label="Supprimer l'accès de <?php echo safe_output($donnees1['mail']); ?>" <?php if ($disable) echo ('disabled'); ?>>
+                                                                <i class="bi bi-trash" aria-hidden="true"></i>
+                                                            </button>
+                                                        </td>
+                                                    <?php
+                                                    }
+                                                    ?>
+                                                </tr>
+                                            <?php
+                                            }
+
+                                            $response1->closeCursor();
+                                            ?>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                <?php
-                }
-                $response1->closeCursor();
-                ?>
-                <br>
+                    <?php
+                    }
+                    $response1->closeCursor();
+                    ?>
+                    <br>
+                </div>
             </div>
         </div>
-    </div>
+    </main>
 
 </body>
 

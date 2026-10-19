@@ -27,23 +27,23 @@ if (count($notifications) > 0) {
     echo '<div class="toast-container position-fixed bottom-0 end-0 p-5">';
 
     foreach ($notifications as $notification) {
-    $datetime = new DateTime($notification["created_to"]);
-    $notifId = intval($notification["id"]);
-    $notifTitre = safe_output($notification["titre"]);
-    $notifMessage = safe_output($notification["message"]);
-    $notifDate = $datetime->format("d/m/Y H:i");
+        $datetime = new DateTime($notification["created_to"]);
+        $notifId = intval($notification["id"]);
+        $notifTitre = safe_output($notification["titre"]);
+        $notifMessage = safe_output($notification["message"]);
+        $notifDate = $datetime->format("d/m/Y H:i");
 ?>
-    <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true" id="toast-<?php echo $notifId; ?>" data-notif-id="<?php echo $notifId; ?>">
-        <div class="toast-header theme-info">
-            <i class="bi bi-bell me-3"></i>
-            <strong class="me-auto"><?php echo $notifTitre; ?></strong>
-            <small><?php echo $notifDate; ?></small>
-            <button type="button" class="btn-close ms-3 notif-close-btn" aria-label="Fermer"></button>
+        <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true" id="toast-<?php echo $notifId; ?>" data-notif-id="<?php echo $notifId; ?>">
+            <div class="toast-header bg-info-subtle text-info-emphasis">
+                <i class="bi bi-bell me-3"></i>
+                <strong class="me-auto"><?php echo $notifTitre; ?></strong>
+                <small><?php echo $notifDate; ?></small>
+                <button type="button" class="btn-close ms-3 notif-close-btn" aria-label="Fermer"></button>
+            </div>
+            <div class="toast-body">
+                <?php echo $notifMessage; ?>
+            </div>
         </div>
-        <div class="toast-body">
-            <?php echo $notifMessage; ?>
-        </div>
-    </div>
 <?php
     }
 

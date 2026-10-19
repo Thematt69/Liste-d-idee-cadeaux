@@ -20,7 +20,7 @@ include('../../scripts/verif/index.php');
 
     <?php include('../../widgets/navbar/index.php'); ?>
 
-    <main>
+    <main id="main-content" tabindex="-1">
 
         <div class="container">
             <div class="row justify-content-center">

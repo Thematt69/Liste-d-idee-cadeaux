@@ -41,7 +41,7 @@ if (!isset($_SESSION['id_compte'])) {
             <div class="row">
                 <div class="col-12">
                     <br>
-                    <div class="alert theme-danger" role="alert">
+                    <div class="alert alert-danger" role="alert">
                         Nous sommes désolées, mais nous n'avons pas trouvé votre liste. Merci de revenir à <a href="https://family.matthieudevilliers.fr/pages/listes/" class="alert-link">vos listes</a>.<br>
                         Il se peut aussi que vous n'ayez pas les droits nécessaires pour y accéder.
                     </div>

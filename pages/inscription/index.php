@@ -2,7 +2,7 @@
 
 session_start();
 
-include ('../../scripts/verif/index.php');
+include('../../scripts/verif/index.php');
 
 if (isset($_SESSION['id_compte'])) {
     header('Location: https://family.matthieudevilliers.fr/pages/listes/');
@@ -85,29 +85,30 @@ if (isset($_POST['Mail'])) {
 <!DOCTYPE html>
 <html lang="fr" class="h-100">
 
-    <head>
-        <title>Listes d'idées cadeau - Inscription</title>
+<head>
+    <title>Listes d'idées cadeau - Inscription</title>
 
-        <!-- Import -->
-        <?php include ('../../widgets/import/index.php'); ?>
-    </head>
+    <!-- Import -->
+    <?php include('../../widgets/import/index.php'); ?>
+</head>
 
-    <body class="d-flex flex-column h-100">
+<body class="d-flex flex-column h-100">
 
-        <?php include ('../../widgets/navbar/index.php'); ?>
+    <?php include('../../widgets/navbar/index.php'); ?>
 
+    <main id="main-content" tabindex="-1">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="md:col-12 lg:col-8">
+                <div class="col-md-12 col-lg-8">
                     <br>
                     <?php
                     if ($alert) {
-                        ?>
-                        <div class="alert theme-danger fade show" role="alert">
+                    ?>
+                        <div class="alert alert-danger fade show" role="alert">
                             <strong><?php echo $alert; ?></strong>
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
                         </div>
-                        <?php
+                    <?php
                     }
                     ?>
                     <h1 class="text-center">Inscription</h1>
@@ -116,45 +117,45 @@ if (isset($_POST['Mail'])) {
                         <div class="card-body">
                             <form action="" method="post">
                                 <div class="row">
-                                    <div class="md:col-6">
+                                    <div class="col-md-6">
                                         <div class="form-floating">
                                             <label for="LabelPrénom">Prénom</label>
                                             <input name="Prénom" type="text" class="form-control" id="LabelPrénom"
-                                                placeholder="Prénom" required>
+                                                autocomplete="given-name" placeholder="Prénom" required>
                                         </div>
                                         <br>
                                     </div>
-                                    <div class="md:col-6">
+                                    <div class="col-md-6">
                                         <div class="form-floating">
                                             <label for="LabelNom">Nom</label>
                                             <input name="Nom" type="text" class="form-control" id="LabelNom"
-                                                placeholder="Nom" required>
+                                                autocomplete="family-name" placeholder="Nom" required>
                                         </div>
                                         <br>
                                     </div>
-                                    <div class="md:col-6">
+                                    <div class="col-md-6">
                                         <div class="form-floating">
                                             <label for="LabelMDP">Mot de passe</label>
                                             <input name="MDP" type="password" class="form-control" id="LabelMDP"
-                                                aria-describedby="DescriptionMDP" placeholder="Mot de passe" required>
-                                            <small id="DescriptionMDP" class="fg-secondary">Votre mot de passe
+                                                autocomplete="new-password" aria-describedby="DescriptionMDP" placeholder="Mot de passe" required>
+                                            <small id="DescriptionMDP" class="text-secondary">Votre mot de passe
                                                 est enregistré dans un format haché, il est impossible pour nous de le
                                                 récupérer.</small>
                                         </div>
                                         <br>
                                     </div>
-                                    <div class="md:col-6">
+                                    <div class="col-md-6">
                                         <div class="form-floating">
                                             <label for="LabelMail">Adresse mail</label>
                                             <input name="Mail" type="email" class="form-control" id="LabelMail"
-                                                aria-describedby="DescriptionMail" placeholder="Adresse mail" required>
-                                            <small id="DescriptionMail" class="fg-secondary">Votre adresse mail
+                                                autocomplete="email" aria-describedby="DescriptionMail" placeholder="Adresse mail" required>
+                                            <small id="DescriptionMail" class="text-secondary">Votre adresse mail
                                                 nous permet de vous transmet toutes les informations vous
                                                 concernant.</small>
                                         </div>
                                         <br>
                                     </div>
-                                    <div class="md:col-6">
+                                    <div class="col-md-6">
                                         <div class="form-field">
                                             <input name="CGU" class="check" type="checkbox" id="LabelCGU"
                                                 required>
@@ -166,8 +167,8 @@ if (isset($_POST['Mail'])) {
                                         </div>
                                         <br>
                                     </div>
-                                    <div class="md:col-12 text-center">
-                                        <button type="submit" class="btn-solid theme-primary">S'inscrire</button>
+                                    <div class="col-md-12 text-center">
+                                        <button type="submit" class="btn btn-primary">S'inscrire</button>
                                     </div>
                                 </div>
                             </form>
@@ -183,9 +184,10 @@ if (isset($_POST['Mail'])) {
                 </div>
             </div>
         </div>
+    </main>
 
-    </body>
+</body>
 
-    <?php include ('../../widgets/footer/index.php'); ?>
+<?php include('../../widgets/footer/index.php'); ?>
 
 </html>
