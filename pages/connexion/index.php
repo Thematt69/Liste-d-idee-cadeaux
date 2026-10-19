@@ -102,60 +102,62 @@ if (isset($_POST['Mail'])) {
 
     <?php include('../../widgets/navbar/index.php'); ?>
 
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-12 md:col-9 lg:col-6">
-                <br>
-                <?php
-                if ($alert) {
-                ?>
-                    <div class="alert theme-danger fade show" role="alert">
-                        <strong><?php echo $alert; ?></strong>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
-                    </div>
-                <?php
-                }
-                ?>
-                <h1 class="text-center">Connexion</h1>
-                <br>
-                <div class="card">
-                    <div class="card-body">
-                        <form action="" method="post">
-                            <div class="row">
-                                <div class="md:col-12">
-                                    <div class="form-floating">
-                                        <label for="LabelMail">Adresse mail</label>
-                                        <input name="Mail" type="email" class="form-control" id="LabelMail"
-                                            placeholder="name@example.com" required>
-                                    </div>
-                                    <br>
-                                    <div class="form-floating">
-                                        <label for="LabelMDP">Mot de passe</label>
-                                        <input name="MDP" type="password" class="form-control" id="LabelMDP"
-                                            aria-describedby="DescriptionMDP" placeholder="Mot de passe" required>
-                                        <small id="DescriptionMDP" class="fg-secondary"><a
-                                                href="https://family.matthieudevilliers.fr/pages/reset-password/">Mot
-                                                de passe oublié</a></small>
-                                    </div>
-                                    <br>
-                                    <div class="text-center">
-                                        <button type="submit" class="btn-solid theme-primary">Se connecter</button>
+    <main id="main-content" tabindex="-1">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-9 col-lg-6">
+                    <br>
+                    <?php
+                    if ($alert) {
+                    ?>
+                        <div class="alert alert-danger fade show" role="alert">
+                            <strong><?php echo $alert; ?></strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+                        </div>
+                    <?php
+                    }
+                    ?>
+                    <h1 class="text-center">Connexion</h1>
+                    <br>
+                    <div class="card">
+                        <div class="card-body">
+                            <form action="" method="post">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-floating">
+                                            <label for="LabelMail">Adresse mail</label>
+                                            <input name="Mail" type="email" class="form-control" id="LabelMail"
+                                                autocomplete="email" placeholder="name@example.com" required>
+                                        </div>
+                                        <br>
+                                        <div class="form-floating">
+                                            <label for="LabelMDP">Mot de passe</label>
+                                            <input name="MDP" type="password" class="form-control" id="LabelMDP"
+                                                autocomplete="current-password" aria-describedby="DescriptionMDP" placeholder="Mot de passe" required>
+                                            <small id="DescriptionMDP" class="text-secondary"><a
+                                                    href="https://family.matthieudevilliers.fr/pages/reset-password/">Mot
+                                                    de passe oublié</a></small>
+                                        </div>
+                                        <br>
+                                        <div class="text-center">
+                                            <button type="submit" class="btn btn-primary">Se connecter</button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
+                    <br>
+                    <div class="text-center">
+                        <a href="https://family.matthieudevilliers.fr/pages/inscription/">
+                            Pas de compte ? Je m'inscris
+                        </a>
+                    </div>
+                    <br>
                 </div>
-                <br>
-                <div class="text-center">
-                    <a href="https://family.matthieudevilliers.fr/pages/inscription/">
-                        Pas de compte ? Je m'inscris
-                    </a>
-                </div>
-                <br>
             </div>
         </div>
-    </div>
+    </main>
 
 </body>
 

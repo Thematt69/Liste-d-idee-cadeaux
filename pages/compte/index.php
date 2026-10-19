@@ -98,136 +98,138 @@ if (isset($_POST['Mail'])) {
 
     <?php include('../../widgets/navbar/index.php'); ?>
 
-    <div class="container">
-        <div class="row">
-            <div class="md:col-12">
-                <br>
-                <?php
-                if ($alert) {
-                ?>
-                    <div class="alert theme-danger fade show" role="alert">
-                        <strong><?php echo $alert; ?></strong>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
-                    </div>
-                <?php
-                } elseif ($info) {
-                ?>
-                    <div class="alert theme-success fade show" role="alert">
-                        <?php echo $info; ?>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
-                    </div>
-                <?php
-                }
+    <main id="main-content" tabindex="-1">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <br>
+                    <?php
+                    if ($alert) {
+                    ?>
+                        <div class="alert alert-danger fade show" role="alert">
+                            <strong><?php echo $alert; ?></strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+                        </div>
+                    <?php
+                    } elseif ($info) {
+                    ?>
+                        <div class="alert alert-success fade show" role="alert">
+                            <?php echo $info; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+                        </div>
+                    <?php
+                    }
 
-                $sql = 'SELECT prenom,nom,mail
+                    $sql = 'SELECT prenom,nom,mail
                         FROM lic_compte
                         WHERE id = ? AND deleted_to IS NULL';
 
-                $response = $bdd->prepare($sql);
-                $response->execute(array($_SESSION['id_compte']));
+                    $response = $bdd->prepare($sql);
+                    $response->execute(array($_SESSION['id_compte']));
 
-                $donnees = $response->fetch();
+                    $donnees = $response->fetch();
 
-                ?>
-                <h1 class="text-center"><?php echo safe_output($donnees['prenom'] . " " . strtoupper($donnees['nom'])); ?></h1>
-                <br>
-                <div class="card">
-                    <div class="card-body">
-                        <form action="" method="post">
-                            <div class="row">
-                                <div class="md:col-6 xl:col-4">
-                                    <div class="form-floating">
-                                        <label for="LabelPrénom">Prénom</label>
-                                        <input name="Prénom" type="text" class="form-control" id="LabelPrénom" placeholder="Prénom" value="<?php echo safe_output($donnees['prenom']) ?>" required>
+                    ?>
+                    <h1 class="text-center"><?php echo safe_output($donnees['prenom'] . " " . strtoupper($donnees['nom'])); ?></h1>
+                    <br>
+                    <div class="card">
+                        <div class="card-body">
+                            <form action="" method="post">
+                                <div class="row">
+                                    <div class="col-md-6 col-xl-4">
+                                        <div class="form-floating">
+                                            <label for="LabelPrénom">Prénom</label>
+                                            <input name="Prénom" type="text" class="form-control" id="LabelPrénom" autocomplete="given-name" placeholder="Prénom" value="<?php echo safe_output($donnees['prenom']) ?>" required>
+                                        </div>
+                                        <br>
                                     </div>
-                                    <br>
-                                </div>
-                                <div class="md:col-6 xl:col-4">
-                                    <div class="form-floating">
-                                        <label for="LabelNom">Nom</label>
-                                        <input name="Nom" type="text" class="form-control" id="LabelNom" placeholder="Nom" value="<?php echo safe_output($donnees['nom']) ?>" required>
+                                    <div class="col-md-6 col-xl-4">
+                                        <div class="form-floating">
+                                            <label for="LabelNom">Nom</label>
+                                            <input name="Nom" type="text" class="form-control" id="LabelNom" autocomplete="family-name" placeholder="Nom" value="<?php echo safe_output($donnees['nom']) ?>" required>
+                                        </div>
+                                        <br>
                                     </div>
-                                    <br>
-                                </div>
-                                <div class="md:col-6 xl:col-4">
-                                    <div class="form-floating">
-                                        <label for="LabelMDP">Mot de passe actuel</label>
-                                        <input name="MDP" type="password" class="form-control" id="LabelMDP" aria-describedby="DescriptionMDP" placeholder="Mot de passe" required>
-                                        <small id="DescriptionMDP" class="fg-secondary">Votre mot de passe est enregistré dans un format haché, il est impossible pour nous de le récupérer.</small>
+                                    <div class="col-md-6 col-xl-4">
+                                        <div class="form-floating">
+                                            <label for="LabelMDP">Mot de passe actuel</label>
+                                            <input name="MDP" type="password" class="form-control" id="LabelMDP" autocomplete="current-password" aria-describedby="DescriptionMDP" placeholder="Mot de passe" required>
+                                            <small id="DescriptionMDP" class="text-secondary">Votre mot de passe est enregistré dans un format haché, il est impossible pour nous de le récupérer.</small>
+                                        </div>
+                                        <br>
                                     </div>
-                                    <br>
-                                </div>
-                                <div class="md:col-6 xl:col-4">
-                                    <div class="form-floating">
-                                        <label for="LabelNewMDP">Nouveau mot de passe</label>
-                                        <input name="NewMDP" type="password" class="form-control" id="LabelNewMDP" aria-describedby="DescriptionMDP" placeholder="Nouveau mot de passe">
+                                    <div class="col-md-6 col-xl-4">
+                                        <div class="form-floating">
+                                            <label for="LabelNewMDP">Nouveau mot de passe</label>
+                                            <input name="NewMDP" type="password" class="form-control" id="LabelNewMDP" autocomplete="new-password" aria-describedby="DescriptionMDP" placeholder="Nouveau mot de passe">
+                                        </div>
+                                        <br>
                                     </div>
-                                    <br>
-                                </div>
-                                <div class="md:col-12 xl:col-8">
-                                    <div class="form-floating">
-                                        <label for="LabelMail">Adresse mail</label>
-                                        <input name="Mail" type="email" class="form-control" id="LabelMail" aria-describedby="DescriptionMail" placeholder="Adresse mail" value="<?php echo safe_output($donnees['mail']) ?>" required>
-                                        <small id="DescriptionMail" class="fg-secondary">Votre adresse mail nous permet de vous transmet toutes les informations vous concernant.</small>
+                                    <div class="col-md-12 col-xl-8">
+                                        <div class="form-floating">
+                                            <label for="LabelMail">Adresse mail</label>
+                                            <input name="Mail" type="email" class="form-control" id="LabelMail" autocomplete="email" aria-describedby="DescriptionMail" placeholder="Adresse mail" value="<?php echo safe_output($donnees['mail']) ?>" required>
+                                            <small id="DescriptionMail" class="text-secondary">Votre adresse mail nous permet de vous transmet toutes les informations vous concernant.</small>
+                                        </div>
+                                        <br>
                                     </div>
-                                    <br>
+                                    <div class="col-md-12 text-center">
+                                        <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+                                    </div>
                                 </div>
-                                <div class="md:col-12 text-center">
-                                    <button type="submit" class="btn-solid theme-primary">Enregistrer les modifications</button>
-                                </div>
-                            </div>
-                            <?php $response->closeCursor(); ?>
-                        </form>
+                                <?php $response->closeCursor(); ?>
+                            </form>
+                        </div>
                     </div>
-                </div>
-                <br>
-                <h3 class="text-center">Historique de connexion</h3>
-                <p class="text-center">
-                    <small>10 dernières connexions uniquement</small>
-                </p>
-                <div class="card">
-                    <div class="card-body text-center">
-                        <div class="table-responsive">
-                            <table class="table text-center align-middle">
-                                <thead>
-                                    <tr>
-                                        <th class="col">Date</th>
-                                        <th class="col">Adresse IP</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
+                    <br>
+                    <h3 id="historique-connexion" class="text-center">Historique de connexion</h3>
+                    <p class="text-center">
+                        <small>10 dernières connexions uniquement</small>
+                    </p>
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <div class="table-responsive">
+                                <table class="table text-center align-middle" aria-labelledby="historique-connexion">
+                                    <thead>
+                                        <tr>
+                                            <th class="col" scope="col">Date</th>
+                                            <th class="col" scope="col">Adresse IP</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
 
-                                    $sql1 = 'SELECT  connected_to,adresse_ip_v4
+                                        $sql1 = 'SELECT  connected_to,adresse_ip_v4
                                             FROM lic_connexion
                                             WHERE id_compte = ?
                                             ORDER BY connected_to DESC
                                             LIMIT 10';
 
-                                    $response1 = $bdd->prepare($sql1);
-                                    $response1->execute(array($_SESSION['id_compte']));
+                                        $response1 = $bdd->prepare($sql1);
+                                        $response1->execute(array($_SESSION['id_compte']));
 
-                                    while ($donnees = $response1->fetch()) {
-                                        $datatime = new DateTime($donnees['connected_to']);
-                                    ?>
-                                        <tr>
-                                            <td><?php echo safe_output($datatime->format('d/m/Y H:i:s')) ?></td>
-                                            <td><?php echo safe_output($donnees['adresse_ip_v4']) ?></td>
-                                        </tr>
-                                    <?php
-                                    }
+                                        while ($donnees = $response1->fetch()) {
+                                            $datatime = new DateTime($donnees['connected_to']);
+                                        ?>
+                                            <tr>
+                                                <td><?php echo safe_output($datatime->format('d/m/Y H:i:s')) ?></td>
+                                                <td><?php echo safe_output($donnees['adresse_ip_v4']) ?></td>
+                                            </tr>
+                                        <?php
+                                        }
 
-                                    $response1->closeCursor();
-                                    ?>
-                                </tbody>
-                            </table>
+                                        $response1->closeCursor();
+                                        ?>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
+                    <br>
                 </div>
-                <br>
             </div>
         </div>
-    </div>
+    </main>
 
 </body>
 

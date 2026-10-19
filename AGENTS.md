@@ -1,52 +1,33 @@
-# AGENTS.md
+# Instructions pour les agents
 
-This repo is a PHP monolith, not a framework app. Most work happens in plain PHP pages under `pages/`, shared UI in `widgets/`, and database/session setup in `scripts/verif/index.php`.
+Ces règles s'appliquent à tout le dépôt. Garder `AGENTS.md` comme socle commun; les fichiers propres à un outil peuvent ajouter des règles ciblées sans dupliquer ces conventions générales.
 
-## What to know first
+## Projet
 
-- Start the app from the project root with `php -S localhost:8000`.
-- The site enforces HTTPS in `scripts/verif/index.php`; redirects use the production hostname, so local testing usually needs a TLS proxy or a temporary local bypass.
-- Authentication uses `$_SESSION['id_compte']` and checks are normally done before page logic.
-- All DB access should use the existing `$bdd` PDO connection from `scripts/verif/index.php`; do not create a second database connection in page files.
+- Application PHP procédurale, sans framework. Les pages sont dans `pages/`; logique partagée dans `scripts/`; éléments communs dans `widgets/`; ressources statiques dans `css/` et `js/`.
+- `scripts/verif/index.php` configure la session, impose HTTPS, initialise le PDO global `$bdd` et définit des helpers comme `safe_output()`.
+- L'identité de session repose surtout sur `$_SESSION['id_compte']`. Les droits sur les listes sont gérés par `lic_autorisation`.
+- Les suppressions sont généralement logiques via `deleted_to`.
 
-## Repo conventions
+## Conventions de modification
 
-- Follow the established include pattern: `session_start();` and then `include('../../scripts/verif/index.php');` (adjust the relative path for each folder).
-- Use prepared statements with positional `?` placeholders and arrays passed to `execute(...)`.
-- Close cursors when the pattern already does so (`$response->closeCursor()`).
-- Preserve soft-delete semantics: many queries filter `deleted_to IS NULL` and should keep that condition unless the feature intentionally changes deletion behavior.
-- Preserved permission checks use `lic_autorisation` with fields like `id_liste`, `id_compte`, and `type` (`proprietaire`, `moderateur`, `lecteur`).
-- Preserve absolute URLs for links and redirects unless the repo is intentionally being migrated to a different routing model.
+- Lire la page visée et un exemple voisin avant de modifier. Les pages mêlent souvent PHP, SQL et HTML; limiter les changements au besoin demandé.
+- Réutiliser `$bdd`; ne pas créer de nouvelle connexion PDO dans une page. Utiliser des requêtes préparées, des paramètres liés et fermer les curseurs selon les usages du fichier.
+- Respecter les contrôles d'accès existants et vérifier côté serveur les données GET/POST. Vérifier le résultat de `fetch()` avant d'accéder à ses champs.
+- Pour les valeurs non fiables rendues en HTML, utiliser `safe_output()` ou l'échappement adapté au contexte. Ne pas confondre échappement HTML et protection SQL.
+- Toute redirection `header('Location: ...')` doit être suivie immédiatement de `exit()`.
+- Préserver le démarrage de session et les inclusions déjà utilisés dans la page. Pour les lectures, respecter les filtres `deleted_to IS NULL` quand ils s'appliquent.
+- Les routes utilisent parfois l'hôte de production, tandis que les ressources partagées utilisent des chemins comme `/css/` et `/js/`. Suivre le contexte local; ne pas normaliser les URL à l'échelle du site sans demande explicite.
 
-## Security rules
+## Vérification et développement local
 
-- Escape output with `htmlspecialchars($var, ENT_QUOTES, 'UTF-8')` or the existing `safe_output()` helper when outputting user-controlled values.
-- Always call `exit()` immediately after `header('Location: ...')`.
-- Validate required GET/POST parameters before use.
-- Check `$response->fetch()` results for `null` before array access.
-- Do not commit or add new database credentials, secrets, or production tokens.
+- Aucun gestionnaire de dépendances ni lanceur de tests automatisés n'est présent actuellement.
+- Pour un fichier PHP modifié, lancer `php -l chemin/du/fichier.php`; contrôler aussi `git diff --check`.
+- Le serveur intégré peut être lancé depuis la racine avec `php -S localhost:8000`. L'inclusion de vérification redirige le HTTP vers le site de production; utiliser un environnement HTTPS local ou un proxy TLS pour tester. Ne jamais désactiver cette redirection dans un changement destiné à la production.
+- `.github/workflows/deploy.yml` déploie par FTP sur la production après un push sur `main`. Traiter toute modification du déploiement comme une modification de production.
 
-## Useful references
+## Sécurité et intégrations
 
-- `README.md` — project notes and security updates.
-- `scripts/verif/index.php` — DB connection, HTTPS enforcement, session setup, and helper functions.
-- `pages/idees/index.php` — permission and listing logic example.
-- `pages/listes/index.php` — list access and authorization flow.
-- `widgets/import/index.php` and `widgets/navbar/index.php` — shared UI and bootstrap imports.
-
-## Editing guidance
-
-- Prefer small, targeted edits in the existing page/widget structure.
-- Keep behavior consistent with the site's server-rendered, Bootstrap-based layout.
-- If you change routes, links, or auth behavior, update all related pages in the same pass.
-- When in doubt, match the surrounding file's established PHP patterns instead of introducing a new abstraction.
-
-## Local testing
-
-From the project root:
-
-```bash
-php -S localhost:8000
-```
-
-If HTTPS redirects block local testing, either temporarily bypass the redirect in `scripts/verif/index.php` or run behind a TLS-capable proxy.
+- `scripts/verif/index.php` contient des identifiants sensibles en dur. Ne jamais les recopier dans les instructions, les sorties ou d'autres fichiers; ne pas modifier ce mécanisme sans besoin explicite.
+- `scripts/mail/index.php` envoie les courriels via `mail()` et ajoute actuellement le webmaster en copie cachée. En tenir compte lors de toute modification des courriels.
+- Consulter [README.md](README.md) pour les informations de projet déjà documentées; éviter de les recopier ici.

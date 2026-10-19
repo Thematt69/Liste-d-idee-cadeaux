@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="/css/bootstrap-icons/bootstrap-icons.css">
 
 <!-- Bootstrap JS -->
-<script type="module" src="/js/bootstrap.bundle.min.js"></script>
+<script src="/js/bootstrap.bundle.min.js" defer></script>
 
 <!-- Bootstrap -->
 <script src="/js/jquery.min.js"></script>

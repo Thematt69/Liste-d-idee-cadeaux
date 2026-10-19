@@ -113,105 +113,107 @@ if (isset($_POST['Comptes'])) {
 
     <?php include('../../widgets/navbar/index.php'); ?>
 
-    <div class="container">
-        <div class="row">
-            <div class="md:col-12">
-                <br>
-                <?php
-                if ($alert) {
-                ?>
-                    <div class="alert theme-danger fade show" role="alert">
-                        <strong><?php echo $alert; ?></strong>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
-                    </div>
-                <?php
-                } elseif ($info) {
-                ?>
-                    <div class="alert theme-success fade show" role="alert">
-                        <?php echo $info; ?>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
-                    </div>
-                <?php
-                }
-                ?>
-                <h1 class="text-center">Panel Admin</h1>
-                <br>
-                <h3 class="text-center">Notification</h3>
-                <br>
-                <div class="card">
-                    <div class="card-body">
-                        <form action="" method="post">
-                            <div class="row">
-                                <div class="md:col-5">
-                                    <div class="form-floating">
-                                        <label for="LabelTitre">Titre</label>
-                                        <input name="Titre" type="text" class="form-control" id="LabelTitre" placeholder="Titre" required>
+    <main id="main-content" tabindex="-1">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <br>
+                    <?php
+                    if ($alert) {
+                    ?>
+                        <div class="alert alert-danger fade show" role="alert">
+                            <strong><?php echo $alert; ?></strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+                        </div>
+                    <?php
+                    } elseif ($info) {
+                    ?>
+                        <div class="alert alert-success fade show" role="alert">
+                            <?php echo $info; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+                        </div>
+                    <?php
+                    }
+                    ?>
+                    <h1 class="text-center">Panel Admin</h1>
+                    <br>
+                    <h3 class="text-center">Notification</h3>
+                    <br>
+                    <div class="card">
+                        <div class="card-body">
+                            <form action="" method="post">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="form-floating">
+                                            <label for="LabelTitre">Titre</label>
+                                            <input name="Titre" type="text" class="form-control" id="LabelTitre" placeholder="Titre" required>
+                                        </div>
+                                        <br>
                                     </div>
-                                    <br>
-                                </div>
-                                <div class="md:col-7">
-                                    <select class="form-control" name="Comptes[]" multiple required>
-                                        <option selected value="tous">Tous les comptes</option>
-                                        <?php
+                                    <div class="col-md-7">
+                                        <select class="form-control" name="Comptes[]" multiple required>
+                                            <option selected value="tous">Tous les comptes</option>
+                                            <?php
 
-                                        $sql1 = 'SELECT id,prenom,nom,mail
+                                            $sql1 = 'SELECT id,prenom,nom,mail
                                                 FROM lic_compte
                                                 WHERE deleted_to IS NULL';
 
-                                        $response1 = $bdd->prepare($sql1);
-                                        $response1->execute(array());
+                                            $response1 = $bdd->prepare($sql1);
+                                            $response1->execute(array());
 
-                                        while ($donnees = $response1->fetch()) {
-                                        ?>
-                                            <option value="<?php echo ($donnees['id']) ?>"><?php echo ($donnees['prenom'] . " " . strtoupper($donnees['nom']) . " - " . $donnees['mail']); ?></option>
-                                        <?php
-                                        }
+                                            while ($donnees = $response1->fetch()) {
+                                            ?>
+                                                <option value="<?php echo ($donnees['id']) ?>"><?php echo ($donnees['prenom'] . " " . strtoupper($donnees['nom']) . " - " . $donnees['mail']); ?></option>
+                                            <?php
+                                            }
 
-                                        $response1->closeCursor();
+                                            $response1->closeCursor();
 
-                                        ?>
-                                    </select>
-                                    <br>
-                                </div>
-                                <div class="md:col-12">
-                                    <div class="form-floating">
-                                        <label for="LabelMessage">Message</label>
-                                        <textarea name="Message" class="form-control" id="LabelMessage" aria-describedby="DescriptionMessage" placeholder="Message" required></textarea>
+                                            ?>
+                                        </select>
+                                        <br>
                                     </div>
-                                    <br>
-                                </div>
-                                <div class="md:col-12">
-                                    <div class="text-center">
-                                        <button type="submit" class="btn-solid theme-primary">Créer & Envoyer</button>
+                                    <div class="col-md-12">
+                                        <div class="form-floating">
+                                            <label for="LabelMessage">Message</label>
+                                            <textarea name="Message" class="form-control" id="LabelMessage" aria-describedby="DescriptionMessage" placeholder="Message" required></textarea>
+                                        </div>
+                                        <br>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="text-center">
+                                            <button type="submit" class="btn btn-primary">Créer & Envoyer</button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                    </div>
-                    </form>
-                </div>
-                <br>
-                <h3 class="text-center">Maintenance</h3>
-                <br>
-                <div class="card">
-                    <div class="card-body">
-                        <h5>Nettoyage de l'historique de connexion</h5>
-                        <p style="color: #666; font-size: 14px;">
-                            Supprime les connexions de plus d'un an et conserve seulement les 10 dernières par utilisateur.
-                        </p>
-                        <form action="" method="post" style="display: inline;">
-                            <button type="submit" name="cleanup_connexions" value="1" class="btn-solid theme-warning">
-                                🧹 Nettoyer l'historique
-                            </button>
+                        </div>
                         </form>
-                        <p style="color: #999; font-size: 12px; margin-top: 10px;">
-                            ⚠️ Cette opération ne peut pas être annulée
-                        </p>
+                    </div>
+                    <br>
+                    <h3 class="text-center">Maintenance</h3>
+                    <br>
+                    <div class="card">
+                        <div class="card-body">
+                            <h5>Nettoyage de l'historique de connexion</h5>
+                            <p style="color: #666; font-size: 14px;">
+                                Supprime les connexions de plus d'un an et conserve seulement les 10 dernières par utilisateur.
+                            </p>
+                            <form action="" method="post" style="display: inline;">
+                                <button type="submit" name="cleanup_connexions" value="1" class="btn btn-warning">
+                                    🧹 Nettoyer l'historique
+                                </button>
+                            </form>
+                            <p style="color: #595959; font-size: 12px; margin-top: 10px;">
+                                ⚠️ Cette opération ne peut pas être annulée
+                            </p>
+                        </div>
                     </div>
                 </div>
+                <br>
             </div>
-            <br>
         </div>
-    </div>
+    </main>
 
 </body>
 

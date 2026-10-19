@@ -4,7 +4,7 @@
 
 ### Version des composants
 
-- **Bootstrap:** v6.0.0-alpha.1
+- **Bootstrap:** v5.3.8
 - **jQuery:** v3.7.1
 
 ### Améliorations de sécurité implémentées

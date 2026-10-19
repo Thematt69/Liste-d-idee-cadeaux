@@ -11,7 +11,7 @@
 
     <?php include('../../widgets/navbar/index.php'); ?>
 
-    <main class="container py-4">
+    <main id="main-content" class="container py-4" tabindex="-1">
         <h1 class="text-center">Conditions générales d'utilisation</h1>
 
         <p>

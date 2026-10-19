@@ -300,183 +300,185 @@ if (isset($_POST['delete'])) {
 
     <?php include('../../widgets/navbar/index.php'); ?>
 
-    <div class="container">
-        <div class="row  justify-content-center">
-            <div class="md:col-12 lg:col-8">
-                <br>
-                <?php
+    <main id="main-content" tabindex="-1">
+        <div class="container">
+            <div class="row  justify-content-center">
+                <div class="col-md-12 col-lg-8">
+                    <br>
+                    <?php
 
-                if ($_GET['idee']) {
-                    $sql = 'SELECT lic_autorisation.type as droit, lic_liste.lien_partage as partage
+                    if ($_GET['idee']) {
+                        $sql = 'SELECT lic_autorisation.type as droit, lic_liste.lien_partage as partage
                             FROM lic_autorisation
                             INNER JOIN lic_idee ON lic_idee.id_liste = lic_autorisation.id_liste
                             INNER JOIN lic_liste ON lic_liste.id = lic_autorisation.id_liste
                             WHERE lic_autorisation.id_compte = ? AND lic_idee.id = ? AND lic_idee.deleted_to IS NULL AND lic_liste.deleted_to IS NULL';
-                } else {
-                    $sql = 'SELECT lic_autorisation.type as droit, lic_liste.lien_partage as partage
+                    } else {
+                        $sql = 'SELECT lic_autorisation.type as droit, lic_liste.lien_partage as partage
                             FROM lic_autorisation
                             INNER JOIN lic_liste ON lic_liste.id = lic_autorisation.id_liste
                             WHERE lic_autorisation.id_compte = ? AND lic_liste.lien_partage = ? AND lic_liste.deleted_to IS NULL';
-                }
+                    }
 
-                $response1 = $bdd->prepare($sql);
-                $response1->execute(array($_SESSION['id_compte'], $_GET['idee'] ?? $_GET['liste']));
+                    $response1 = $bdd->prepare($sql);
+                    $response1->execute(array($_SESSION['id_compte'], $_GET['idee'] ?? $_GET['liste']));
 
-                $donnee = $response1->fetch();
+                    $donnee = $response1->fetch();
 
-                if (isset($_GET['idee']) && ($donnee == null || $donnee['droit'] == "lecteur")) {
-                ?>
-                    <div class="container">
-                        <div class="row">
-                            <div class="sm:col-12">
-                                <br>
-                                <div class="alert theme-danger" role="alert">
-                                    <strong>Vous n'avez pas les droits !</strong> Nous sommes désolées, mais il semblerait que vous n'ayez pas les droits pour cette idée. Merci de revenir à <a href="https://family.matthieudevilliers.fr/pages/listes/" class="alert-link">vos listes</a>.
+                    if (isset($_GET['idee']) && ($donnee == null || $donnee['droit'] == "lecteur")) {
+                    ?>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <br>
+                                    <div class="alert alert-danger" role="alert">
+                                        <strong>Vous n'avez pas les droits !</strong> Nous sommes désolées, mais il semblerait que vous n'ayez pas les droits pour cette idée. Merci de revenir à <a href="https://family.matthieudevilliers.fr/pages/listes/" class="alert-link">vos listes</a>.
+                                    </div>
+                                    <br>
                                 </div>
-                                <br>
                             </div>
                         </div>
-                    </div>
 
-                <?php
-                } elseif (!isset($_GET['liste']) && !isset($_GET['idee'])) {
-                ?>
-                    <div class="container">
-                        <div class="row">
-                            <div class="sm:col-12">
-                                <br>
-                                <div class="alert theme-danger" role="alert">
-                                    <strong>Idée introuvable !</strong> Nous sommes désolées, mais nous n'avons pas trouvé votre idée. Merci de revenir à <a href="https://family.matthieudevilliers.fr/pages/listes/" class="alert-link">vos listes</a>.
+                    <?php
+                    } elseif (!isset($_GET['liste']) && !isset($_GET['idee'])) {
+                    ?>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <br>
+                                    <div class="alert alert-danger" role="alert">
+                                        <strong>Idée introuvable !</strong> Nous sommes désolées, mais nous n'avons pas trouvé votre idée. Merci de revenir à <a href="https://family.matthieudevilliers.fr/pages/listes/" class="alert-link">vos listes</a>.
+                                    </div>
+                                    <br>
                                 </div>
-                                <br>
                             </div>
                         </div>
-                    </div>
-                <?php
-                } else {
+                    <?php
+                    } else {
 
-                    $sql = 'SELECT id, nom, commentaire, lien, is_buy, buy_from, price
+                        $sql = 'SELECT id, nom, commentaire, lien, is_buy, buy_from, price
                         FROM lic_idee
                         WHERE id = ? AND deleted_to IS NULL';
 
-                    $response = $bdd->prepare($sql);
-                    $response->execute(array($_GET['idee']));
+                        $response = $bdd->prepare($sql);
+                        $response->execute(array($_GET['idee']));
 
-                    $donnees = $response->fetch();
+                        $donnees = $response->fetch();
 
-                    $isModif = isset($_GET['idee']) && $donnees != null;
+                        $isModif = isset($_GET['idee']) && $donnees != null;
 
-                    if ($isModif) {
-                        echo ('<h1 class="text-center">Modification d\'une idée</h1>');
-                    } else {
-                        echo ('<h1 class="text-center">Création d\'une idée</h1>');
-                    }
-                ?>
-                    <br>
-                    <div class="card">
-                        <div class="card-body">
-                            <form action="" method="post">
-                                <div class="row">
-                                    <div class="md:col-7">
-                                        <div class="form-floating">
-                                            <label for="LabelNom">Nom de l'idée *</label>
-                                            <input name="Nom" type="text" value="<?php echo ($donnees['nom']) ?>" class="form-control" id="LabelNom" placeholder="Nom de l'idée" required>
+                        if ($isModif) {
+                            echo ('<h1 class="text-center">Modification d\'une idée</h1>');
+                        } else {
+                            echo ('<h1 class="text-center">Création d\'une idée</h1>');
+                        }
+                    ?>
+                        <br>
+                        <div class="card">
+                            <div class="card-body">
+                                <form action="" method="post">
+                                    <div class="row">
+                                        <div class="col-md-7">
+                                            <div class="form-floating">
+                                                <label for="LabelNom">Nom de l'idée *</label>
+                                                <input name="Nom" type="text" value="<?php echo ($donnees['nom']) ?>" class="form-control" id="LabelNom" placeholder="Nom de l'idée" required>
+                                            </div>
+                                            <br>
                                         </div>
-                                        <br>
-                                    </div>
-                                    <div class="md:col-5">
-                                        <div class="form-floating">
-                                            <label for="LabelPrix">Prix de l'idée</label>
-                                            <input name="Prix" type="text" value="<?php echo ($donnees['price']) ?>" class="form-control" id="LabelPrix" placeholder="Prix de l'idée">
+                                        <div class="col-md-5">
+                                            <div class="form-floating">
+                                                <label for="LabelPrix">Prix de l'idée</label>
+                                                <input name="Prix" type="text" value="<?php echo ($donnees['price']) ?>" class="form-control" id="LabelPrix" placeholder="Prix de l'idée">
+                                            </div>
+                                            <br>
                                         </div>
-                                        <br>
-                                    </div>
-                                    <div class="md:col-12">
-                                        <div class="form-floating">
-                                            <label for="LabelCommentaire">Commentaire</label>
-                                            <input name="Commentaire" type="text" value="<?php echo ($donnees['commentaire']) ?>" class="form-control" id="LabelCommentaire" placeholder="Commentaire">
+                                        <div class="col-md-12">
+                                            <div class="form-floating">
+                                                <label for="LabelCommentaire">Commentaire</label>
+                                                <input name="Commentaire" type="text" value="<?php echo ($donnees['commentaire']) ?>" class="form-control" id="LabelCommentaire" placeholder="Commentaire">
+                                            </div>
+                                            <br>
                                         </div>
-                                        <br>
-                                    </div>
-                                    <div class="md:col-7">
-                                        <div class="form-floating">
-                                            <label for="LabelLien">Lien de l'idée</label>
-                                            <input name="Lien" type="url" value="<?php echo ($donnees['lien']) ?>" class="form-control" id="LabelLien" placeholder="Lien de l'idée">
+                                        <div class="col-md-7">
+                                            <div class="form-floating">
+                                                <label for="LabelLien">Lien de l'idée</label>
+                                                <input name="Lien" type="url" value="<?php echo ($donnees['lien']) ?>" class="form-control" id="LabelLien" placeholder="Lien de l'idée">
+                                            </div>
+                                            <br>
                                         </div>
-                                        <br>
-                                    </div>
-                                    <div class="md:col-5">
-                                        <div class="form-field">
-                                            <?php
-
-                                            if ($donnee['droit'] == "proprietaire") {
-                                            ?>
-                                                <input name="Achat" value="1" class="check" type="checkbox" id="LabelAchat" <?php if ($donnees['is_buy']) echo 'checked' ?>>
-                                                <label for="LabelAchat">
-                                                    J'ai acheté cette idée
-                                                </label>
+                                        <div class="col-md-5">
+                                            <div class="form-field">
                                                 <?php
-                                            } else {
-                                                if ($donnees['is_buy']) {
+
+                                                if ($donnee['droit'] == "proprietaire") {
                                                 ?>
-                                                    <input class="check" type="checkbox" id="LabelAchat" checked disabled>
+                                                    <input name="Achat" value="1" class="check" type="checkbox" id="LabelAchat" <?php echo $donnees['is_buy'] ? 'checked' : ''; ?>>
                                                     <label for="LabelAchat">
-                                                        Déjà acheté par le propriétaire
+                                                        J'ai acheté cette idée
                                                     </label>
-                                                <?php
-                                                } elseif (isset($donnees['buy_from']) && $donnees['buy_from'] != $_SESSION['id_compte']) {
-                                                ?>
-                                                    <input name="AchatFrom" value="1" class="check" type="checkbox" id="LabelAchat" checked disabled>
-                                                    <label for="LabelAchat">
-                                                        Déjà réservé
-                                                    </label>
-                                                <?php
+                                                    <?php
                                                 } else {
-                                                ?>
-                                                    <input name="AchatFrom" value="1" class="check" type="checkbox" id="LabelAchat" <?php if ($donnees['buy_from'] == $_SESSION['id_compte']) echo 'checked' ?>>
-                                                    <label for="LabelAchat">
-                                                        Je réserve cette idée
-                                                    </label>
-                                            <?php
+                                                    if ($donnees['is_buy']) {
+                                                    ?>
+                                                        <input class="check" type="checkbox" id="LabelAchat" checked disabled>
+                                                        <label for="LabelAchat">
+                                                            Déjà acheté par le propriétaire
+                                                        </label>
+                                                    <?php
+                                                    } elseif (isset($donnees['buy_from']) && $donnees['buy_from'] != $_SESSION['id_compte']) {
+                                                    ?>
+                                                        <input name="AchatFrom" value="1" class="check" type="checkbox" id="LabelAchat" checked disabled>
+                                                        <label for="LabelAchat">
+                                                            Déjà réservé
+                                                        </label>
+                                                    <?php
+                                                    } else {
+                                                    ?>
+                                                        <input name="AchatFrom" value="1" class="check" type="checkbox" id="LabelAchat" <?php echo $donnees['buy_from'] == $_SESSION['id_compte'] ? 'checked' : ''; ?>>
+                                                        <label for="LabelAchat">
+                                                            Je réserve cette idée
+                                                        </label>
+                                                <?php
+                                                    }
                                                 }
+                                                ?>
+                                            </div>
+                                            <br>
+                                        </div>
+                                        <div class="btn-group" role="group">
+                                            <div class="col-md-8 text-center">
+                                                <button type="submit" name="save" value="<?php echo $donnees['id'] ?>" class="btn btn-primary">Enregistrer</button>
+                                                <a class="btn btn-secondary" href="https://family.matthieudevilliers.fr/pages/idees/?liste=<?php echo $_GET['liste'] ?? $donnee['partage']; ?>">
+                                                    Annuler
+                                                </a>
+                                            </div>
+                                            <?php
+                                            if (isset($_GET['idee']) && $donnees != null && $donnee['droit'] == "proprietaire") {
+                                            ?>
+                                                <br>
+                                                <br>
+                                                <div class="col-md-4 text-center">
+                                                    <button type="submit" name="delete" value="<?php echo $donnees['id'] ?>" class="btn btn-danger">Supprimer</button>
+                                                </div>
+                                            <?php
                                             }
                                             ?>
                                         </div>
-                                        <br>
                                     </div>
-                                    <div class="btn-group" role="group">
-                                        <div class="md:col-8 text-center">
-                                            <button type="submit" name="save" value="<?php echo $donnees['id'] ?>" class="btn-solid theme-primary">Enregistrer</button>
-                                            <a class="btn-solid theme-secondary" href="https://family.matthieudevilliers.fr/pages/idees/?liste=<?php echo $_GET['liste'] ?? $donnee['partage']; ?>">
-                                                Annuler
-                                            </a>
-                                        </div>
-                                        <?php
-                                        if (isset($_GET['idee']) && $donnees != null && $donnee['droit'] == "proprietaire") {
-                                        ?>
-                                            <br>
-                                            <br>
-                                            <div class="md:col-4 text-center">
-                                                <button type="submit" name="delete" value="<?php echo $donnees['id'] ?>" class="btn-solid theme-danger">Supprimer</button>
-                                            </div>
-                                        <?php
-                                        }
-                                        ?>
-                                    </div>
-                                </div>
-                            </form>
+                                </form>
+                            </div>
                         </div>
-                    </div>
-                <?php
-                    $response->closeCursor();
-                }
-                $response1->closeCursor();
-                ?>
-                <br>
-                <!-- TODO - Historique de modification -->
+                    <?php
+                        $response->closeCursor();
+                    }
+                    $response1->closeCursor();
+                    ?>
+                    <br>
+                    <!-- TODO - Historique de modification -->
+                </div>
             </div>
         </div>
-    </div>
+    </main>
 
 </body>
 
