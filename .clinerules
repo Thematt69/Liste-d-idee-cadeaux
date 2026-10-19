@@ -1,0 +1,50 @@
+# Règles Cline pour ce projet
+
+## 1. Toujours gérer les commandes terminal avec timeout explicite
+
+- Toute commande ponctuelle doit être lancée avec un timeout clair.
+- Ne jamais laisser un terminal bloqué sans limite de temps.
+- Pour un test, build, validation ou script local, utiliser un mode synchronisé avec timeout.
+- Ne pas lancer de commandes interactives sans surveiller la sortie.
+
+## 2. Séparer les tâches courtes et les tâches longues
+
+- `sync` pour : validation, recherche, diff, tests, lint, scripts de courte durée.
+- `async` uniquement pour : serveur local, watcher, process long qui doit rester vivant.
+- Si une commande est longue ou bloque, la stopper proprement et la relancer avec un timeout ou une commande plus ciblée.
+
+## 3. Éviter les commandes qui peuvent rester bloquées
+
+- Ne pas lancer de commandes qui attendent une entrée sans avoir prévu la réponse.
+- Ne pas utiliser de scripts interactifs trop génériques.
+- Ne pas faire de boucle infinie, de sleep, ou de commande qui dépend d’une interaction utilisateur sans garde-fou.
+- Si le terminal attend une saisie, la traiter immédiatement ou arrêter le processus.
+
+## 4. Rester ciblé et lisible
+
+- Préférer des commandes courtes et précises.
+- Éviter les scans globaux trop larges sans besoin.
+- Pour ce projet, privilégier les actions utiles sur la base PHP : validation des fichiers, diff, lancement local, vérification de la syntaxe PHP, contrôles de sécurité et de cohérence du code.
+
+## 5. Conventions de ce repo
+
+- Le projet est un monolithe PHP, sans framework.
+- Respecter les conventions de [AGENTS.md](AGENTS.md) et des fichiers d’instructions dans [.github/instructions](.github/instructions).
+- Utiliser les fichiers PHP dans `pages/`, `scripts/` et `widgets/` comme point d’entrée et de logique serveur.
+- Ne pas créer de connexion PDO supplémentaire dans les pages.
+- Conserver les règles de sécurité du projet : sortie échappée, `exit()` après redirection, validation des inputs, `deleted_to IS NULL` quand pertinent.
+
+## 6. Recommandations pratiques pour Cline
+
+- Avant toute commande longue : choisir le bon mode (`sync` ou `async`) et prévoir un timeout raisonnable.
+- Après un échec ou un blocage : diagnostiquer rapidement, ne pas relancer plusieurs fois sans raison.
+- Quand un serveur local est lancé, garder la commande asynchrone et noter le terminal ID / port utilisé.
+- Pour ce projet, les commandes de référence sont souvent :
+  - `php -S localhost:8000`
+  - `git diff --check`
+  - `php -l <fichier.php>`
+
+## 7. Règle d’or
+
+- Une commande non surveillée et sans timeout n’est pas acceptable dans ce projet.
+- Si une commande est susceptible de bloquer, on la limite, on la contrôle, ou on la remplace par une version plus ciblée.
