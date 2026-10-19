@@ -15,7 +15,7 @@
 
 body {
     color: var(--bs-fg-body);
-    background: #00c8e6;
+    background-color: var(--bs-primary-bg-subtle);
 }
 
 main {
@@ -40,9 +40,9 @@ h3 {
     --bs-navbar-active-color: #102f36;
     --bs-navbar-brand-color: #173b44;
     --bs-navbar-brand-hover-color: #102f36;
-    --bs-navbar-bg: #00c8e6;
+    --bs-navbar-bg: #fff;
     color: #173b44;
-    background-color: #00c8e6;
+    background-color: var(--bs-navbar-bg);
 }
 
 .site-navbar .navbar-brand,
@@ -64,7 +64,7 @@ h3 {
 
 .site-navbar .drawer {
     color: #173b44;
-    background-color: #00c8e6;
+    background-color: var(--bs-navbar-bg);
 }
 
 .site-navbar .drawer-header {
