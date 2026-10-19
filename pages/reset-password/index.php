@@ -184,13 +184,13 @@ if ($_GET['reset']) {
                                 <div class="row">
                                     <div class="md:col-12">
                                         <div class="form-floating">
-                                            <input name="Mail" type="email" class="form-control" id="LabelMail" placeholder="name@example.com" required <?php if ($invalide) echo 'disabled aria-disabled' ?>>
                                             <label for="LabelMail">Adresse mail</label>
+                                            <input name="Mail" type="email" class="form-control" id="LabelMail" placeholder="name@example.com" required <?php if ($invalide) echo 'disabled aria-disabled' ?>>
                                         </div>
                                         <br>
                                         <div class="form-floating">
-                                            <input name="MDP" type="password" class="form-control" id="LabelMDP" aria-describedby="DescriptionMDP" placeholder="Mot de passe" required <?php if ($invalide) echo 'disabled aria-disabled' ?>>
                                             <label for="LabelMDP">Nouveau mot de passe</label>
+                                            <input name="MDP" type="password" class="form-control" id="LabelMDP" aria-describedby="DescriptionMDP" placeholder="Mot de passe" required <?php if ($invalide) echo 'disabled aria-disabled' ?>>
                                         </div>
                                         <br>
                                         <div class=" d-flex justify-content-center">
@@ -214,8 +214,8 @@ if ($_GET['reset']) {
                                 <div class="row">
                                     <div class="md:col-12">
                                         <div class="form-floating">
-                                            <input name="Mail" type="email" class="form-control" id="LabelMail" placeholder="name@example.com" required <?php if ($invalide) echo 'disabled aria-disabled' ?>>
                                             <label for="LabelMail">Adresse mail</label>
+                                            <input name="Mail" type="email" class="form-control" id="LabelMail" placeholder="name@example.com" required <?php if ($invalide) echo 'disabled aria-disabled' ?>>
                                         </div>
                                         <br>
                                         <div class=" d-flex justify-content-center">

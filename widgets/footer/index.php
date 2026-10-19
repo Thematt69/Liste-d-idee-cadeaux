@@ -6,7 +6,7 @@ if (isset($_SESSION['id_compte'])) {
 ?>
 
 <footer class="footer mt-auto py-5 site-footer">
-    <div class="container fg-inverse text-center">
+    <div class="container text-center">
         <span>
             <a href="https://family.matthieudevilliers.fr/pages/accessibilite/">Accessibilité : partiellement conforme</a>
             |
@@ -14,7 +14,7 @@ if (isset($_SESSION['id_compte'])) {
             |
             <a href="https://matthieudevilliers.fr/" target="_blank">Matthieu Devilliers</a>
             | Copyright ©2020-2025 All rights reserved |
-            <a href="mailto:devilliers.matthieu@gmail.com" target="_blank">Contactez-moi</a>
+            <a href="mailto:webmaster@matthieudevilliers.fr" target="_blank">Contactez-moi</a>
         </span>
     </div>
 </footer>
