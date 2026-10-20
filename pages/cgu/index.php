@@ -1,3 +1,10 @@
+<?php
+
+session_start();
+
+include('../../scripts/verif/index.php');
+
+?>
 <!DOCTYPE html>
 <html lang="fr" class="h-100">
 
