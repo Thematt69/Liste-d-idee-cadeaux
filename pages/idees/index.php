@@ -128,7 +128,7 @@ $response1->closeCursor();
         ?>
             <div class="container">
                 <div class="row justify-content-center">
-                    <div class="col-12">
+                    <div class="col-12 ideas-page-column">
                         <div class="text-center mb-4">
                             <h1 class="mb-2"><?php echo safe_output($donnee['nom']); ?></h1>
                             <p class="text-body-secondary mb-3">

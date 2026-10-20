@@ -279,6 +279,10 @@ main:focus:not(:focus-visible) {
   min-width: 48rem;
 }
 
+.ideas-page-column {
+  min-width: 0;
+}
+
 .idea-cell-wide {
   min-width: 10rem;
   max-width: 30rem;
