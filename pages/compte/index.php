@@ -102,7 +102,6 @@ if (isset($_POST['Mail'])) {
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <br>
                     <?php
                     if ($alert) {
                     ?>
@@ -130,48 +129,42 @@ if (isset($_POST['Mail'])) {
                     $donnees = $response->fetch();
 
                     ?>
-                    <h1 class="text-center"><?php echo safe_output($donnees['prenom'] . " " . strtoupper($donnees['nom'])); ?></h1>
-                    <br>
+                    <h1 class="text-center mb-4"><?php echo safe_output($donnees['prenom'] . " " . strtoupper($donnees['nom'])); ?></h1>
                     <div class="card">
                         <div class="card-body">
                             <form action="" method="post">
-                                <div class="row">
+                                <div class="row g-3">
                                     <div class="col-md-6 col-xl-4">
                                         <div class="form-floating">
-                                            <label for="LabelPrénom">Prénom</label>
                                             <input name="Prénom" type="text" class="form-control" id="LabelPrénom" autocomplete="given-name" placeholder="Prénom" value="<?php echo safe_output($donnees['prenom']) ?>" required>
+                                            <label for="LabelPrénom">Prénom</label>
                                         </div>
-                                        <br>
                                     </div>
                                     <div class="col-md-6 col-xl-4">
                                         <div class="form-floating">
-                                            <label for="LabelNom">Nom</label>
                                             <input name="Nom" type="text" class="form-control" id="LabelNom" autocomplete="family-name" placeholder="Nom" value="<?php echo safe_output($donnees['nom']) ?>" required>
+                                            <label for="LabelNom">Nom</label>
                                         </div>
-                                        <br>
                                     </div>
                                     <div class="col-md-6 col-xl-4">
                                         <div class="form-floating">
-                                            <label for="LabelMDP">Mot de passe actuel</label>
                                             <input name="MDP" type="password" class="form-control" id="LabelMDP" autocomplete="current-password" aria-describedby="DescriptionMDP" placeholder="Mot de passe" required>
-                                            <small id="DescriptionMDP" class="text-secondary">Votre mot de passe est enregistré dans un format haché, il est impossible pour nous de le récupérer.</small>
+                                            <label for="LabelMDP">Mot de passe actuel</label>
                                         </div>
-                                        <br>
+                                        <div id="DescriptionMDP" class="form-text">Votre mot de passe est enregistré dans un format haché, il est impossible pour nous de le récupérer.</div>
                                     </div>
                                     <div class="col-md-6 col-xl-4">
                                         <div class="form-floating">
+                                            <input name="NewMDP" type="password" class="form-control" id="LabelNewMDP" autocomplete="new-password" placeholder="Nouveau mot de passe">
                                             <label for="LabelNewMDP">Nouveau mot de passe</label>
-                                            <input name="NewMDP" type="password" class="form-control" id="LabelNewMDP" autocomplete="new-password" aria-describedby="DescriptionMDP" placeholder="Nouveau mot de passe">
                                         </div>
-                                        <br>
                                     </div>
                                     <div class="col-md-12 col-xl-8">
                                         <div class="form-floating">
-                                            <label for="LabelMail">Adresse mail</label>
                                             <input name="Mail" type="email" class="form-control" id="LabelMail" autocomplete="email" aria-describedby="DescriptionMail" placeholder="Adresse mail" value="<?php echo safe_output($donnees['mail']) ?>" required>
-                                            <small id="DescriptionMail" class="text-secondary">Votre adresse mail nous permet de vous transmet toutes les informations vous concernant.</small>
+                                            <label for="LabelMail">Adresse mail</label>
                                         </div>
-                                        <br>
+                                        <div id="DescriptionMail" class="form-text">Votre adresse mail nous permet de vous transmettre toutes les informations vous concernant.</div>
                                     </div>
                                     <div class="col-md-12 text-center">
                                         <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
@@ -181,15 +174,15 @@ if (isset($_POST['Mail'])) {
                             </form>
                         </div>
                     </div>
-                    <br>
-                    <h3 id="historique-connexion" class="text-center">Historique de connexion</h3>
-                    <p class="text-center">
+                    <h2 id="historique-connexion" class="h4 text-center mt-4">Historique de connexion</h2>
+                    <p class="text-center mb-3">
                         <small>10 dernières connexions uniquement</small>
                     </p>
                     <div class="card">
                         <div class="card-body text-center">
                             <div class="table-responsive">
                                 <table class="table text-center align-middle" aria-labelledby="historique-connexion">
+                                    <caption class="visually-hidden">Historique des dix dernières connexions</caption>
                                     <thead>
                                         <tr>
                                             <th class="col" scope="col">Date</th>
@@ -225,14 +218,12 @@ if (isset($_POST['Mail'])) {
                             </div>
                         </div>
                     </div>
-                    <br>
                 </div>
             </div>
         </div>
     </main>
 
+    <?php include('../../widgets/footer/index.php'); ?>
 </body>
-
-<?php include('../../widgets/footer/index.php'); ?>
 
 </html>

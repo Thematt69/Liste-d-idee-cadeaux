@@ -189,8 +189,20 @@ if (isset($_POST['delete'])) {
         header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $donnee['lien']);
         exit();
     } else if (isset($droitModif['droit']) && $droitModif['droit'] !== 'proprietaire') {
-        if (htmlentities($_POST['AchatFrom']) == "1") {
+        $sql = 'SELECT buy_from
+                FROM lic_idee
+                WHERE id = ? AND deleted_to IS NULL';
+
+        $response = $bdd->prepare($sql);
+        $response->execute(array($_POST['save']));
+        $reservation = $response->fetch();
+        $response->closeCursor();
+
+        $buyFrom = $reservation['buy_from'] ?? null;
+        if (isset($_POST['AchatFrom']) && htmlentities($_POST['AchatFrom']) == "1") {
             $buyFrom = $_SESSION['id_compte'];
+        } elseif ($buyFrom == $_SESSION['id_compte']) {
+            $buyFrom = null;
         }
 
         // Modification de l'idée par un modérateur ou un lecteur
@@ -302,9 +314,8 @@ if (isset($_POST['delete'])) {
 
     <main id="main-content" tabindex="-1">
         <div class="container">
-            <div class="row  justify-content-center">
+            <div class="row justify-content-center">
                 <div class="col-md-12 col-lg-8">
-                    <br>
                     <?php
 
                     if ($_GET['idee']) {
@@ -327,31 +338,15 @@ if (isset($_POST['delete'])) {
 
                     if (isset($_GET['idee']) && ($donnee == null || $donnee['droit'] == "lecteur")) {
                     ?>
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <br>
-                                    <div class="alert alert-danger" role="alert">
-                                        <strong>Vous n'avez pas les droits !</strong> Nous sommes désolées, mais il semblerait que vous n'ayez pas les droits pour cette idée. Merci de revenir à <a href="https://family.matthieudevilliers.fr/pages/listes/" class="alert-link">vos listes</a>.
-                                    </div>
-                                    <br>
-                                </div>
-                            </div>
+                        <div class="alert alert-danger" role="alert">
+                            <strong>Vous n'avez pas les droits !</strong> Nous sommes désolées, mais il semblerait que vous n'ayez pas les droits pour cette idée. Merci de revenir à <a href="https://family.matthieudevilliers.fr/pages/listes/" class="alert-link">vos listes</a>.
                         </div>
 
                     <?php
                     } elseif (!isset($_GET['liste']) && !isset($_GET['idee'])) {
                     ?>
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <br>
-                                    <div class="alert alert-danger" role="alert">
-                                        <strong>Idée introuvable !</strong> Nous sommes désolées, mais nous n'avons pas trouvé votre idée. Merci de revenir à <a href="https://family.matthieudevilliers.fr/pages/listes/" class="alert-link">vos listes</a>.
-                                    </div>
-                                    <br>
-                                </div>
-                            </div>
+                        <div class="alert alert-danger" role="alert">
+                            <strong>Idée introuvable !</strong> Nous sommes désolées, mais nous n'avons pas trouvé votre idée. Merci de revenir à <a href="https://family.matthieudevilliers.fr/pages/listes/" class="alert-link">vos listes</a>.
                         </div>
                     <?php
                     } else {
@@ -368,43 +363,38 @@ if (isset($_POST['delete'])) {
                         $isModif = isset($_GET['idee']) && $donnees != null;
 
                         if ($isModif) {
-                            echo ('<h1 class="text-center">Modification d\'une idée</h1>');
+                            echo ('<h1 class="text-center mb-4">Modification d\'une idée</h1>');
                         } else {
-                            echo ('<h1 class="text-center">Création d\'une idée</h1>');
+                            echo ('<h1 class="text-center mb-4">Création d\'une idée</h1>');
                         }
                     ?>
-                        <br>
                         <div class="card">
                             <div class="card-body">
                                 <form action="" method="post">
-                                    <div class="row">
+                                    <div class="row g-3">
                                         <div class="col-md-7">
                                             <div class="form-floating">
+                                                <input name="Nom" type="text" value="<?php echo ($donnees['nom']) ?>" class="form-control" id="LabelNom" autocomplete="off" placeholder="Nom de l'idée" required>
                                                 <label for="LabelNom">Nom de l'idée *</label>
-                                                <input name="Nom" type="text" value="<?php echo ($donnees['nom']) ?>" class="form-control" id="LabelNom" placeholder="Nom de l'idée" required>
                                             </div>
-                                            <br>
                                         </div>
                                         <div class="col-md-5">
                                             <div class="form-floating">
+                                                <input name="Prix" type="text" value="<?php echo ($donnees['price']) ?>" class="form-control" id="LabelPrix" autocomplete="off" placeholder="Prix de l'idée">
                                                 <label for="LabelPrix">Prix de l'idée</label>
-                                                <input name="Prix" type="text" value="<?php echo ($donnees['price']) ?>" class="form-control" id="LabelPrix" placeholder="Prix de l'idée">
                                             </div>
-                                            <br>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="form-floating">
+                                                <input name="Commentaire" type="text" value="<?php echo ($donnees['commentaire']) ?>" class="form-control" id="LabelCommentaire" autocomplete="off" placeholder="Commentaire">
                                                 <label for="LabelCommentaire">Commentaire</label>
-                                                <input name="Commentaire" type="text" value="<?php echo ($donnees['commentaire']) ?>" class="form-control" id="LabelCommentaire" placeholder="Commentaire">
                                             </div>
-                                            <br>
                                         </div>
                                         <div class="col-md-7">
                                             <div class="form-floating">
+                                                <input name="Lien" type="url" value="<?php echo ($donnees['lien']) ?>" class="form-control" id="LabelLien" autocomplete="url" placeholder="Lien de l'idée">
                                                 <label for="LabelLien">Lien de l'idée</label>
-                                                <input name="Lien" type="url" value="<?php echo ($donnees['lien']) ?>" class="form-control" id="LabelLien" placeholder="Lien de l'idée">
                                             </div>
-                                            <br>
                                         </div>
                                         <div class="col-md-5">
                                             <div class="form-field">
@@ -443,23 +433,16 @@ if (isset($_POST['delete'])) {
                                                 }
                                                 ?>
                                             </div>
-                                            <br>
                                         </div>
-                                        <div class="btn-group" role="group">
-                                            <div class="col-md-8 text-center">
+                                        <div class="d-flex flex-wrap justify-content-center gap-2 mt-3">
                                                 <button type="submit" name="save" value="<?php echo $donnees['id'] ?>" class="btn btn-primary">Enregistrer</button>
                                                 <a class="btn btn-secondary" href="https://family.matthieudevilliers.fr/pages/idees/?liste=<?php echo $_GET['liste'] ?? $donnee['partage']; ?>">
                                                     Annuler
                                                 </a>
-                                            </div>
                                             <?php
                                             if (isset($_GET['idee']) && $donnees != null && $donnee['droit'] == "proprietaire") {
                                             ?>
-                                                <br>
-                                                <br>
-                                                <div class="col-md-4 text-center">
-                                                    <button type="submit" name="delete" value="<?php echo $donnees['id'] ?>" class="btn btn-danger">Supprimer</button>
-                                                </div>
+                                                <button type="submit" name="delete" value="<?php echo $donnees['id'] ?>" class="btn btn-danger">Supprimer</button>
                                             <?php
                                             }
                                             ?>
@@ -473,15 +456,12 @@ if (isset($_POST['delete'])) {
                     }
                     $response1->closeCursor();
                     ?>
-                    <br>
-                    <!-- TODO - Historique de modification -->
                 </div>
             </div>
         </div>
     </main>
 
+    <?php include('../../widgets/footer/index.php'); ?>
 </body>
-
-<?php include('../../widgets/footer/index.php'); ?>
 
 </html>

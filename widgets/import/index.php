@@ -10,6 +10,17 @@
 <meta name="revisit-after" content="30">
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+
+<script>
+    (() => {
+        const preference = window.matchMedia('(prefers-color-scheme: dark)');
+        const applyTheme = () => document.documentElement.setAttribute('data-bs-theme', preference.matches ? 'dark' : 'light');
+
+        applyTheme();
+        preference.addEventListener('change', applyTheme);
+    })();
+</script>
 
 <link rel="icon" href="/images/logo.webp">
 

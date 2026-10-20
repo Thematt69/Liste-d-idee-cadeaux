@@ -16,30 +16,24 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <br>
-                    <h1 class="text-center">Erreur 403</h1>
-                    <br>
+                    <h1 class="text-center mb-4">Erreur 403</h1>
                     <div class="text-center">
-                        <h4>Vous n'êtes pas autorisé à accéder à ce fichier.</h4>
-                        <br>
+                        <h2 class="h4 mb-3">Vous n'êtes pas autorisé à accéder à ce fichier.</h2>
                         <a class="btn btn-outline-primary" href="https://family.matthieudevilliers.fr">
                             Revenir au site
                         </a>
-                        <br>
-                        <video autoplay loop muted style="max-width: 100%;">
+                        <video class="error-video mt-3" autoplay loop muted>
                             <source src="https://spa.matthieudevilliers.fr/images/maintenance-resize.webm" type="video/webm">
                             <source src="https://spa.matthieudevilliers.fr/images/maintenance-resize.mp4" type="video/mp4">
                             <p>Votre navigateur ne prend pas en charge les vidéos HTML5.</p>
                         </video>
                     </div>
-                    <br>
                 </div>
             </div>
         </div>
     </main>
 
+    <?php include('../../widgets/footer/index.php'); ?>
 </body>
-
-<?php include('../../widgets/footer/index.php'); ?>
 
 </html>
