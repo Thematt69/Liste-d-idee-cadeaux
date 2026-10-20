@@ -78,8 +78,7 @@
         </section>
     </main>
 
+    <?php include('../../widgets/footer/index.php'); ?>
 </body>
-
-<?php include('../../widgets/footer/index.php'); ?>
 
 </html>

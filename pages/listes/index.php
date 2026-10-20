@@ -28,19 +28,16 @@ if (!isset($_SESSION['id_compte'])) {
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-12 col-lg-10">
-                    <br>
-                    <h1 class="text-center">Mes listes</h1>
-                    <br>
-                    <div class="row">
-                        <div class="col-6 text-center">
-                            <a class="btn btn-primary btn-lg" href="https://family.matthieudevilliers.fr/pages/modif-listes/?type=solo" role="button">Créer une liste</a>
-                        </div>
-                        <div class="col-6 text-center">
-                            <a class="btn btn-primary btn-lg" href="https://family.matthieudevilliers.fr/pages/modif-listes/?type=duo" role="button">Créer une liste en duo</a>
-                        </div>
+                    <h1 class="text-center mb-4">Mes listes</h1>
+                    <div class="d-flex flex-wrap justify-content-center gap-3 mb-4">
+                        <a class="btn btn-primary btn-lg" href="https://family.matthieudevilliers.fr/pages/modif-listes/?type=solo">
+                            <i class="bi bi-plus-lg me-2" aria-hidden="true"></i>Créer une liste
+                        </a>
+                        <a class="btn btn-outline-primary btn-lg" href="https://family.matthieudevilliers.fr/pages/modif-listes/?type=duo">
+                            <i class="bi bi-people me-2" aria-hidden="true"></i>Créer une liste en duo
+                        </a>
                     </div>
-                    <br>
-                    <div class="row">
+                    <ul class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3 list-unstyled">
                         <?php
 
                         $sql = 'SELECT lic_liste.nom as nom, lic_liste.lien_partage as lien_partage, lic_liste.id as id
@@ -74,13 +71,12 @@ if (!isset($_SESSION['id_compte'])) {
                             }
 
                         ?>
-                            <div class="col-sm-6 col-md-4 col-lg-3 col-xxl-2">
-                                <div class="card bg-body" style="min-height: 6rem;">
+                            <li class="col">
+                                <div class="card h-100">
                                     <div class="card-body d-flex align-items-center justify-content-center text-center">
-                                        <p class="card-text">
-                                            <a href="https://family.matthieudevilliers.fr/pages/idees/?liste=<?php echo safe_output($donnees['lien_partage']) ?>" class="stretched-link"><?php echo safe_output($donnees['nom']) ?></a>
-                                            <br>
-                                            <small class="text-secondary d-flex justify-content-center">de
+                                        <p class="card-text mb-0">
+                                            <a href="https://family.matthieudevilliers.fr/pages/idees/?liste=<?php echo safe_output($donnees['lien_partage']) ?>" class="stretched-link list-card-link"><span class="fw-bold"><?php echo safe_output($donnees['nom']) ?></span></a>
+                                            <small class="d-block text-body-secondary">de
                                                 <?php
                                                 $totalCount = count($proprietaire);
 
@@ -118,23 +114,20 @@ if (!isset($_SESSION['id_compte'])) {
                                         </p>
                                     </div>
                                 </div>
-                                <br>
-                            </div>
+                            </li>
                         <?php
                             $response1->closeCursor();
                         }
                         $response->closeCursor();
                         ?>
 
-                    </div>
-                    <br>
+                    </ul>
                 </div>
             </div>
         </div>
     </main>
 
+    <?php include('../../widgets/footer/index.php'); ?>
 </body>
-
-<?php include('../../widgets/footer/index.php'); ?>
 
 </html>

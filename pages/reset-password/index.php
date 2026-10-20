@@ -156,7 +156,6 @@ if ($_GET['reset']) {
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-12 col-md-9 col-lg-6">
-                    <br>
                     <?php
                     if ($alert) {
                     ?>
@@ -174,30 +173,26 @@ if ($_GET['reset']) {
                     <?php
                     }
                     ?>
-                    <h1 class="text-center">Mot de passe oublié</h1>
-                    <br>
+                    <h1 class="text-center mb-4">Mot de passe oublié</h1>
                     <?php
                     if (isset($_GET['reset'])) {
                     ?>
                         <div class="card">
                             <div class="card-body">
                                 <form action="" method="post">
-                                    <div class="row">
+                                    <div class="row g-3">
                                         <div class="col-md-12">
                                             <div class="form-floating">
+                                                <input name="Mail" type="email" class="form-control" id="LabelMail" autocomplete="email" placeholder="name@example.com" required <?php if ($invalide) echo 'disabled aria-disabled="true"' ?>>
                                                 <label for="LabelMail">Adresse mail</label>
-                                                <input name="Mail" type="email" class="form-control" id="LabelMail" autocomplete="email" placeholder="name@example.com" required <?php if ($invalide) echo 'disabled aria-disabled' ?>>
                                             </div>
-                                            <br>
                                             <div class="form-floating">
+                                                <input name="MDP" type="password" class="form-control" id="LabelMDP" autocomplete="new-password" placeholder="Mot de passe" required <?php if ($invalide) echo 'disabled aria-disabled="true"' ?>>
                                                 <label for="LabelMDP">Nouveau mot de passe</label>
-                                                <input name="MDP" type="password" class="form-control" id="LabelMDP" autocomplete="new-password" aria-describedby="DescriptionMDP" placeholder="Mot de passe" required <?php if ($invalide) echo 'disabled aria-disabled' ?>>
                                             </div>
-                                            <br>
-                                            <div class=" d-flex justify-content-center">
+                                            <div class="d-flex justify-content-center mb-3">
                                                 <div class="g-recaptcha" data-sitekey="6Lc-ZgkaAAAAAEoCEsUwvVPygJPyhxGDtPIvkppO"></div>
                                             </div>
-                                            <br>
                                             <div class="text-center">
                                                 <button type="submit" name="reset" value="<?php echo $_GET['reset'] ?>" class="btn btn-primary" <?php echo $invalide ? 'disabled aria-disabled="true"' : ''; ?>>Réinitialiser le mot de passe</button>
                                             </div>
@@ -212,17 +207,15 @@ if ($_GET['reset']) {
                         <div class="card">
                             <div class="card-body">
                                 <form action="" method="post">
-                                    <div class="row">
+                                    <div class="row g-3">
                                         <div class="col-md-12">
                                             <div class="form-floating">
+                                                <input name="Mail" type="email" class="form-control" id="LabelMail" autocomplete="email" placeholder="name@example.com" required <?php if ($invalide) echo 'disabled aria-disabled="true"' ?>>
                                                 <label for="LabelMail">Adresse mail</label>
-                                                <input name="Mail" type="email" class="form-control" id="LabelMail" autocomplete="email" placeholder="name@example.com" required <?php if ($invalide) echo 'disabled aria-disabled' ?>>
                                             </div>
-                                            <br>
-                                            <div class=" d-flex justify-content-center">
+                                            <div class="d-flex justify-content-center mb-3">
                                                 <div class="g-recaptcha" data-sitekey="6Lc-ZgkaAAAAAEoCEsUwvVPygJPyhxGDtPIvkppO"></div>
                                             </div>
-                                            <br>
                                             <div class="text-center">
                                                 <button type="submit" class="btn btn-primary" <?php echo $invalide ? 'disabled aria-disabled="true"' : ''; ?>>Demander la réinitialisation</button>
                                             </div>
@@ -234,14 +227,12 @@ if ($_GET['reset']) {
                     <?php
                     }
                     ?>
-                    <br>
                 </div>
             </div>
         </div>
     </main>
 
+    <?php include('../../widgets/footer/index.php'); ?>
 </body>
-
-<?php include('../../widgets/footer/index.php'); ?>
 
 </html>

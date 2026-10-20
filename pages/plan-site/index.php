@@ -32,6 +32,7 @@ include('../../scripts/verif/index.php');
                     <li><a href="https://family.matthieudevilliers.fr/pages/reset-password/">Réinitialiser le mot de passe</a></li>
                     <li><a href="https://family.matthieudevilliers.fr/pages/accessibilite/">Déclaration d'accessibilité</a></li>
                     <li><a href="https://family.matthieudevilliers.fr/pages/cgu/">Conditions générales d'utilisation</a></li>
+                    <li><a href="https://family.matthieudevilliers.fr/pages/mentions-legales/">Mentions légales</a></li>
                 </ul>
             </nav>
 
@@ -59,8 +60,7 @@ include('../../scripts/verif/index.php');
         </div>
     </main>
 
+    <?php include('../../widgets/footer/index.php'); ?>
 </body>
-
-<?php include('../../widgets/footer/index.php'); ?>
 
 </html>

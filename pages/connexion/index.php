@@ -106,7 +106,6 @@ if (isset($_POST['Mail'])) {
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-12 col-md-9 col-lg-6">
-                    <br>
                     <?php
                     if ($alert) {
                     ?>
@@ -117,28 +116,25 @@ if (isset($_POST['Mail'])) {
                     <?php
                     }
                     ?>
-                    <h1 class="text-center">Connexion</h1>
-                    <br>
+                    <h1 class="text-center mb-4">Connexion</h1>
                     <div class="card">
                         <div class="card-body">
                             <form action="" method="post">
-                                <div class="row">
+                                <div class="row g-3">
                                     <div class="col-md-12">
                                         <div class="form-floating">
-                                            <label for="LabelMail">Adresse mail</label>
                                             <input name="Mail" type="email" class="form-control" id="LabelMail"
                                                 autocomplete="email" placeholder="name@example.com" required>
+                                            <label for="LabelMail">Adresse mail</label>
                                         </div>
-                                        <br>
                                         <div class="form-floating">
-                                            <label for="LabelMDP">Mot de passe</label>
                                             <input name="MDP" type="password" class="form-control" id="LabelMDP"
                                                 autocomplete="current-password" aria-describedby="DescriptionMDP" placeholder="Mot de passe" required>
-                                            <small id="DescriptionMDP" class="text-secondary"><a
-                                                    href="https://family.matthieudevilliers.fr/pages/reset-password/">Mot
-                                                    de passe oublié</a></small>
+                                            <label for="LabelMDP">Mot de passe</label>
                                         </div>
-                                        <br>
+                                        <div id="DescriptionMDP" class="form-text mb-3"><a
+                                                href="https://family.matthieudevilliers.fr/pages/reset-password/">Mot
+                                                de passe oublié</a></div>
                                         <div class="text-center">
                                             <button type="submit" class="btn btn-primary">Se connecter</button>
                                         </div>
@@ -147,20 +143,17 @@ if (isset($_POST['Mail'])) {
                             </form>
                         </div>
                     </div>
-                    <br>
-                    <div class="text-center">
+                    <div class="text-center mt-3">
                         <a href="https://family.matthieudevilliers.fr/pages/inscription/">
                             Pas de compte ? Je m'inscris
                         </a>
                     </div>
-                    <br>
                 </div>
             </div>
         </div>
     </main>
 
+    <?php include('../../widgets/footer/index.php'); ?>
 </body>
-
-<?php include('../../widgets/footer/index.php'); ?>
 
 </html>

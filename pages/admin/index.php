@@ -101,12 +101,10 @@ if (isset($_POST['Comptes'])) {
 <html lang="fr" class="h-100">
 
 <head>
-    <title>Listes d'idées cadeau - Connexion</title>
+    <title>Listes d'idées cadeau - Panel Admin</title>
 
     <!-- Import -->
     <?php include('../../widgets/import/index.php'); ?>
-
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 
 <body class="d-flex flex-column h-100">
@@ -117,7 +115,6 @@ if (isset($_POST['Comptes'])) {
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <br>
                     <?php
                     if ($alert) {
                     ?>
@@ -135,23 +132,21 @@ if (isset($_POST['Comptes'])) {
                     <?php
                     }
                     ?>
-                    <h1 class="text-center">Panel Admin</h1>
-                    <br>
-                    <h3 class="text-center">Notification</h3>
-                    <br>
+                    <h1 class="text-center mb-4">Panel Admin</h1>
+                    <h2 class="h4 text-center mb-3">Notification</h2>
                     <div class="card">
                         <div class="card-body">
                             <form action="" method="post">
-                                <div class="row">
-                                    <div class="col-md-5">
+                                <div class="row g-3">
+                                    <div class="col-md-5 mb-3">
                                         <div class="form-floating">
-                                            <label for="LabelTitre">Titre</label>
                                             <input name="Titre" type="text" class="form-control" id="LabelTitre" placeholder="Titre" required>
+                                            <label for="LabelTitre">Titre</label>
                                         </div>
-                                        <br>
                                     </div>
-                                    <div class="col-md-7">
-                                        <select class="form-control" name="Comptes[]" multiple required>
+                                    <div class="col-md-7 mb-3">
+                                        <label for="Comptes" class="form-label">Destinataires</label>
+                                        <select class="form-select" id="Comptes" name="Comptes[]" multiple required>
                                             <option selected value="tous">Tous les comptes</option>
                                             <?php
 
@@ -172,14 +167,12 @@ if (isset($_POST['Comptes'])) {
 
                                             ?>
                                         </select>
-                                        <br>
                                     </div>
-                                    <div class="col-md-12">
+                                    <div class="col-md-12 mb-3">
                                         <div class="form-floating">
+                                            <textarea name="Message" class="form-control" id="LabelMessage" placeholder="Message" required></textarea>
                                             <label for="LabelMessage">Message</label>
-                                            <textarea name="Message" class="form-control" id="LabelMessage" aria-describedby="DescriptionMessage" placeholder="Message" required></textarea>
                                         </div>
-                                        <br>
                                     </div>
                                     <div class="col-md-12">
                                         <div class="text-center">
@@ -187,36 +180,32 @@ if (isset($_POST['Comptes'])) {
                                         </div>
                                     </div>
                                 </div>
+                            </form>
                         </div>
-                        </form>
                     </div>
-                    <br>
-                    <h3 class="text-center">Maintenance</h3>
-                    <br>
+                    <h2 class="h4 text-center mt-4 mb-3">Maintenance</h2>
                     <div class="card">
                         <div class="card-body">
                             <h5>Nettoyage de l'historique de connexion</h5>
-                            <p style="color: #666; font-size: 14px;">
+                            <p class="text-body-secondary small">
                                 Supprime les connexions de plus d'un an et conserve seulement les 10 dernières par utilisateur.
                             </p>
-                            <form action="" method="post" style="display: inline;">
+                            <form action="" method="post" class="d-inline">
                                 <button type="submit" name="cleanup_connexions" value="1" class="btn btn-warning">
                                     🧹 Nettoyer l'historique
                                 </button>
                             </form>
-                            <p style="color: #595959; font-size: 12px; margin-top: 10px;">
+                            <p class="text-body-secondary small mt-2">
                                 ⚠️ Cette opération ne peut pas être annulée
                             </p>
                         </div>
                     </div>
                 </div>
-                <br>
             </div>
         </div>
     </main>
 
+    <?php include('../../widgets/footer/index.php'); ?>
 </body>
-
-<?php include('../../widgets/footer/index.php'); ?>
 
 </html>

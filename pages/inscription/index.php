@@ -100,7 +100,6 @@ if (isset($_POST['Mail'])) {
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-12 col-lg-8">
-                    <br>
                     <?php
                     if ($alert) {
                     ?>
@@ -111,49 +110,44 @@ if (isset($_POST['Mail'])) {
                     <?php
                     }
                     ?>
-                    <h1 class="text-center">Inscription</h1>
-                    <br>
+                    <h1 class="text-center mb-4">Inscription</h1>
                     <div class="card">
                         <div class="card-body">
                             <form action="" method="post">
-                                <div class="row">
+                                <div class="row g-3">
                                     <div class="col-md-6">
                                         <div class="form-floating">
-                                            <label for="LabelPrénom">Prénom</label>
                                             <input name="Prénom" type="text" class="form-control" id="LabelPrénom"
                                                 autocomplete="given-name" placeholder="Prénom" required>
+                                            <label for="LabelPrénom">Prénom</label>
                                         </div>
-                                        <br>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-floating">
-                                            <label for="LabelNom">Nom</label>
                                             <input name="Nom" type="text" class="form-control" id="LabelNom"
                                                 autocomplete="family-name" placeholder="Nom" required>
+                                            <label for="LabelNom">Nom</label>
                                         </div>
-                                        <br>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-floating">
-                                            <label for="LabelMDP">Mot de passe</label>
                                             <input name="MDP" type="password" class="form-control" id="LabelMDP"
                                                 autocomplete="new-password" aria-describedby="DescriptionMDP" placeholder="Mot de passe" required>
-                                            <small id="DescriptionMDP" class="text-secondary">Votre mot de passe
-                                                est enregistré dans un format haché, il est impossible pour nous de le
-                                                récupérer.</small>
+                                            <label for="LabelMDP">Mot de passe</label>
                                         </div>
-                                        <br>
+                                        <div id="DescriptionMDP" class="form-text mb-3">Votre mot de passe
+                                            est enregistré dans un format haché, il est impossible pour nous de le
+                                            récupérer.</div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-floating">
-                                            <label for="LabelMail">Adresse mail</label>
                                             <input name="Mail" type="email" class="form-control" id="LabelMail"
                                                 autocomplete="email" aria-describedby="DescriptionMail" placeholder="Adresse mail" required>
-                                            <small id="DescriptionMail" class="text-secondary">Votre adresse mail
-                                                nous permet de vous transmet toutes les informations vous
-                                                concernant.</small>
+                                            <label for="LabelMail">Adresse mail</label>
                                         </div>
-                                        <br>
+                                        <div id="DescriptionMail" class="form-text mb-3">Votre adresse mail
+                                            nous permet de vous transmet toutes les informations vous
+                                            concernant.</div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-field">
@@ -165,29 +159,28 @@ if (isset($_POST['Mail'])) {
                                                     Général d'Utilisation</a>
                                             </label>
                                         </div>
-                                        <br>
                                     </div>
                                     <div class="col-md-12 text-center">
+                                        <p class="small text-body-secondary">
+                                            Les informations sur le traitement de vos données personnelles et vos droits sont disponibles dans les <a href="https://family.matthieudevilliers.fr/pages/mentions-legales/#donnees-personnelles">mentions légales</a>.
+                                        </p>
                                         <button type="submit" class="btn btn-primary">S'inscrire</button>
                                     </div>
                                 </div>
                             </form>
                         </div>
                     </div>
-                    <br>
-                    <div class="text-center">
+                    <div class="text-center mt-3">
                         <a href="https://family.matthieudevilliers.fr/pages/connexion/">
                             Déjà un compte ? Je me connecte
                         </a>
                     </div>
-                    <br>
                 </div>
             </div>
         </div>
     </main>
 
+    <?php include('../../widgets/footer/index.php'); ?>
 </body>
-
-<?php include('../../widgets/footer/index.php'); ?>
 
 </html>

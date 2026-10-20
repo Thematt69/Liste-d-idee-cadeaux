@@ -39,7 +39,7 @@ if (isset($_POST['AchatFrom'])) {
     $response->closeCursor();
 }
 
-$sql = 'SELECT id, partage
+$sql = 'SELECT id, nom, partage
         FROM lic_liste
         WHERE lien_partage = ? AND deleted_to IS NULL';
 
@@ -72,7 +72,7 @@ $response1->closeCursor();
 <html lang="fr" class="h-100">
 
 <head>
-    <title>Listes d'idées cadeau - Idées de la liste</title>
+    <title>Listes d'idées cadeau - <?php echo safe_output($donnee['nom'] ?? 'Idées de la liste'); ?></title>
 
     <!-- Import -->
     <?php include('../../widgets/import/index.php'); ?>
@@ -102,110 +102,101 @@ $response1->closeCursor();
             <div class="container">
                 <div class="row">
                     <div class="col-12">
-                        <br>
                         <div class="alert alert-danger" role="alert">
-                            Nous sommes désolées, mais nous n'avons pas trouvé votre liste. Merci de revenir à <a href="https://family.matthieudevilliers.fr/pages/listes/" class="alert-link">vos listes</a>.<br>
-                            Il se peut aussi que vous n'ayez pas les droits nécessaires pour y accéder.
+                            <p>Nous sommes désolées, mais nous n'avons pas trouvé votre liste. Merci de revenir à <a href="https://family.matthieudevilliers.fr/pages/listes/" class="alert-link">vos listes</a>.</p>
+                            <p class="mb-0">Il se peut aussi que vous n'ayez pas les droits nécessaires pour y accéder.</p>
                         </div>
-                        <br>
                     </div>
                 </div>
             </div>
         <?php
         } else {
+            $sql1 = 'SELECT lic_compte.prenom as prenom, lic_compte.id as id
+                FROM lic_compte
+                INNER JOIN lic_autorisation ON lic_autorisation.id_compte = lic_compte.id
+                WHERE lic_autorisation.type = "proprietaire" AND lic_autorisation.id_liste = ? AND lic_compte.deleted_to IS NULL
+                ORDER BY lic_compte.prenom ASC';
+
+            $response1 = $bdd->prepare($sql1);
+            $response1->execute(array($donnee['id']));
+            $proprietaires = $response1->fetchAll();
+            $response1->closeCursor();
+
+            $renderEmpty = static function () {
+                echo '<span aria-hidden="true">—</span><span class="visually-hidden">Non renseigné</span>';
+            };
         ?>
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-12">
-                        <br>
-                        <h1 class="text-center">
-                            <?php
-                            switch ($donnee['partage']) {
-                                case 'public':
-                                    echo '<i class="bi bi-people-fill" aria-hidden="true" style="font-size: 1.5rem;"></i> Partage public : ';
-                                    break;
-
-                                case 'limite':
-                                    echo '<i class="bi bi-person-lock" aria-hidden="true" style="font-size: 1.5rem;"></i> Partage limité : ';
-                                    break;
-
-                                default:
-                                    echo '<i class="bi bi-lock-fill" aria-hidden="true" style="font-size: 1.5rem;"></i> Liste privée : ';
-                                    break;
-                            }
-                            echo safe_output($donnee['nom']);
-
-
-
-                            $sql1 = 'SELECT lic_compte.prenom as prenom, lic_compte.id as id
-                                FROM lic_compte
-                                INNER JOIN lic_autorisation ON lic_autorisation.id_compte = lic_compte.id
-                                WHERE lic_autorisation.type = "proprietaire" AND lic_autorisation.id_liste = ? AND lic_compte.deleted_to IS NULL
-                                ORDER BY lic_compte.prenom ASC';
-
-                            $response1 = $bdd->prepare($sql1);
-                            $response1->execute(array($donnee['id']));
-
-                            $proprietaire = array();
-
-                            while ($donnees1 = $response1->fetch()) {
-                                array_push($proprietaire, $donnees1);
-                            }
-
-                            ?>
-                            <small class="text-secondary">de
+                        <div class="text-center mb-4">
+                            <h1 class="mb-2"><?php echo safe_output($donnee['nom']); ?></h1>
+                            <p class="text-body-secondary mb-3">
                                 <?php
-                                for ($i = 0; $i < count($proprietaire); $i++) {
-                                    if ($i > 0) {
-                                        echo " et ";
-                                    }
-                                    if ($proprietaire[$i]['id'] == $_SESSION['id_compte']) {
-                                        echo "<strong>&thinsp;vous&thinsp;</strong>";
-                                    } else {
-                                        echo safe_output($proprietaire[$i]['prenom']);
-                                    }
+                                switch ($donnee['partage']) {
+                                    case 'public':
+                                        echo '<span class="badge bg-primary-subtle text-primary-emphasis" title="Partage public"><i class="bi bi-people-fill" aria-hidden="true"></i><span class="visually-hidden">Partage public</span></span> ';
+                                        break;
+
+                                    case 'limite':
+                                        echo '<span class="badge bg-primary-subtle text-primary-emphasis" title="Partage limité"><i class="bi bi-person-lock" aria-hidden="true"></i><span class="visually-hidden">Partage limité</span></span> ';
+                                        break;
+
+                                    default:
+                                        echo '<span class="badge bg-primary-subtle text-primary-emphasis" title="Liste privée"><i class="bi bi-lock-fill" aria-hidden="true"></i><span class="visually-hidden">Liste privée</span></span> ';
+                                        break;
                                 }
-
                                 ?>
-                            </small>
-                            <?php
-
-                            $response1->closeCursor();
-
-                            if ($donnee['droit'] == "proprietaire") {
-                            ?>
-                                <a href="https://family.matthieudevilliers.fr/pages/modif-listes/?liste=<?php echo ($_GET['liste']) ?>" aria-label="Modifier la liste">
-                                    <i class="bi bi-pencil-fill" aria-hidden="true" style="font-size: 1.5rem;"></i>
+                                <span>de
+                                    <?php
+                                    for ($i = 0; $i < count($proprietaires); $i++) {
+                                        if ($i > 0) {
+                                            echo " et ";
+                                        }
+                                        if ($proprietaires[$i]['id'] == $_SESSION['id_compte']) {
+                                            echo "<strong>&thinsp;vous&thinsp;</strong>";
+                                        } else {
+                                            echo safe_output($proprietaires[$i]['prenom']);
+                                        }
+                                    }
+                                    ?>
+                                </span>
+                            </p>
+                            <div class="d-flex flex-wrap justify-content-center gap-2">
+                                <?php if ($donnee['droit'] == "proprietaire") { ?>
+                                    <a class="btn btn-outline-primary" href="https://family.matthieudevilliers.fr/pages/modif-listes/?liste=<?php echo rawurlencode($_GET['liste']); ?>">
+                                        <i class="bi bi-pencil-fill me-2" aria-hidden="true"></i>Modifier la liste
+                                    </a>
+                                <?php } ?>
+                                <a class="btn btn-outline-primary" href="https://family.matthieudevilliers.fr/pages/print-liste/?liste=<?php echo rawurlencode($_GET['liste']); ?>">
+                                    <i class="bi bi-printer-fill me-2" aria-hidden="true"></i>Imprimer la liste
                                 </a>
-                            <?php
-                            }
-                            ?>
+                                <?php if ($donnee['droit'] == "proprietaire" || $donnee['droit'] == "moderateur") { ?>
+                                    <a class="btn btn-primary" href="https://family.matthieudevilliers.fr/pages/modif-idees/?liste=<?php echo rawurlencode($_GET['liste']); ?>">
+                                        <i class="bi bi-plus-lg me-2" aria-hidden="true"></i>Ajouter une idée
+                                    </a>
+                                <?php } ?>
+                            </div>
+                        </div>
 
-
-                            <a href="https://family.matthieudevilliers.fr/pages/print-liste/?liste=<?php echo ($_GET['liste']) ?>" aria-label="Imprimer la liste">
-                                <i class="bi bi-printer-fill" aria-hidden="true" style="font-size: 1.5rem;"></i>
-                            </a>
-
-                        </h1>
-                        <br>
-
-                        <div class="card bg-body">
-                            <div class="card-body text-center">
+                        <div class="card">
+                            <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table text-center align-middle">
+                                    <table class="table table-hover align-middle text-center ideas-table">
                                         <caption class="visually-hidden">Idées de la liste <?php echo safe_output($donnee['nom']); ?></caption>
                                         <thead>
                                             <tr>
                                                 <th scope="col">Nom</th>
-                                                <th scope="col" style="max-width: 30rem;">Commentaire</th>
-                                                <th scope="col" style="max-width: 40rem;">Lien</th>
-                                                <th scope="col" style="min-width: 8rem;">Prix</th>
+                                                <th scope="col">Commentaire</th>
+                                                <th scope="col">Lien</th>
+                                                <th scope="col">Prix</th>
                                                 <th scope="col">Infos</th>
                                                 <?php
-                                                if ($donnee['droit'] != "lecteur")
+                                                if ($donnee['droit'] != "lecteur") {
                                                     echo '<th scope="col">Actions</th>';
-                                                else
-                                                    echo '<th scope="col">Réservé</th>';
+                                                } else {
+                                                    echo '<th scope="col">Réservation</th>';
+                                                }
                                                 ?>
                                             </tr>
                                         </thead>
@@ -221,39 +212,44 @@ $response1->closeCursor();
 
                                             while ($donnees = $response1->fetch()) {
                                             ?>
-                                                <tr>
-                                                    <td>
+                                                <tr<?php echo ($donnees['is_buy'] || ($donnee['droit'] != 'proprietaire' && $donnees['buy_from'])) ? ' class="idea-row-reserved"' : ''; ?>>
+                                                    <th scope="row">
                                                         <?php
-                                                        if ($donnees['nom'] == null) echo ('//');
+                                                        if ($donnees['nom'] == null || $donnees['nom'] === '') $renderEmpty();
                                                         else echo safe_output($donnees['nom']);
                                                         ?>
-                                                    </td>
-                                                    <td style="max-width: 40rem">
+                                                    </th>
+                                                    <td class="idea-cell-wide">
                                                         <?php
-                                                        if ($donnees['commentaire'] == null) echo ('//');
+                                                        if ($donnees['commentaire'] == null || $donnees['commentaire'] === '') $renderEmpty();
                                                         else echo safe_output($donnees['commentaire']);
                                                         ?>
                                                     </td>
-                                                    <td style="max-width: 40rem;">
+                                                    <td class="idea-cell-wide">
                                                         <?php
-                                                        if ($donnees['lien'] == null)
-                                                            echo ('//');
-                                                        else
+                                                        $ideaUrl = trim($donnees['lien'] ?? '');
+                                                        $urlParts = $ideaUrl !== '' ? parse_url($ideaUrl) : false;
+                                                        $isWebUrl = is_array($urlParts)
+                                                            && isset($urlParts['scheme'], $urlParts['host'])
+                                                            && in_array(strtolower($urlParts['scheme']), array('http', 'https'), true);
+                                                        if ($isWebUrl) {
+                                                            $domain = preg_replace('/^www\./i', '', $urlParts['host']);
                                                         ?>
-                                                        <?php $safeHref = safe_output($donnees['lien'] ?? ''); ?>
-                                                        <a href="<?php echo $safeHref ?>" target="_blank" rel="noopener noreferrer">
-                                                            <?php
-                                                            if (!empty($donnees['lien'])) {
-                                                                $display = mb_substr($donnees['lien'], 0, 60);
-                                                                echo safe_output($display);
-                                                                if (mb_strlen($donnees['lien']) > 60) echo '...';
-                                                            }
-                                                            ?>
-                                                        </a>
-                                                    </td>
-                                                    <td style="min-width: 8rem;">
+                                                            <a class="idea-link" href="<?php echo safe_output($ideaUrl); ?>" title="<?php echo safe_output($ideaUrl); ?>" target="_blank" rel="noopener noreferrer">
+                                                                <i class="bi bi-box-arrow-up-right me-1" aria-hidden="true"></i><?php echo safe_output($domain); ?><span class="visually-hidden"> : lien externe pour <?php echo safe_output($donnees['nom'] ?: 'cette idée'); ?> (nouvelle fenêtre)</span>
+                                                            </a>
                                                         <?php
-                                                        if ($donnees['price'] == null) echo ('//');
+                                                        } elseif ($ideaUrl !== '') {
+                                                            echo safe_output(mb_substr($ideaUrl, 0, 60));
+                                                            if (mb_strlen($ideaUrl) > 60) echo '…';
+                                                        } else {
+                                                            $renderEmpty();
+                                                        }
+                                                        ?>
+                                                    </td>
+                                                    <td>
+                                                        <?php
+                                                        if ($donnees['price'] == null || $donnees['price'] === '') $renderEmpty();
                                                         else echo safe_output($donnees['price']);
                                                         ?>
                                                     </td>
@@ -276,13 +272,14 @@ $response1->closeCursor();
                                                                 array_push($proprietaire, $donnee1);
                                                             }
 
-                                                            echo 'Acheté par ';
+                                                            echo '<span class="badge bg-secondary-subtle text-secondary-emphasis">Acheté par ';
 
                                                             for ($i = 0; $i < count($proprietaire); $i++) {
                                                                 if ($i > 0) echo " et ";
                                                                 echo safe_output($proprietaire[$i]['prenom']);
                                                             }
 
+                                                            echo '</span>';
                                                             $response2->closeCursor();
                                                         } elseif ($donnees['buy_from'] && $donnee['droit'] != "proprietaire") {
 
@@ -296,12 +293,12 @@ $response1->closeCursor();
                                                             $donnee1 = $response2->fetch();
 
                                                             if ($donnee1) {
-                                                                echo 'Réservé par ' . safe_output($donnee1['prenom']);
+                                                                echo '<span class="badge bg-secondary-subtle text-secondary-emphasis">Réservé par ' . safe_output($donnee1['prenom']) . '</span>';
                                                             }
 
                                                             $response2->closeCursor();
                                                         } else {
-                                                            echo '//';
+                                                            $renderEmpty();
                                                         }
                                                         ?>
                                                     </td>
@@ -309,8 +306,8 @@ $response1->closeCursor();
                                                     if ($donnee['droit'] != "lecteur") {
                                                     ?>
                                                         <td>
-                                                            <a class="btn btn-outline-secondary" href="https://family.matthieudevilliers.fr/pages/modif-idees/?idee=<?php echo $donnees['id']; ?>" aria-label="Modifier l'idée <?php echo safe_output($donnees['nom']); ?>">
-                                                                <i class="bi bi-pencil-square" aria-hidden="true"></i>
+                                                            <a class="btn btn-outline-primary" href="https://family.matthieudevilliers.fr/pages/modif-idees/?idee=<?php echo (int) $donnees['id']; ?>" aria-label="Modifier l'idée <?php echo safe_output($donnees['nom'] ?: 'sans nom'); ?>">
+                                                                <i class="bi bi-pencil-square me-2" aria-hidden="true"></i>Modifier
                                                             </a>
                                                         </td>
                                                         <?php
@@ -318,15 +315,22 @@ $response1->closeCursor();
                                                         if ($donnees['is_buy'] || (isset($donnees['buy_from']) && $donnees['buy_from'] != $_SESSION['id_compte'])) {
                                                         ?>
                                                             <td>
-                                                                <input class="check" type="checkbox" aria-label="Idée déjà achetée ou réservée" checked disabled>
+                                                                <div class="form-check form-switch d-flex justify-content-center">
+                                                                    <input class="form-check-input" id="reservation-<?php echo (int) $donnees['id']; ?>" type="checkbox" checked disabled>
+                                                                    <label class="form-check-label visually-hidden" for="reservation-<?php echo (int) $donnees['id']; ?>">Réservation de <?php echo safe_output($donnees['nom'] ?: 'cette idée'); ?> : déjà achetée ou réservée</label>
+                                                                </div>
                                                             </td>
                                                         <?php
                                                         } else {
                                                         ?>
                                                             <td>
-                                                                <form action="" method="post">
+                                                                <form action="" method="post" class="d-flex justify-content-center">
                                                                     <input name='AchatFrom' value="<?php echo $donnees['id']; ?>" type='hidden'>
-                                                                    <input name="AchatFrom" value="<?php echo $donnees['id']; ?>" class="check" type="checkbox" aria-label="Réserver <?php echo safe_output($donnees['nom']); ?>" onChange="submit();" <?php if ($donnees['buy_from'] == $_SESSION['id_compte']) echo 'checked'; ?> />
+                                                                    <div class="form-check form-switch">
+                                                                        <input name="AchatFrom" value="<?php echo $donnees['id']; ?>" class="form-check-input" id="reservation-<?php echo (int) $donnees['id']; ?>" type="checkbox" onchange="this.form.submit()" <?php if ($donnees['buy_from'] == $_SESSION['id_compte']) echo 'checked'; ?>>
+                                                                        <label class="form-check-label" for="reservation-<?php echo (int) $donnees['id']; ?>">Réserver<span class="visually-hidden"> <?php echo safe_output($donnees['nom']); ?></span></label>
+                                                                        <noscript><button class="btn btn-sm btn-outline-primary ms-2" type="submit">Enregistrer</button></noscript>
+                                                                    </div>
                                                                 </form>
                                                             </td>
                                                         <?php
@@ -336,28 +340,17 @@ $response1->closeCursor();
                                                     <?php
                                                     }
                                                     ?>
-                                                </tr>
-                                            <?php
+                                                    </tr>
+                                                <?php
                                             }
 
                                             $response1->closeCursor();
-                                            ?>
+                                                ?>
                                         </tbody>
                                     </table>
                                 </div>
-                                <?php
-                                if ($donnee['droit'] == "proprietaire" || $donnee['droit'] == "moderateur") {
-                                ?>
-                                    <br>
-                                    <a class="btn btn-primary" href="https://family.matthieudevilliers.fr/pages/modif-idees/?liste=<?php echo $_GET['liste']; ?>">
-                                        Ajouter une idée
-                                    </a>
-                                <?php
-                                }
-                                ?>
                             </div>
                         </div>
-                        <br>
                     </div>
                 </div>
             </div>
@@ -369,8 +362,7 @@ $response1->closeCursor();
         ?>
     </main>
 
+    <?php include('../../widgets/footer/index.php'); ?>
 </body>
-
-<?php include('../../widgets/footer/index.php'); ?>
 
 </html>

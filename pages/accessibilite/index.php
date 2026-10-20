@@ -25,9 +25,9 @@ include('../../scripts/verif/index.php');
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-12">
-                    <h1 class="text-center">Déclaration d’accessibilité</h1>
+                    <h1 class="text-center mb-4">Déclaration d’accessibilité</h1>
 
-                    <div class="card bg-body">
+                    <div class="card bg-body mb-4">
                         <div class="card-body">
                             <p><strong>DEVILLIERS Matthieu</strong> s’engage à rendre ses sites internet, intranet, extranet et ses progiciels accessibles (et ses applications mobiles et mobilier urbain numérique) conformément à l’article 47 de la loi n°2005-102 du 11 février 2005.</p>
 
@@ -35,7 +35,7 @@ include('../../scripts/verif/index.php');
 
                             <h2>État de conformité</h2>
 
-                            <p><strong>Listes d'idées cadeau <a target="_blank" href="https://family.matthieudevilliers.fr/">https://family.matthieudevilliers.fr/</a></strong> est <strong>partiellement conforme</strong> avec le référentiel général d’amélioration de l’accessibilité (RGAA).</p>
+                            <p><strong>Listes d'idées cadeau <a href="https://family.matthieudevilliers.fr/">https://family.matthieudevilliers.fr/</a></strong> est <strong>partiellement conforme</strong> avec le référentiel général d’amélioration de l’accessibilité (RGAA).</p>
 
                             <h2>Résultats des tests</h2>
 
@@ -94,22 +94,20 @@ include('../../scripts/verif/index.php');
                             <p>Plusieurs moyens sont à votre disposition :</p>
 
                             <ul>
-                                <li><a href="https://formulaire.defenseurdesdroits.fr/formulaire_saisine" target="_blank"> Écrire un message au Défenseur des droits</a></li>
-                                <li><a href="https://www.defenseurdesdroits.fr/carte-des-delegues" target="_blank"> Contacter le délégué du Défenseur des droits dans votre région</a></li>
+                                <li><a href="https://formulaire.defenseurdesdroits.fr/formulaire_saisine" target="_blank" rel="noopener noreferrer">Écrire un message au Défenseur des droits <span class="visually-hidden">(nouvelle fenêtre)</span><i class="bi bi-box-arrow-up-right ms-1" aria-hidden="true"></i></a></li>
+                                <li><a href="https://www.defenseurdesdroits.fr/carte-des-delegues" target="_blank" rel="noopener noreferrer">Contacter le délégué du Défenseur des droits dans votre région <span class="visually-hidden">(nouvelle fenêtre)</span><i class="bi bi-box-arrow-up-right ms-1" aria-hidden="true"></i></a></li>
                                 <li> Envoyer un courrier par la poste (gratuit, ne pas mettre de timbre) à :<br><span>Défenseur des droits<br> Libre réponse 71120<br> 75342 Paris CEDEX 07</span></li>
                             </ul>
                         </div>
                     </div>
 
-                    <br>
                 </div>
             </div>
         </div>
 
     </main>
 
+    <?php include('../../widgets/footer/index.php'); ?>
 </body>
-
-<?php include('../../widgets/footer/index.php'); ?>
 
 </html>
