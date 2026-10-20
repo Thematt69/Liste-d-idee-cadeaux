@@ -13,18 +13,25 @@
 
 <link rel="icon" href="/images/logo.webp">
 
+<?php
+// Le ?v= change avec le fichier : le cache d'un an du .htaccess reste sans risque.
+$asset = function ($path) {
+    $file = __DIR__ . '/../..' . $path;
+    return $path . (is_file($file) ? '?v=' . filemtime($file) : '');
+};
+?>
 <!-- Bootstrap CSS -->
-<link rel="stylesheet" href="/css/bootstrap.min.css">
-<link rel="stylesheet" href="/css/bootstrap-icons/bootstrap-icons.css">
+<link rel="stylesheet" href="<?php echo $asset('/css/bootstrap.min.css'); ?>">
+<link rel="stylesheet" href="<?php echo $asset('/css/bootstrap-icons/bootstrap-icons.css'); ?>">
 
 <!-- Bootstrap JS -->
-<script src="/js/bootstrap.bundle.min.js" defer></script>
+<script src="<?php echo $asset('/js/bootstrap.bundle.min.js'); ?>" defer></script>
 
 <!-- Bootstrap -->
-<script src="/js/jquery.min.js"></script>
+<script src="<?php echo $asset('/js/jquery.min.js'); ?>"></script>
 
 <!-- Notifications JS -->
-<script type="module" src="/js/notifications.js"></script>
+<script type="module" src="<?php echo $asset('/js/notifications.js'); ?>"></script>
 
 <!-- Style CSS -->
-<link href="/css/style.css" rel="stylesheet">
+<link href="<?php echo $asset('/css/style.css'); ?>" rel="stylesheet">

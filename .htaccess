@@ -1,39 +1,40 @@
-<IfModule mod_expires.c>
+<IfModule mod_deflate.c>
 
-    ExpiresActive On
-    ExpiresDefault "access plus 6 month"
-    ExpiresByType text/css "access plus 1 month"
-    ExpiresByType image/jpg "access plus 1 week"
-    ExpiresByType image/webp "access plus 1 week"
-    ExpiresByType text/html "access plus 2 day"
-    
-    AddType images/ico .ico
-    ExpiresByType images/ico "access plus 1 year"
+    AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json image/svg+xml font/ttf application/vnd.ms-fontobject
 
 </IfModule>
 
 <IfModule mod_headers.c>
 
-    <FilesMatch "\.(js|ico|css|eot|svg|scss|ttf|woff)$">
+    # Assets versionnés par ?v= (voir widgets/import) : cache d'un an
+    <FilesMatch "\.(css|js|eot|ttf|woff2?)$">
 
-        Header set Cache-Control "max-age=4838400, public"
+        Header set Cache-Control "public, max-age=31536000, immutable"
 
     </FilesMatch>
 
-    <FilesMatch "\.(jpg|webp)$">
+    # Fichiers sans version dans l'URL : cache d'une semaine
+    <FilesMatch "\.(jpe?g|png|webp|ico|svg|mp4|webm)$">
 
-        Header set Cache-Control "max-age=345600, public"
+        Header set Cache-Control "public, max-age=604800"
+
+    </FilesMatch>
+
+    # Pages PHP : revalidation ; setIfEmpty conserve les en-têtes de session_start()
+    <FilesMatch "\.php$">
+
+        Header setIfEmpty Cache-Control "no-cache"
 
     </FilesMatch>
 
     # Security headers
     Header always set X-Frame-Options "SAMEORIGIN"
     Header always set X-Content-Type-Options "nosniff"
-    Header always set X-XSS-Protection "1; mode=block"
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
     Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+    Header always set Strict-Transport-Security "max-age=31536000"
 
-</IfModule> 
+</IfModule>
 
 ErrorDocument 401 /pages/erreur/403.php
 ErrorDocument 403 /pages/erreur/403.php
