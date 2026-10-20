@@ -1,50 +1,58 @@
-# Règles Cline pour ce projet
+# Cline rules for this project
 
-## 1. Toujours gérer les commandes terminal avec timeout explicite
+## General working rules
 
-- Toute commande ponctuelle doit être lancée avec un timeout clair.
-- Ne jamais laisser un terminal bloqué sans limite de temps.
-- Pour un test, build, validation ou script local, utiliser un mode synchronisé avec timeout.
-- Ne pas lancer de commandes interactives sans surveiller la sortie.
+- Keep work minimal and project-specific.
+- Prefer small, targeted edits over broad refactors.
+- Follow the repo conventions in `AGENTS.md` and the PHP instruction files under `.github/instructions/`.
+- Do not create a new framework, service layer, or architecture pattern unless the task requires it.
 
-## 2. Séparer les tâches courtes et les tâches longues
+## Terminal and command execution rules
 
-- `sync` pour : validation, recherche, diff, tests, lint, scripts de courte durée.
-- `async` uniquement pour : serveur local, watcher, process long qui doit rester vivant.
-- Si une commande est longue ou bloque, la stopper proprement et la relancer avec un timeout ou une commande plus ciblée.
+- Never run commands without a timeout when the task may block.
+- For long-running or interactive commands, set a clear timeout and prefer background execution only when needed.
+- If a terminal command hangs or waits for input, stop and diagnose instead of continuing blindly.
+- Do not leave shells waiting in a blocked state without handling the prompt or timeout.
+- If a command needs user input, ask for the needed value or handle it explicitly; do not guess.
+- Keep commands short and narrow; avoid broad build/test loops when a focused validation is enough.
 
-## 3. Éviter les commandes qui peuvent rester bloquées
+## Local validation rules
 
-- Ne pas lancer de commandes qui attendent une entrée sans avoir prévu la réponse.
-- Ne pas utiliser de scripts interactifs trop génériques.
-- Ne pas faire de boucle infinie, de sleep, ou de commande qui dépend d’une interaction utilisateur sans garde-fou.
-- Si le terminal attend une saisie, la traiter immédiatement ou arrêter le processus.
+- Prefer focused checks such as a PHP local server start or a minimal page-level validation instead of broad project-wide commands.
+- Use `php -S localhost:8000` from the project root for local testing when relevant.
+- If HTTPS enforcement blocks local testing, use a temporary bypass or a local TLS proxy, but do not leave that workaround in the final committed patch.
 
-## 4. Rester ciblé et lisible
+## PHP and SQL rules
 
-- Préférer des commandes courtes et précises.
-- Éviter les scans globaux trop larges sans besoin.
-- Pour ce projet, privilégier les actions utiles sur la base PHP : validation des fichiers, diff, lancement local, vérification de la syntaxe PHP, contrôles de sécurité et de cohérence du code.
+- Use the project `$bdd` PDO instance from `scripts/verif/index.php`; do not open a second connection in page files.
+- Always prefer prepared statements with positional `?` placeholders.
+- Preserve `deleted_to IS NULL` filters unless the feature explicitly changes deletion behavior.
+- Preserve permission checks against `lic_autorisation` and the expected roles (`proprietaire`, `moderateur`, `lecteur`).
+- Validate required GET/POST values before using them.
 
-## 5. Conventions de ce repo
+## Security rules
 
-- Le projet est un monolithe PHP, sans framework.
-- Respecter les conventions de [AGENTS.md](AGENTS.md) et des fichiers d’instructions dans [.github/instructions](.github/instructions).
-- Utiliser les fichiers PHP dans `pages/`, `scripts/` et `widgets/` comme point d’entrée et de logique serveur.
-- Ne pas créer de connexion PDO supplémentaire dans les pages.
-- Conserver les règles de sécurité du projet : sortie échappée, `exit()` après redirection, validation des inputs, `deleted_to IS NULL` quand pertinent.
+- Escape output with `htmlspecialchars($var, ENT_QUOTES, 'UTF-8')` or `safe_output()`.
+- Always call `exit();` immediately after `header('Location: ...');`.
+- Check `$response->fetch()` results before array access.
+- Never commit credentials, secrets, production tokens, or password material.
+- Keep local workarounds temporary and explicit.
 
-## 6. Recommandations pratiques pour Cline
+## Transactional DB work
 
-- Avant toute commande longue : choisir le bon mode (`sync` ou `async`) et prévoir un timeout raisonnable.
-- Après un échec ou un blocage : diagnostiquer rapidement, ne pas relancer plusieurs fois sans raison.
-- Quand un serveur local est lancé, garder la commande asynchrone et noter le terminal ID / port utilisé.
-- Pour ce projet, les commandes de référence sont souvent :
-  - `php -S localhost:8000`
-  - `git diff --check`
-  - `php -l <fichier.php>`
+- For multi-step writes, prefer a transaction with proper rollback on failure.
+- Do not leave partial database updates if an error occurs.
+- Keep the transaction scope aligned to the business action, not wider than needed.
 
-## 7. Règle d’or
+## When stuck
 
-- Une commande non surveillée et sans timeout n’est pas acceptable dans ce projet.
-- Si une commande est susceptible de bloquer, on la limite, on la contrôle, ou on la remplace par une version plus ciblée.
+- Stop, identify the exact failure point, and re-check the real project pattern before making a new change.
+- Do not stack speculative fixes.
+- Prefer one root-cause fix and validate it with the smallest relevant command.
+
+## Cline specific expectations
+
+- Keep prompts and tool use explicit.
+- If the tool or command is likely to hang, enforce time limits and a clear fallback plan.
+- Use the smallest command that checks the changed behavior.
+- If a terminal is blocked, note the exact state and fix the cause before continuing the task.
