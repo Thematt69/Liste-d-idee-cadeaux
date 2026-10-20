@@ -435,10 +435,10 @@ if (isset($_POST['delete'])) {
                                             </div>
                                         </div>
                                         <div class="d-flex flex-wrap justify-content-center gap-2 mt-3">
-                                                <button type="submit" name="save" value="<?php echo $donnees['id'] ?>" class="btn btn-primary">Enregistrer</button>
-                                                <a class="btn btn-secondary" href="https://family.matthieudevilliers.fr/pages/idees/?liste=<?php echo $_GET['liste'] ?? $donnee['partage']; ?>">
-                                                    Annuler
-                                                </a>
+                                            <button type="submit" name="save" value="<?php echo $donnees['id'] ?>" class="btn btn-primary">Enregistrer</button>
+                                            <a class="btn btn-secondary" href="https://family.matthieudevilliers.fr/pages/idees/?liste=<?php echo $_GET['liste'] ?? $donnee['partage']; ?>">
+                                                Annuler
+                                            </a>
                                             <?php
                                             if (isset($_GET['idee']) && $donnees != null && $donnee['droit'] == "proprietaire") {
                                             ?>

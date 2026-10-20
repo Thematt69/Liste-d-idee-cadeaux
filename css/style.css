@@ -23,7 +23,7 @@
   --bs-primary-bg-subtle: #b0ecff;
   --bs-primary-text-emphasis: #004e5e;
   --bs-secondary-bg-subtle: #cee7ef;
-    --app-card-bg: #ffffff;
+  --app-card-bg: #ffffff;
   --bs-danger-bg-subtle: #ffdad6;
   --bs-danger-text-emphasis: #93000a;
   --bs-success-bg-subtle: #d7f0df;
@@ -59,7 +59,7 @@
   --bs-primary-bg-subtle: #004e5e;
   --bs-primary-text-emphasis: #b0ecff;
   --bs-secondary-bg-subtle: #344a51;
-    --app-card-bg: #171c1e;
+  --app-card-bg: #171c1e;
   --bs-danger-bg-subtle: #93000a;
   --bs-danger-text-emphasis: #ffdad6;
   --bs-success-bg-subtle: #175c31;
@@ -125,7 +125,9 @@ main:focus:not(:focus-visible) {
 
 .site-navbar .nav-link {
   border-radius: var(--bs-border-radius);
-  transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+  transition:
+    background-color 0.15s ease-in-out,
+    color 0.15s ease-in-out;
 }
 
 .site-navbar .nav-link:hover,
@@ -184,9 +186,6 @@ main:focus:not(:focus-visible) {
 .card-body {
   padding: clamp(1rem, 2.5vw, 1.75rem);
 }
-
-
-
 
 .alert:has(> .btn-close) {
   position: relative;

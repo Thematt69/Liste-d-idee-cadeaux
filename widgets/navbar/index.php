@@ -40,16 +40,16 @@
                             if ($_SESSION['fonction'] == 'admin') {
                         ?>
                                 <li class="nav-item">
-                                    <a class="nav-link<?php echo $isCurrent('/pages/admin/') ? ' active' : ''; ?>" href="https://family.matthieudevilliers.fr/pages/admin/"<?php echo $isCurrent('/pages/admin/') ? ' aria-current="page"' : ''; ?>>Panel Admin</a>
+                                    <a class="nav-link<?php echo $isCurrent('/pages/admin/') ? ' active' : ''; ?>" href="https://family.matthieudevilliers.fr/pages/admin/" <?php echo $isCurrent('/pages/admin/') ? ' aria-current="page"' : ''; ?>>Panel Admin</a>
                                 </li>
                             <?php
                             }
                             ?>
                             <li class="nav-item">
-                                <a class="nav-link<?php echo $isCurrent('/pages/listes/') ? ' active' : ''; ?>" href="https://family.matthieudevilliers.fr/pages/listes/"<?php echo $isCurrent('/pages/listes/') ? ' aria-current="page"' : ''; ?>>Mes listes</a>
+                                <a class="nav-link<?php echo $isCurrent('/pages/listes/') ? ' active' : ''; ?>" href="https://family.matthieudevilliers.fr/pages/listes/" <?php echo $isCurrent('/pages/listes/') ? ' aria-current="page"' : ''; ?>>Mes listes</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link<?php echo $isCurrent('/pages/compte/') ? ' active' : ''; ?>" href="https://family.matthieudevilliers.fr/pages/compte/"<?php echo $isCurrent('/pages/compte/') ? ' aria-current="page"' : ''; ?>>Mon compte</a>
+                                <a class="nav-link<?php echo $isCurrent('/pages/compte/') ? ' active' : ''; ?>" href="https://family.matthieudevilliers.fr/pages/compte/" <?php echo $isCurrent('/pages/compte/') ? ' aria-current="page"' : ''; ?>>Mon compte</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="https://family.matthieudevilliers.fr/scripts/deconnexion/">Déconnexion</a>
@@ -58,10 +58,10 @@
                         } else {
                         ?>
                             <li class="nav-item">
-                                <a class="nav-link<?php echo $isCurrent('/pages/inscription/') ? ' active' : ''; ?>" href="https://family.matthieudevilliers.fr/pages/inscription/"<?php echo $isCurrent('/pages/inscription/') ? ' aria-current="page"' : ''; ?>>Inscription</a>
+                                <a class="nav-link<?php echo $isCurrent('/pages/inscription/') ? ' active' : ''; ?>" href="https://family.matthieudevilliers.fr/pages/inscription/" <?php echo $isCurrent('/pages/inscription/') ? ' aria-current="page"' : ''; ?>>Inscription</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link<?php echo $isCurrent('/pages/connexion/') ? ' active' : ''; ?>" href="https://family.matthieudevilliers.fr/pages/connexion/"<?php echo $isCurrent('/pages/connexion/') ? ' aria-current="page"' : ''; ?>>Connexion</a>
+                                <a class="nav-link<?php echo $isCurrent('/pages/connexion/') ? ' active' : ''; ?>" href="https://family.matthieudevilliers.fr/pages/connexion/" <?php echo $isCurrent('/pages/connexion/') ? ' aria-current="page"' : ''; ?>>Connexion</a>
                             </li>
                         <?php
                         }

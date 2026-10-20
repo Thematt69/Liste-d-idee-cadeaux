@@ -133,8 +133,8 @@ if (isset($_POST['Mail'])) {
                                             <label for="LabelMDP">Mot de passe</label>
                                         </div>
                                         <div id="DescriptionMDP" class="form-text mb-3"><a
-                                                    href="https://family.matthieudevilliers.fr/pages/reset-password/">Mot
-                                                    de passe oublié</a></div>
+                                                href="https://family.matthieudevilliers.fr/pages/reset-password/">Mot
+                                                de passe oublié</a></div>
                                         <div class="text-center">
                                             <button type="submit" class="btn btn-primary">Se connecter</button>
                                         </div>

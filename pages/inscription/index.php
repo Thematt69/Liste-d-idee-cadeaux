@@ -136,8 +136,8 @@ if (isset($_POST['Mail'])) {
                                             <label for="LabelMDP">Mot de passe</label>
                                         </div>
                                         <div id="DescriptionMDP" class="form-text mb-3">Votre mot de passe
-                                                est enregistré dans un format haché, il est impossible pour nous de le
-                                                récupérer.</div>
+                                            est enregistré dans un format haché, il est impossible pour nous de le
+                                            récupérer.</div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-floating">
@@ -146,8 +146,8 @@ if (isset($_POST['Mail'])) {
                                             <label for="LabelMail">Adresse mail</label>
                                         </div>
                                         <div id="DescriptionMail" class="form-text mb-3">Votre adresse mail
-                                                nous permet de vous transmet toutes les informations vous
-                                                concernant.</div>
+                                            nous permet de vous transmet toutes les informations vous
+                                            concernant.</div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-field">

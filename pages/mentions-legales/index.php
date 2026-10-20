@@ -51,11 +51,31 @@ include('../../scripts/verif/index.php');
                         </tr>
                     </thead>
                     <tbody>
-                        <tr><th scope="row">Prénom et nom</th><td>Personnalisation du compte</td><td>Vous et les personnes autorisées à consulter vos listes</td></tr>
-                        <tr><th scope="row">Mot de passe</th><td>Authentification au compte</td><td>Vous uniquement ; il est stocké sous forme hachée</td></tr>
-                        <tr><th scope="row">Adresse e-mail</th><td>Identification et communications relatives au compte</td><td>Vous et les personnes autorisées selon les fonctions de partage</td></tr>
-                        <tr><th scope="row">Adresse IP</th><td>Historique des connexions</td><td>Administrateur du site</td></tr>
-                        <tr><th scope="row">Listes et idées</th><td>Création, consultation et partage</td><td>Vous et les personnes autorisées</td></tr>
+                        <tr>
+                            <th scope="row">Prénom et nom</th>
+                            <td>Personnalisation du compte</td>
+                            <td>Vous et les personnes autorisées à consulter vos listes</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Mot de passe</th>
+                            <td>Authentification au compte</td>
+                            <td>Vous uniquement ; il est stocké sous forme hachée</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Adresse e-mail</th>
+                            <td>Identification et communications relatives au compte</td>
+                            <td>Vous et les personnes autorisées selon les fonctions de partage</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Adresse IP</th>
+                            <td>Historique des connexions</td>
+                            <td>Administrateur du site</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Listes et idées</th>
+                            <td>Création, consultation et partage</td>
+                            <td>Vous et les personnes autorisées</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

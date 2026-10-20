@@ -132,50 +132,50 @@ $response1->closeCursor();
                         <div class="text-center mb-4">
                             <h1 class="mb-2"><?php echo safe_output($donnee['nom']); ?></h1>
                             <p class="text-body-secondary mb-3">
-                            <?php
-                            switch ($donnee['partage']) {
-                                case 'public':
-                                    echo '<span class="badge bg-primary-subtle text-primary-emphasis" title="Partage public"><i class="bi bi-people-fill" aria-hidden="true"></i><span class="visually-hidden">Partage public</span></span> ';
-                                    break;
-
-                                case 'limite':
-                                    echo '<span class="badge bg-primary-subtle text-primary-emphasis" title="Partage limité"><i class="bi bi-person-lock" aria-hidden="true"></i><span class="visually-hidden">Partage limité</span></span> ';
-                                    break;
-
-                                default:
-                                    echo '<span class="badge bg-primary-subtle text-primary-emphasis" title="Liste privée"><i class="bi bi-lock-fill" aria-hidden="true"></i><span class="visually-hidden">Liste privée</span></span> ';
-                                    break;
-                            }
-                            ?>
-                            <span>de
                                 <?php
-                                for ($i = 0; $i < count($proprietaires); $i++) {
-                                    if ($i > 0) {
-                                        echo " et ";
-                                    }
-                                    if ($proprietaires[$i]['id'] == $_SESSION['id_compte']) {
-                                        echo "<strong>&thinsp;vous&thinsp;</strong>";
-                                    } else {
-                                        echo safe_output($proprietaires[$i]['prenom']);
-                                    }
+                                switch ($donnee['partage']) {
+                                    case 'public':
+                                        echo '<span class="badge bg-primary-subtle text-primary-emphasis" title="Partage public"><i class="bi bi-people-fill" aria-hidden="true"></i><span class="visually-hidden">Partage public</span></span> ';
+                                        break;
+
+                                    case 'limite':
+                                        echo '<span class="badge bg-primary-subtle text-primary-emphasis" title="Partage limité"><i class="bi bi-person-lock" aria-hidden="true"></i><span class="visually-hidden">Partage limité</span></span> ';
+                                        break;
+
+                                    default:
+                                        echo '<span class="badge bg-primary-subtle text-primary-emphasis" title="Liste privée"><i class="bi bi-lock-fill" aria-hidden="true"></i><span class="visually-hidden">Liste privée</span></span> ';
+                                        break;
                                 }
                                 ?>
-                            </span>
+                                <span>de
+                                    <?php
+                                    for ($i = 0; $i < count($proprietaires); $i++) {
+                                        if ($i > 0) {
+                                            echo " et ";
+                                        }
+                                        if ($proprietaires[$i]['id'] == $_SESSION['id_compte']) {
+                                            echo "<strong>&thinsp;vous&thinsp;</strong>";
+                                        } else {
+                                            echo safe_output($proprietaires[$i]['prenom']);
+                                        }
+                                    }
+                                    ?>
+                                </span>
                             </p>
                             <div class="d-flex flex-wrap justify-content-center gap-2">
-                            <?php if ($donnee['droit'] == "proprietaire") { ?>
-                                <a class="btn btn-outline-primary" href="https://family.matthieudevilliers.fr/pages/modif-listes/?liste=<?php echo rawurlencode($_GET['liste']); ?>">
-                                    <i class="bi bi-pencil-fill me-2" aria-hidden="true"></i>Modifier la liste
+                                <?php if ($donnee['droit'] == "proprietaire") { ?>
+                                    <a class="btn btn-outline-primary" href="https://family.matthieudevilliers.fr/pages/modif-listes/?liste=<?php echo rawurlencode($_GET['liste']); ?>">
+                                        <i class="bi bi-pencil-fill me-2" aria-hidden="true"></i>Modifier la liste
+                                    </a>
+                                <?php } ?>
+                                <a class="btn btn-outline-primary" href="https://family.matthieudevilliers.fr/pages/print-liste/?liste=<?php echo rawurlencode($_GET['liste']); ?>">
+                                    <i class="bi bi-printer-fill me-2" aria-hidden="true"></i>Imprimer la liste
                                 </a>
-                            <?php } ?>
-                            <a class="btn btn-outline-primary" href="https://family.matthieudevilliers.fr/pages/print-liste/?liste=<?php echo rawurlencode($_GET['liste']); ?>">
-                                <i class="bi bi-printer-fill me-2" aria-hidden="true"></i>Imprimer la liste
-                            </a>
-                            <?php if ($donnee['droit'] == "proprietaire" || $donnee['droit'] == "moderateur") { ?>
-                                <a class="btn btn-primary" href="https://family.matthieudevilliers.fr/pages/modif-idees/?liste=<?php echo rawurlencode($_GET['liste']); ?>">
-                                    <i class="bi bi-plus-lg me-2" aria-hidden="true"></i>Ajouter une idée
-                                </a>
-                            <?php } ?>
+                                <?php if ($donnee['droit'] == "proprietaire" || $donnee['droit'] == "moderateur") { ?>
+                                    <a class="btn btn-primary" href="https://family.matthieudevilliers.fr/pages/modif-idees/?liste=<?php echo rawurlencode($_GET['liste']); ?>">
+                                        <i class="bi bi-plus-lg me-2" aria-hidden="true"></i>Ajouter une idée
+                                    </a>
+                                <?php } ?>
                             </div>
                         </div>
 
@@ -340,12 +340,12 @@ $response1->closeCursor();
                                                     <?php
                                                     }
                                                     ?>
-                                                </tr>
-                                            <?php
+                                                    </tr>
+                                                <?php
                                             }
 
                                             $response1->closeCursor();
-                                            ?>
+                                                ?>
                                         </tbody>
                                     </table>
                                 </div>
