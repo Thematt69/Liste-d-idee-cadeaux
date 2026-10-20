@@ -130,6 +130,10 @@ main:focus:not(:focus-visible) {
     color 0.15s ease-in-out;
 }
 
+.site-navbar .navbar-nav {
+  gap: 0.25rem;
+}
+
 .site-navbar .nav-link:hover,
 .site-navbar .nav-link:focus-visible,
 .site-navbar .nav-link.active {
@@ -148,6 +152,12 @@ main:focus:not(:focus-visible) {
 
 .site-navbar .offcanvas-header {
   border-bottom: 1px solid var(--bs-border-color);
+}
+
+@media (max-width: 767.98px) {
+  .site-navbar .nav-link {
+    padding-left: 1rem;
+  }
 }
 
 .site-footer {
@@ -288,6 +298,9 @@ main:focus:not(:focus-visible) {
 }
 
 .toast {
+  color: var(--bs-body-color);
+  background-color: var(--bs-secondary-bg);
+  border-color: var(--bs-border-color);
   min-width: 300px;
   max-width: 350px;
   margin-bottom: 0.5rem;

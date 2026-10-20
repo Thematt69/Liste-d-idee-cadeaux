@@ -236,7 +236,7 @@ $response1->closeCursor();
                                                             $domain = preg_replace('/^www\./i', '', $urlParts['host']);
                                                         ?>
                                                             <a class="idea-link" href="<?php echo safe_output($ideaUrl); ?>" title="<?php echo safe_output($ideaUrl); ?>" target="_blank" rel="noopener noreferrer">
-                                                                <i class="bi bi-box-arrow-up-right me-1" aria-hidden="true"></i><?php echo safe_output($domain); ?><span class="visually-hidden"> : lien externe pour <?php echo safe_output($donnees['nom'] ?: 'cette idée'); ?> (nouvelle fenêtre)</span>
+                                                                <?php echo safe_output($domain); ?><i class="bi bi-box-arrow-up-right ms-1" aria-hidden="true"></i><span class="visually-hidden"> : lien externe pour <?php echo safe_output($donnees['nom'] ?: 'cette idée'); ?> (nouvelle fenêtre)</span>
                                                             </a>
                                                         <?php
                                                         } elseif ($ideaUrl !== '') {
