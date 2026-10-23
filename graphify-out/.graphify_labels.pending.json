@@ -1,0 +1,21 @@
+{
+  "7": "notifications.js",
+  "8": "inscription/index.php",
+  "9": "footer/index.php",
+  "10": "accessibilite/index.php",
+  "11": "cgu/index.php",
+  "12": "compte/index.php",
+  "13": "401.php",
+  "14": "403.php",
+  "15": "404.php",
+  "16": "listes/index.php",
+  "17": "mentions-legales/index.php",
+  "18": "modif-idees/index.php",
+  "19": "modif-listes/index.php",
+  "20": "plan-site/index.php",
+  "21": "print-liste/index.php",
+  "22": "reset-password/index.php",
+  "23": "clean/index.php",
+  "24": "deconnexion/index.php",
+  "25": "mark-notif-read/index.php"
+}

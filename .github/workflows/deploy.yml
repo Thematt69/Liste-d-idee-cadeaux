@@ -21,3 +21,7 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: /family.matthieudevilliers.fr/
+          exclude: |
+            **/.git*
+            **/.git*/**
+            tools/**

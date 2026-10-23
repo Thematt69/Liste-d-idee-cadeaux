@@ -1,0 +1,209 @@
+{
+  "communities": {
+    "0": [
+      "custom_session_fonction",
+      "custom_session_id_compte",
+      "custom_table_lic_compte",
+      "custom_table_lic_connexion",
+      "pages_compte_index",
+      "pages_connexion_index",
+      "pages_connexion_index_getip",
+      "pages_inscription_index",
+      "pages_reset_password_index",
+      "scripts_deconnexion_index"
+    ],
+    "1": [
+      "custom_route_pages_erreur_403_php",
+      "custom_route_pages_idees",
+      "custom_route_pages_modif_listes",
+      "custom_table_lic_autorisation",
+      "custom_table_lic_idee",
+      "custom_table_lic_liste",
+      "pages_idees_index",
+      "pages_listes_index",
+      "pages_modif_idees_index",
+      "pages_modif_listes_index",
+      "pages_print_liste_index"
+    ],
+    "2": [
+      "custom_route_scripts_mark_notif_read",
+      "custom_table_lic_notif",
+      "js_notifications",
+      "js_notifications_marknotificationasread",
+      "scripts_mail_index",
+      "scripts_mail_index_envoimail",
+      "scripts_mark_notif_read_index",
+      "widgets_notif_toast_index"
+    ],
+    "3": [
+      "pages_admin_index",
+      "scripts_clean_index",
+      "scripts_verif_index_cleanup_old_connexions"
+    ],
+    "4": [
+      "custom_route_pages_connexion",
+      "custom_route_pages_listes",
+      "images_logo",
+      "index",
+      "pages_accessibilite_index",
+      "pages_cgu_index",
+      "pages_erreur_401",
+      "pages_erreur_403",
+      "pages_erreur_404",
+      "pages_mentions_legales_index",
+      "pages_plan_site_index",
+      "widgets_footer_index",
+      "widgets_import_index",
+      "widgets_navbar_index"
+    ],
+    "5": [
+      "custom_infra_shared",
+      "scripts_verif_index",
+      "scripts_verif_index_safe_output"
+    ],
+    "6": [
+      "agents",
+      "readme"
+    ]
+  },
+  "cohesion": {
+    "0": 0.3333333333333333,
+    "1": 0.4,
+    "2": 0.21428571428571427,
+    "3": 0.3333333333333333,
+    "4": 0.3076923076923077,
+    "5": 0.6666666666666666,
+    "6": 1.0
+  },
+  "gods": [
+    {
+      "id": "widgets_navbar_index",
+      "label": "Widget navbar",
+      "degree": 21
+    },
+    {
+      "id": "widgets_import_index",
+      "label": "Widget import",
+      "degree": 18
+    },
+    {
+      "id": "widgets_footer_index",
+      "label": "Widget footer",
+      "degree": 18
+    },
+    {
+      "id": "custom_infra_shared",
+      "label": "Infrastructure partagée",
+      "degree": 18
+    },
+    {
+      "id": "pages_modif_idees_index",
+      "label": "Page modif-idees",
+      "degree": 17
+    },
+    {
+      "id": "pages_listes_index",
+      "label": "Page listes",
+      "degree": 16
+    },
+    {
+      "id": "custom_session_id_compte",
+      "label": "id_compte",
+      "degree": 16
+    },
+    {
+      "id": "pages_plan_site_index",
+      "label": "Page plan-site",
+      "degree": 15
+    },
+    {
+      "id": "pages_connexion_index",
+      "label": "Page connexion",
+      "degree": 14
+    },
+    {
+      "id": "pages_idees_index",
+      "label": "Page idees",
+      "degree": 14
+    }
+  ],
+  "surprises": [
+    {
+      "source": "Widget import",
+      "target": "Logo",
+      "source_files": [
+        "widgets/import/index.php",
+        "images/logo.webp"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "crosses file types (code ↔ image); connects across different repos/directories; peripheral node `Logo` unexpectedly reaches hub `Widget import`"
+    },
+    {
+      "source": "Widget navbar",
+      "target": "Logo",
+      "source_files": [
+        "widgets/navbar/index.php",
+        "images/logo.webp"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "crosses file types (code ↔ image); connects across different repos/directories; peripheral node `Logo` unexpectedly reaches hub `Widget navbar`"
+    },
+    {
+      "source": "Script deconnexion",
+      "target": "/pages/connexion/",
+      "source_files": [
+        "scripts/deconnexion/index.php",
+        "index.php"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "redirects_to",
+      "why": "connects across different repos/directories; bridges separate communities; peripheral node `Script deconnexion` unexpectedly reaches hub `/pages/connexion/`"
+    },
+    {
+      "source": "Widget navbar",
+      "target": "Script deconnexion",
+      "source_files": [
+        "widgets/navbar/index.php",
+        "scripts/deconnexion/index.php"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "links_to",
+      "why": "connects across different repos/directories; bridges separate communities; peripheral node `Script deconnexion` unexpectedly reaches hub `Widget navbar`"
+    },
+    {
+      "source": "Page admin",
+      "target": "envoiMail()",
+      "source_files": [
+        "pages/admin/index.php",
+        "scripts/mail/index.php"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls_function",
+      "why": "connects across different repos/directories; bridges separate communities"
+    }
+  ],
+  "questions": [
+    {
+      "type": "bridge_node",
+      "question": "Why does `Widget navbar` connect `Pages publiques et widgets` to `Authentification et comptes`, `Listes et idées`, `Administration et maintenance`?",
+      "why": "High betweenness centrality (0.128) - this node is a cross-community bridge."
+    },
+    {
+      "type": "isolated_nodes",
+      "question": "What connects `Instructions pour les agents`, `README`, `/pages/modif-listes/` to the rest of the system?",
+      "why": "3 weakly-connected nodes found - possible documentation gaps or missing edges."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `Infrastructure partagée` connect `Infrastructure partagée` to `Authentification et comptes`, `Listes et idées`, `Notifications et courriels`, `Administration et maintenance`, `Pages publiques et widgets`?",
+      "why": "High betweenness centrality (0.124) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `Script mark-notif-read` connect `Notifications et courriels` to `Authentification et comptes`, `Infrastructure partagée`?",
+      "why": "High betweenness centrality (0.111) - this node is a cross-community bridge."
+    }
+  ]
+}

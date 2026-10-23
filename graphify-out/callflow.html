@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liste-d-idee-cadeaux — Complete Call Flow &amp; Architecture Documentation</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<style>
+:root {
+  --bg: #0f172a; --surface: #1e293b; --border: #334155;
+  --text: #e2e8f0; --muted: #94a3b8; --accent: #38bdf8;
+  --warn: #fbbf24; --err: #f87171; --ok: #34d399;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+.container { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+h1 { font-size: 2.4rem; margin-bottom: 8px; background: linear-gradient(135deg, var(--accent), #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+h2 { font-size: 1.7rem; margin: 48px 0 16px; padding-bottom: 8px; border-bottom: 2px solid var(--accent); }
+h3 { font-size: 1.25rem; margin: 32px 0 12px; color: var(--accent); }
+h4 { font-size: 1.05rem; margin: 20px 0 8px; color: var(--warn); }
+p { margin: 8px 0; color: var(--muted); }
+.subtitle { color: var(--muted); font-size: 1.1rem; margin-bottom: 32px; }
+.mermaid { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin: 20px 0; overflow-x: auto; position: relative; }
+.mermaid.is-enhanced { padding: 0; overflow: hidden; min-height: 260px; }
+.mermaid-viewport { padding: 54px 24px 24px; overflow: hidden; cursor: grab; touch-action: none; min-height: 260px; }
+.mermaid-viewport.is-dragging { cursor: grabbing; }
+.mermaid-viewport svg { max-width: none !important; height: auto; transform-origin: 0 0; transition: transform 120ms ease; }
+.mermaid-toolbar { position: absolute; top: 10px; right: 10px; z-index: 3; display: flex; align-items: center; gap: 6px; padding: 6px; background: rgba(15,23,42,0.92); border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.28); }
+.mermaid-toolbar button, .mermaid-toolbar .zoom-level { height: 28px; min-width: 32px; border: 1px solid var(--border); border-radius: 6px; background: #1e293b; color: var(--text); font: 600 0.78rem system-ui, sans-serif; display: inline-flex; align-items: center; justify-content: center; }
+.mermaid-toolbar button { cursor: pointer; }
+.mermaid-toolbar button:hover { border-color: var(--accent); color: var(--accent); }
+.mermaid-toolbar .zoom-level { min-width: 52px; color: var(--muted); background: transparent; }
+.call-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.92rem; }
+.call-table th { background: #1a2744; color: var(--accent); text-align: left; padding: 10px 14px; border: 1px solid var(--border); }
+.call-table td { padding: 8px 14px; border: 1px solid var(--border); vertical-align: top; }
+.call-table tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+.tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; }
+.tag-async { background: #7c3aed33; color: #a78bfa; }
+.tag-class { background: #05966933; color: var(--ok); }
+.tag-func { background: #2563eb33; color: var(--accent); }
+.tag-cmd { background: #d9770633; color: var(--warn); }
+.tag-endpoint { background: #dc262633; color: var(--err); }
+.tag-hook { background: #db277733; color: #f472b6; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin: 16px 0; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; margin: 16px 0; }
+.arrow-chain { font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--accent); padding: 10px; background: rgba(56,189,248,0.06); border-radius: 6px; }
+code { font-family: 'Fira Code', 'Cascadia Code', monospace; background: rgba(255,255,255,0.06); padding: 1px 6px; border-radius: 3px; font-size: 0.88em; }
+ul, ol { margin: 8px 0 8px 24px; color: var(--muted); }
+li { margin: 4px 0; }
+a { color: var(--accent); }
+hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+.nav { position: sticky; top: 0; background: var(--bg); z-index: 10; padding: 12px 0; border-bottom: 1px solid var(--border); display: flex; gap: 20px; flex-wrap: wrap; font-size: 0.9rem; }
+.nav a { text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+@media (max-width: 768px) { .container { padding: 16px; } h1 { font-size: 1.8rem; } }
+
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Liste-d-idee-cadeaux — Complete Call Flow &amp; Architecture Documentation</h1>
+<p class="subtitle">Generated from graphify knowledge graph: 51 nodes, 193 edges, 7 communities. Commit: 0a79e9a</p>
+
+<div class="nav">
+    <a href="#overview">Architecture Overview</a>
+    <a href="#pages-publiques-et-widgets">Pages publiques et widgets</a>
+    <a href="#listes-et-id-es">Listes et idées</a>
+    <a href="#authentification-et-comptes">Authentification et comptes</a>
+    <a href="#notifications-et-courriels">Notifications et courriels</a>
+    <a href="#administration-et-maintenance">Administration et maintenance</a>
+    <a href="#infrastructure-partag-e">Infrastructure partagée</a>
+    <a href="#documentation">Documentation</a>
+</div>
+
+<!-- ====== Architecture Overview ====== -->
+<h2 id="overview">1. Architecture Overview</h2>
+
+<div class="mermaid">
+
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    PAGES_PUBLIQUES_ET_WIDGETS_830F64F5("Pages publiques et widgets<br/><small>14 nodes</small>")
+    class PAGES_PUBLIQUES_ET_WIDGETS_830F64F5 module;
+    LISTES_ET_ID_ES_5131D550("Listes et idées<br/><small>11 nodes</small>")
+    class LISTES_ET_ID_ES_5131D550 module;
+    AUTHENTIFICATION_ET_COMPTES_39F8392D("Authentification et comptes<br/><small>10 nodes</small>")
+    class AUTHENTIFICATION_ET_COMPTES_39F8392D module;
+    NOTIFICATIONS_ET_COURRIELS_5C68B6FB("Notifications et courriels<br/><small>8 nodes</small>")
+    class NOTIFICATIONS_ET_COURRIELS_5C68B6FB module;
+    ADMINISTRATION_ET_MAINTENANCE_A7F0EBD6("Administration et maintenance<br/><small>3 nodes</small>")
+    class ADMINISTRATION_ET_MAINTENANCE_A7F0EBD6 module;
+    INFRASTRUCTURE_PARTAG_E_2DB6263F("Infrastructure partagée<br/><small>3 nodes</small>")
+    class INFRASTRUCTURE_PARTAG_E_2DB6263F module;
+    DOCUMENTATION_BA2A1650("Documentation<br/><small>2 nodes</small>")
+    class DOCUMENTATION_BA2A1650 module;
+    LISTES_ET_ID_ES_5131D550 -->|includes x20| PAGES_PUBLIQUES_ET_WIDGETS_830F64F5
+    AUTHENTIFICATION_ET_COMPTES_39F8392D -->|includes x16| PAGES_PUBLIQUES_ET_WIDGETS_830F64F5
+    PAGES_PUBLIQUES_ET_WIDGETS_830F64F5 -->|links to x16| AUTHENTIFICATION_ET_COMPTES_39F8392D
+    LISTES_ET_ID_ES_5131D550 -->|reads session x10| AUTHENTIFICATION_ET_COMPTES_39F8392D
+    LISTES_ET_ID_ES_5131D550 -->|uses shared infrastructure x9| INFRASTRUCTURE_PARTAG_E_2DB6263F
+    PAGES_PUBLIQUES_ET_WIDGETS_830F64F5 -->|uses shared infrastructure x6| INFRASTRUCTURE_PARTAG_E_2DB6263F
+    AUTHENTIFICATION_ET_COMPTES_39F8392D -->|uses shared infrastructure x5| INFRASTRUCTURE_PARTAG_E_2DB6263F
+    ADMINISTRATION_ET_MAINTENANCE_A7F0EBD6 -->|reads session x5| AUTHENTIFICATION_ET_COMPTES_39F8392D
+    ADMINISTRATION_ET_MAINTENANCE_A7F0EBD6 -->|writes table x4| NOTIFICATIONS_ET_COURRIELS_5C68B6FB
+    ADMINISTRATION_ET_MAINTENANCE_A7F0EBD6 -->|includes x4| PAGES_PUBLIQUES_ET_WIDGETS_830F64F5
+    AUTHENTIFICATION_ET_COMPTES_39F8392D -->|calls function x3| NOTIFICATIONS_ET_COURRIELS_5C68B6FB
+    LISTES_ET_ID_ES_5131D550 -->|calls function x3| NOTIFICATIONS_ET_COURRIELS_5C68B6FB
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<div class="grid">
+  <div class="card">
+    <h4>Architecture Layers</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>Layer</th><th>Nodes</th><th>Communities</th></tr>
+      <tr><td>Pages publiques et widgets</td><td>14</td><td><code>4</code></td></tr><tr><td>Listes et idées</td><td>11</td><td><code>1</code></td></tr><tr><td>Authentification et comptes</td><td>10</td><td><code>0</code></td></tr><tr><td>Notifications et courriels</td><td>8</td><td><code>2</code></td></tr><tr><td>Administration et maintenance</td><td>3</td><td><code>3</code></td></tr><tr><td>Infrastructure partagée</td><td>3</td><td><code>5</code></td></tr><tr><td>Documentation</td><td>2</td><td><code>6</code></td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Core Flow</h4>
+    <div class="arrow-chain">Documentation -&gt; Pages publiques et widgets -&gt; Authentification et comptes -&gt; Infrastructure partagée -&gt; Administration et maintenance -&gt; Notifications et courriels -&gt; Listes et idées</div>
+  </div>
+</div>
+<div class="grid">
+  <div class="card">
+    <h4>Graph Report Highlights</h4>
+    <ul>
+      <li>51 nodes · 193 edges · 7 communities (6 shown, 1 thin omitted)</li>
+      <li>Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS</li>
+      <li>Token cost: 0 input · 0 output</li>
+      <li>1. `Widget navbar` - 21 edges</li>
+      <li>2. `Widget import` - 18 edges</li>
+      <li>3. `Widget footer` - 18 edges</li>
+    </ul>
+  </div>
+</div>
+<hr>
+<!-- ====== 2. Pages publiques et widgets ====== -->
+<h2 id="pages-publiques-et-widgets">2. Pages publiques et widgets</h2>
+<p>Pages publiques et widgets groups implementation around indexphp, pages, page, erreur, mostly in index.php, pages/accessibilite/index.php, pages/cgu/index.php. This section covers 14 nodes and 28 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Pages publiques et widgets (14 nodes, 28 edges)
+    subgraph pages_publiques_et_widgets_index_php_61e52a92["index.php"]
+        index_e540cdd1("Page accueil<br/><small>index.php</small>")
+        custom_route_pages_connexion_9c11c3c7("/pages/connexion/<br/><small>index.php</small>")
+        custom_route_pages_listes_9a7d0e16("/pages/listes/<br/><small>index.php</small>")
+    end
+    images_logo_177dc1a4("Logo<br/><small>images/logo.webp</small>")
+    pages_accessibilite_index_62382ac0("Page accessibilite<br/><small>pages/accessibilite/index.php</small>")
+    pages_cgu_index_44d1716e("Page cgu<br/><small>pages/cgu/index.php</small>")
+    pages_erreur_401_aa0f066c("Page erreur 401<br/><small>pages/erreur/401.php</small>")
+    pages_erreur_403_33f52b5e("Page erreur 403<br/><small>pages/erreur/403.php</small>")
+    pages_erreur_404_8ac67322("Page erreur 404<br/><small>pages/erreur/404.php</small>")
+    pages_mentions_legales_index_e3ab295e("Page mentions-legales<br/><small>pages/mentions-legales/index.php</small>")
+    pages_plan_site_index_23f447d6("Page plan-site<br/><small>pages/plan-site/index.php</small>")
+    widgets_footer_index_e123cfac("Widget footer<br/><small>widgets/footer/index.php</small>")
+    widgets_import_index_52679e90("Widget import<br/><small>widgets/import/index.php</small>")
+    widgets_navbar_index_1a4e0a99("Widget navbar<br/><small>widgets/navbar/index.php</small>")
+    index_e540cdd1 -->|redirects to| custom_route_pages_connexion_9c11c3c7
+    index_e540cdd1 -->|redirects to| custom_route_pages_listes_9a7d0e16
+    pages_accessibilite_index_62382ac0 -->|includes| widgets_import_index_52679e90
+    pages_accessibilite_index_62382ac0 -->|includes| widgets_navbar_index_1a4e0a99
+    pages_cgu_index_44d1716e -->|includes| widgets_import_index_52679e90
+    pages_cgu_index_44d1716e -->|includes| widgets_navbar_index_1a4e0a99
+    pages_erreur_401_aa0f066c -->|includes| widgets_navbar_index_1a4e0a99
+    pages_erreur_401_aa0f066c -->|includes| widgets_footer_index_e123cfac
+    pages_erreur_401_aa0f066c -->|includes| widgets_import_index_52679e90
+    pages_erreur_403_33f52b5e -->|includes| widgets_navbar_index_1a4e0a99
+    pages_erreur_403_33f52b5e -->|includes| widgets_footer_index_e123cfac
+    pages_erreur_403_33f52b5e -->|includes| widgets_import_index_52679e90
+    pages_erreur_404_8ac67322 -->|includes| widgets_navbar_index_1a4e0a99
+    pages_erreur_404_8ac67322 -->|includes| widgets_footer_index_e123cfac
+    pages_erreur_404_8ac67322 -->|includes| widgets_import_index_52679e90
+    pages_mentions_legales_index_e3ab295e -->|includes| widgets_import_index_52679e90
+    pages_mentions_legales_index_e3ab295e -->|includes| widgets_navbar_index_1a4e0a99
+    pages_plan_site_index_23f447d6 -->|links to| pages_accessibilite_index_62382ac0
+    pages_plan_site_index_23f447d6 -->|links to| pages_cgu_index_44d1716e
+    pages_plan_site_index_23f447d6 -->|links to| pages_mentions_legales_index_e3ab295e
+    pages_plan_site_index_23f447d6 -->|includes| widgets_import_index_52679e90
+    pages_plan_site_index_23f447d6 -->|includes| widgets_navbar_index_1a4e0a99
+    widgets_footer_index_e123cfac -->|links to| pages_plan_site_index_23f447d6
+    widgets_footer_index_e123cfac -->|links to| pages_accessibilite_index_62382ac0
+    %% Omitted for readability: 0 nodes, 4 edges
+    class index_e540cdd1 klass;
+    class custom_route_pages_connexion_9c11c3c7 function;
+    class custom_route_pages_listes_9a7d0e16 function;
+    class images_logo_177dc1a4 klass;
+    class pages_accessibilite_index_62382ac0 klass;
+    class pages_cgu_index_44d1716e klass;
+    class pages_erreur_401_aa0f066c klass;
+    class pages_erreur_403_33f52b5e klass;
+    class pages_erreur_404_8ac67322 klass;
+    class pages_mentions_legales_index_e3ab295e klass;
+    class pages_plan_site_index_23f447d6 klass;
+    class widgets_footer_index_e123cfac klass;
+    class widgets_import_index_52679e90 klass;
+    class widgets_navbar_index_1a4e0a99 klass;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>Page accueil</code><br><small style="color:var(--muted)">index.php</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Organizes documentation pages, navigation, or content lookup.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>Page accessibilite</code><br><small style="color:var(--muted)">pages/accessibilite/index.php</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Organizes documentation pages, navigation, or content lookup.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>Page cgu</code><br><small style="color:var(--muted)">pages/cgu/index.php</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Organizes documentation pages, navigation, or content lookup.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><code>Page erreur 401</code><br><small style="color:var(--muted)">pages/erreur/401.php</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Organizes documentation pages, navigation, or content lookup.</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td><code>Page erreur 403</code><br><small style="color:var(--muted)">pages/erreur/403.php</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Organizes documentation pages, navigation, or content lookup.</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td><code>Page erreur 404</code><br><small style="color:var(--muted)">pages/erreur/404.php</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Organizes documentation pages, navigation, or content lookup.</td>
+</tr>
+<tr>
+  <td>7</td>
+  <td><code>Page mentions-legales</code><br><small style="color:var(--muted)">pages/mentions-legales/index.php</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Organizes documentation pages, navigation, or content lookup.</td>
+</tr>
+<tr>
+  <td>8</td>
+  <td><code>Page plan-site</code><br><small style="color:var(--muted)">pages/plan-site/index.php</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Organizes documentation pages, navigation, or content lookup.</td>
+</tr>
+<tr>
+  <td>9</td>
+  <td><code>Widget footer</code><br><small style="color:var(--muted)">widgets/footer/index.php</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Widget footer node in widgets/footer/index.php.</td>
+</tr>
+<tr>
+  <td>10</td>
+  <td><code>Widget import</code><br><small style="color:var(--muted)">widgets/import/index.php</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Widget import node in widgets/import/index.php.</td>
+</tr>
+<tr>
+  <td>11</td>
+  <td><code>Widget navbar</code><br><small style="color:var(--muted)">widgets/navbar/index.php</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Widget navbar node in widgets/navbar/index.php.</td>
+</tr>
+<tr>
+  <td>12</td>
+  <td><code>/pages/connexion/</code><br><small style="color:var(--muted)">index.php</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Organizes documentation pages, navigation, or content lookup.</td>
+</tr>
+<tr>
+  <td>13</td>
+  <td><code>/pages/listes/</code><br><small style="color:var(--muted)">index.php</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Organizes documentation pages, navigation, or content lookup.</td>
+</tr>
+<tr>
+  <td>14</td>
+  <td><code>Logo</code><br><small style="color:var(--muted)">images/logo.webp</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Logo node in images/logo.webp.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>index.php</code></td><td>3 nodes</td></tr>
+<tr><td><code>images/logo.webp</code></td><td>1 nodes</td></tr>
+<tr><td><code>pages/accessibilite/index.php</code></td><td>1 nodes</td></tr>
+<tr><td><code>pages/cgu/index.php</code></td><td>1 nodes</td></tr>
+<tr><td><code>pages/erreur/401.php</code></td><td>1 nodes</td></tr>
+<tr><td><code>pages/erreur/403.php</code></td><td>1 nodes</td></tr>
+<tr><td><code>pages/erreur/404.php</code></td><td>1 nodes</td></tr>
+<tr><td><code>pages/mentions-legales/index.php</code></td><td>1 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: includes x17, links to x7, redirects to x2, references x2. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 3. Listes et idées ====== -->
+<h2 id="listes-et-id-es">3. Listes et idées</h2>
+<p>Listes et idées groups implementation around pages, indexphp, idees, modif, mostly in pages/idees/index.php, pages/modif-idees/index.php, pages/modif-listes/index.php. This section covers 11 nodes and 22 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Listes et idées (11 nodes, 22 edges)
+    subgraph listes_et_id_es_pages_idees_index_php_7d80bfa9["pages/idees/index.php"]
+        pages_idees_index_bdc36e0c("Page idees<br/><small>pages/idees/index.php</small>")
+        custom_table_lic_liste_1506657c("lic_liste<br/><small>pages/idees/index.php</small>")
+        custom_table_lic_autorisation_0d389fef("lic_autorisation<br/><small>pages/idees/index.php</small>")
+        custom_table_lic_idee_367af961("lic_idee<br/><small>pages/idees/index.php</small>")
+    end
+    subgraph listes_et_id_es_pages_modif_idees_index_php_7ea272bf["pages/modif-idees/index.php"]
+        pages_modif_idees_index_7a8e4c42("Page modif-idees<br/><small>pages/modif-idees/index.php</small>")
+        custom_route_pages_idees_a580d295("/pages/idees/<br/><small>pages/modif-idees/index.php</small>")
+        custom_route_pages_erreur_403_php_1bfd9e74("/pages/erreur/403.php<br/><small>pages/modif-idees/index.php</small>")
+    end
+    subgraph listes_et_id_es_pages_modif_listes_index_php_ffa97c30["pages/modif-listes/index.php"]
+        pages_modif_listes_index_4c4bf247("Page modif-listes<br/><small>pages/modif-listes/index.php</small>")
+        custom_route_pages_modif_listes_576c5a0b("/pages/modif-listes/<br/><small>pages/modif-listes/index.php</small>")
+    end
+    pages_listes_index_caab9962("Page listes<br/><small>pages/listes/index.php</small>")
+    pages_print_liste_index_98f89941("Page print-liste<br/><small>pages/print-liste/index.php</small>")
+    pages_idees_index_bdc36e0c -->|links to| pages_listes_index_caab9962
+    pages_idees_index_bdc36e0c -->|reads table| custom_table_lic_liste_1506657c
+    pages_idees_index_bdc36e0c -->|writes table| custom_table_lic_autorisation_0d389fef
+    pages_idees_index_bdc36e0c -->|writes table| custom_table_lic_idee_367af961
+    pages_listes_index_caab9962 -->|reads table| custom_table_lic_liste_1506657c
+    pages_listes_index_caab9962 -->|reads table| custom_table_lic_autorisation_0d389fef
+    pages_modif_idees_index_7a8e4c42 -->|links to| pages_listes_index_caab9962
+    pages_modif_idees_index_7a8e4c42 -->|redirects to| custom_route_pages_erreur_403_php_1bfd9e74
+    pages_modif_idees_index_7a8e4c42 -->|redirects to| custom_route_pages_idees_a580d295
+    pages_modif_idees_index_7a8e4c42 -->|reads table| custom_table_lic_autorisation_0d389fef
+    pages_modif_idees_index_7a8e4c42 -->|reads table| custom_table_lic_liste_1506657c
+    pages_modif_idees_index_7a8e4c42 -->|writes table| custom_table_lic_idee_367af961
+    pages_modif_listes_index_4c4bf247 -->|links to| pages_listes_index_caab9962
+    pages_modif_listes_index_4c4bf247 -->|redirects to| custom_route_pages_modif_listes_576c5a0b
+    pages_modif_listes_index_4c4bf247 -->|redirects to| custom_route_pages_idees_a580d295
+    pages_modif_listes_index_4c4bf247 -->|writes table| custom_table_lic_autorisation_0d389fef
+    pages_modif_listes_index_4c4bf247 -->|writes table| custom_table_lic_liste_1506657c
+    pages_print_liste_index_98f89941 -->|links to| pages_listes_index_caab9962
+    pages_print_liste_index_98f89941 -->|reads table| custom_table_lic_liste_1506657c
+    pages_print_liste_index_98f89941 -->|reads table| custom_table_lic_idee_367af961
+    pages_print_liste_index_98f89941 -->|reads table| custom_table_lic_autorisation_0d389fef
+    custom_route_pages_idees_a580d295 -->|resolves to| pages_idees_index_bdc36e0c
+    class pages_idees_index_bdc36e0c klass;
+    class custom_table_lic_liste_1506657c function;
+    class custom_table_lic_autorisation_0d389fef function;
+    class custom_table_lic_idee_367af961 function;
+    class pages_modif_idees_index_7a8e4c42 klass;
+    class custom_route_pages_idees_a580d295 function;
+    class custom_route_pages_erreur_403_php_1bfd9e74 module;
+    class pages_modif_listes_index_4c4bf247 klass;
+    class custom_route_pages_modif_listes_576c5a0b function;
+    class pages_listes_index_caab9962 klass;
+    class pages_print_liste_index_98f89941 klass;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>Page idees</code><br><small style="color:var(--muted)">pages/idees/index.php</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Organizes documentation pages, navigation, or content lookup.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>Page listes</code><br><small style="color:var(--muted)">pages/listes/index.php</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Organizes documentation pages, navigation, or content lookup.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>Page modif-idees</code><br><small style="color:var(--muted)">pages/modif-idees/index.php</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Organizes documentation pages, navigation, or content lookup.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><code>Page modif-listes</code><br><small style="color:var(--muted)">pages/modif-listes/index.php</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Organizes documentation pages, navigation, or content lookup.</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td><code>Page print-liste</code><br><small style="color:var(--muted)">pages/print-liste/index.php</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Organizes documentation pages, navigation, or content lookup.</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td><code>/pages/erreur/403.php</code><br><small style="color:var(--muted)">pages/modif-idees/index.php</small></td>
+  <td><span class="tag tag-class">Module</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Organizes documentation pages, navigation, or content lookup.</td>
+</tr>
+<tr>
+  <td>7</td>
+  <td><code>/pages/idees/</code><br><small style="color:var(--muted)">pages/modif-idees/index.php</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Organizes documentation pages, navigation, or content lookup.</td>
+</tr>
+<tr>
+  <td>8</td>
+  <td><code>/pages/modif-listes/</code><br><small style="color:var(--muted)">pages/modif-listes/index.php</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Organizes documentation pages, navigation, or content lookup.</td>
+</tr>
+<tr>
+  <td>9</td>
+  <td><code>lic_autorisation</code><br><small style="color:var(--muted)">pages/idees/index.php</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>lic_autorisation node in pages/idees/index.php.</td>
+</tr>
+<tr>
+  <td>10</td>
+  <td><code>lic_idee</code><br><small style="color:var(--muted)">pages/idees/index.php</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>lic_idee node in pages/idees/index.php.</td>
+</tr>
+<tr>
+  <td>11</td>
+  <td><code>lic_liste</code><br><small style="color:var(--muted)">pages/idees/index.php</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>lic_liste node in pages/idees/index.php.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>pages/idees/index.php</code></td><td>4 nodes</td></tr>
+<tr><td><code>pages/modif-idees/index.php</code></td><td>3 nodes</td></tr>
+<tr><td><code>pages/modif-listes/index.php</code></td><td>2 nodes</td></tr>
+<tr><td><code>pages/listes/index.php</code></td><td>1 nodes</td></tr>
+<tr><td><code>pages/print-liste/index.php</code></td><td>1 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: reads table x8, writes table x5, links to x4, redirects to x4. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 4. Authentification et comptes ====== -->
+<h2 id="authentification-et-comptes">4. Authentification et comptes</h2>
+<p>Authentification et comptes groups implementation around indexphp, pages, compte, connexion, mostly in pages/connexion/index.php, pages/compte/index.php, pages/admin/index.php. This section covers 10 nodes and 15 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Authentification et comptes (10 nodes, 15 edges)
+    subgraph authentification_et_comptes_pages_admin_index_ph_cb06d890["pages/admin/index.php"]
+        custom_table_lic_compte_0ec80f00("lic_compte<br/><small>pages/admin/index.php</small>")
+        custom_session_fonction_956fb200("fonction<br/><small>pages/admin/index.php</small>")
+    end
+    subgraph authentification_et_comptes_pages_compte_index_p_5c38d79e["pages/compte/index.php"]
+        pages_compte_index_f3c7933b("Page compte<br/><small>pages/compte/index.php</small>")
+        custom_table_lic_connexion_8d6747b8("lic_connexion<br/><small>pages/compte/index.php</small>")
+    end
+    subgraph authentification_et_comptes_pages_connexion_inde_ac6e0bce["pages/connexion/index.php"]
+        pages_connexion_index_f4670861("Page connexion<br/><small>pages/connexion/index.php</small>")
+        pages_connexion_index_getip_34d3db9c("getIp()<br/><small>pages/connexion/index.php</small>")
+    end
+    custom_session_id_compte_101184d4("id_compte<br/><small>index.php</small>")
+    pages_inscription_index_fc99744c("Page inscription<br/><small>pages/inscription/index.php</small>")
+    pages_reset_password_index_3febc0ba("Page reset-password<br/><small>pages/reset-password/index.php</small>")
+    scripts_deconnexion_index_9726e9ff("Script deconnexion<br/><small>scripts/deconnexion/index.php</small>")
+    pages_compte_index_f3c7933b -->|reads session| custom_session_id_compte_101184d4
+    pages_compte_index_f3c7933b -->|reads table| custom_table_lic_connexion_8d6747b8
+    pages_compte_index_f3c7933b -->|writes table| custom_table_lic_compte_0ec80f00
+    pages_connexion_index_f4670861 -->|links to| pages_reset_password_index_3febc0ba
+    pages_connexion_index_f4670861 -->|links to| pages_inscription_index_fc99744c
+    pages_connexion_index_f4670861 -->|sets session| custom_session_id_compte_101184d4
+    pages_connexion_index_f4670861 -->|writes table| custom_table_lic_connexion_8d6747b8
+    pages_connexion_index_f4670861 -->|writes table| custom_table_lic_compte_0ec80f00
+    pages_inscription_index_fc99744c -->|sets session| custom_session_id_compte_101184d4
+    pages_inscription_index_fc99744c -->|writes table| custom_table_lic_compte_0ec80f00
+    pages_inscription_index_fc99744c -->|writes table| custom_table_lic_connexion_8d6747b8
+    pages_reset_password_index_3febc0ba -->|reads session| custom_session_id_compte_101184d4
+    pages_reset_password_index_3febc0ba -->|writes table| custom_table_lic_compte_0ec80f00
+    pages_connexion_index_f4670861 -->|contains| pages_connexion_index_getip_34d3db9c
+    pages_inscription_index_fc99744c -->|contains| pages_connexion_index_getip_34d3db9c
+    class custom_table_lic_compte_0ec80f00 function;
+    class custom_session_fonction_956fb200 function;
+    class pages_compte_index_f3c7933b klass;
+    class custom_table_lic_connexion_8d6747b8 function;
+    class pages_connexion_index_f4670861 klass;
+    class pages_connexion_index_getip_34d3db9c function;
+    class custom_session_id_compte_101184d4 function;
+    class pages_inscription_index_fc99744c klass;
+    class pages_reset_password_index_3febc0ba klass;
+    class scripts_deconnexion_index_9726e9ff klass;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>getIp()</code><br><small style="color:var(--muted)">pages/connexion/index.php</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>getIp() node in pages/connexion/index.php.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>Page compte</code><br><small style="color:var(--muted)">pages/compte/index.php</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Organizes documentation pages, navigation, or content lookup.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>Page connexion</code><br><small style="color:var(--muted)">pages/connexion/index.php</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Organizes documentation pages, navigation, or content lookup.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><code>Page inscription</code><br><small style="color:var(--muted)">pages/inscription/index.php</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Organizes documentation pages, navigation, or content lookup.</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td><code>Page reset-password</code><br><small style="color:var(--muted)">pages/reset-password/index.php</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Organizes documentation pages, navigation, or content lookup.</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td><code>Script deconnexion</code><br><small style="color:var(--muted)">scripts/deconnexion/index.php</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Script deconnexion node in scripts/deconnexion/index.php.</td>
+</tr>
+<tr>
+  <td>7</td>
+  <td><code>fonction</code><br><small style="color:var(--muted)">pages/admin/index.php</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>fonction node in pages/admin/index.php.</td>
+</tr>
+<tr>
+  <td>8</td>
+  <td><code>id_compte</code><br><small style="color:var(--muted)">index.php</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>id_compte node in index.php.</td>
+</tr>
+<tr>
+  <td>9</td>
+  <td><code>lic_compte</code><br><small style="color:var(--muted)">pages/admin/index.php</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>lic_compte node in pages/admin/index.php.</td>
+</tr>
+<tr>
+  <td>10</td>
+  <td><code>lic_connexion</code><br><small style="color:var(--muted)">pages/compte/index.php</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>lic_connexion node in pages/compte/index.php.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>pages/admin/index.php</code></td><td>2 nodes</td></tr>
+<tr><td><code>pages/compte/index.php</code></td><td>2 nodes</td></tr>
+<tr><td><code>pages/connexion/index.php</code></td><td>2 nodes</td></tr>
+<tr><td><code>index.php</code></td><td>1 nodes</td></tr>
+<tr><td><code>pages/inscription/index.php</code></td><td>1 nodes</td></tr>
+<tr><td><code>pages/reset-password/index.php</code></td><td>1 nodes</td></tr>
+<tr><td><code>scripts/deconnexion/index.php</code></td><td>1 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: writes table x6, reads session x2, links to x2, sets session x2. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 5. Notifications et courriels ====== -->
+<h2 id="notifications-et-courriels">5. Notifications et courriels</h2>
+<p>Notifications et courriels groups implementation around notif, indexphp, scripts, notificationsjs, mostly in js/notifications.js, scripts/mail/index.php, scripts/mark-notif-read/index.php. This section covers 8 nodes and 6 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Notifications et courriels (8 nodes, 6 edges)
+    subgraph notifications_et_courriels_js_notifications_js_54c6e543["js/notifications.js"]
+        js_notifications_9b2131e9("JS notifications<br/><small>js/notifications.js</small>")
+        custom_route_scripts_mark_notif_read_6e34721c("/scripts/mark-notif-read/<br/><small>js/notifications.js</small>")
+        js_notifications_marknotificationasread_5a13e27d("markNotificationAsRead()<br/><small>js/notifications.js</small>")
+    end
+    subgraph notifications_et_courriels_scripts_mail_index_ph_3be8c8bb["scripts/mail/index.php"]
+        scripts_mail_index_f6e9f8a7("Script mail<br/><small>scripts/mail/index.php</small>")
+        scripts_mail_index_envoimail_71950a12("envoiMail()<br/><small>scripts/mail/index.php</small>")
+    end
+    custom_table_lic_notif_8568dfb3("lic_notif<br/><small>pages/admin/index.php</small>")
+    scripts_mark_notif_read_index_146513b8("Script mark-notif-read<br/><small>scripts/mark-notif-read/index.php</small>")
+    widgets_notif_toast_index_bb10815e("Widget notif-toast<br/><small>widgets/notif-toast/index.php</small>")
+    js_notifications_9b2131e9 -->|calls route| custom_route_scripts_mark_notif_read_6e34721c
+    scripts_mark_notif_read_index_146513b8 -->|writes table| custom_table_lic_notif_8568dfb3
+    widgets_notif_toast_index_bb10815e -->|reads table| custom_table_lic_notif_8568dfb3
+    custom_route_scripts_mark_notif_read_6e34721c -->|resolves to| scripts_mark_notif_read_index_146513b8
+    js_notifications_9b2131e9 -->|contains| js_notifications_marknotificationasread_5a13e27d
+    scripts_mail_index_f6e9f8a7 -->|contains| scripts_mail_index_envoimail_71950a12
+    class js_notifications_9b2131e9 klass;
+    class custom_route_scripts_mark_notif_read_6e34721c function;
+    class js_notifications_marknotificationasread_5a13e27d function;
+    class scripts_mail_index_f6e9f8a7 klass;
+    class scripts_mail_index_envoimail_71950a12 function;
+    class custom_table_lic_notif_8568dfb3 function;
+    class scripts_mark_notif_read_index_146513b8 klass;
+    class widgets_notif_toast_index_bb10815e klass;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>markNotificationAsRead()</code><br><small style="color:var(--muted)">js/notifications.js</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>markNotificationAsRead() node in js/notifications.js.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>envoiMail()</code><br><small style="color:var(--muted)">scripts/mail/index.php</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>envoiMail() node in scripts/mail/index.php.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>JS notifications</code><br><small style="color:var(--muted)">js/notifications.js</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>JS notifications node in js/notifications.js.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><code>Script mail</code><br><small style="color:var(--muted)">scripts/mail/index.php</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Script mail node in scripts/mail/index.php.</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td><code>Script mark-notif-read</code><br><small style="color:var(--muted)">scripts/mark-notif-read/index.php</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Script mark-notif-read node in scripts/mark-notif-read/index.php.</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td><code>Widget notif-toast</code><br><small style="color:var(--muted)">widgets/notif-toast/index.php</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Widget notif-toast node in widgets/notif-toast/index.php.</td>
+</tr>
+<tr>
+  <td>7</td>
+  <td><code>/scripts/mark-notif-read/</code><br><small style="color:var(--muted)">js/notifications.js</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>/scripts/mark-notif-read/ node in js/notifications.js.</td>
+</tr>
+<tr>
+  <td>8</td>
+  <td><code>lic_notif</code><br><small style="color:var(--muted)">pages/admin/index.php</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>lic_notif node in pages/admin/index.php.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>js/notifications.js</code></td><td>3 nodes</td></tr>
+<tr><td><code>scripts/mail/index.php</code></td><td>2 nodes</td></tr>
+<tr><td><code>pages/admin/index.php</code></td><td>1 nodes</td></tr>
+<tr><td><code>scripts/mark-notif-read/index.php</code></td><td>1 nodes</td></tr>
+<tr><td><code>widgets/notif-toast/index.php</code></td><td>1 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: contains x2, calls route x1, writes table x1, reads table x1. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 6. Administration et maintenance ====== -->
+<h2 id="administration-et-maintenance">6. Administration et maintenance</h2>
+<p>Administration et maintenance groups implementation around indexphp, scripts, admin, clean, mostly in scripts/verif/index.php, pages/admin/index.php, scripts/clean/index.php. This section covers 3 nodes and 1 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Administration et maintenance (3 nodes, 1 edges)
+    pages_admin_index_a59e4dfc("Page admin<br/><small>pages/admin/index.php</small>")
+    scripts_clean_index_9b92be25("Script clean<br/><small>scripts/clean/index.php</small>")
+    scripts_verif_index_cleanup_old_connexions_9592986f("cleanup_old_connexions()<br/><small>scripts/verif/index.php</small>")
+    pages_admin_index_a59e4dfc -->|calls function| scripts_verif_index_cleanup_old_connexions_9592986f
+    class pages_admin_index_a59e4dfc klass;
+    class scripts_clean_index_9b92be25 klass;
+    class scripts_verif_index_cleanup_old_connexions_9592986f function;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>cleanup_old_connexions()</code><br><small style="color:var(--muted)">scripts/verif/index.php</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>cleanup_old_connexions() node in scripts/verif/index.php.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>Page admin</code><br><small style="color:var(--muted)">pages/admin/index.php</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Organizes documentation pages, navigation, or content lookup.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>Script clean</code><br><small style="color:var(--muted)">scripts/clean/index.php</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Script clean node in scripts/clean/index.php.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>pages/admin/index.php</code></td><td>1 nodes</td></tr>
+<tr><td><code>scripts/clean/index.php</code></td><td>1 nodes</td></tr>
+<tr><td><code>scripts/verif/index.php</code></td><td>1 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: calls function x1. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 7. Infrastructure partagée ====== -->
+<h2 id="infrastructure-partag-e">7. Infrastructure partagée</h2>
+<p>Infrastructure partagée groups implementation around verif, scripts, indexphp, safe, mostly in scripts/verif/index.php. This section covers 3 nodes and 2 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Infrastructure partagée (3 nodes, 2 edges)
+    custom_infra_shared_937d6cda("Infrastructure partagée<br/><small>scripts/verif/index.php</small>")
+    scripts_verif_index_3ff9e67d("Script verif<br/><small>scripts/verif/index.php</small>")
+    scripts_verif_index_safe_output_e19ba788("safe_output()<br/><small>scripts/verif/index.php</small>")
+    custom_infra_shared_937d6cda -->|implemented by| scripts_verif_index_3ff9e67d
+    scripts_verif_index_3ff9e67d -->|contains| scripts_verif_index_safe_output_e19ba788
+    class custom_infra_shared_937d6cda klass;
+    class scripts_verif_index_3ff9e67d klass;
+    class scripts_verif_index_safe_output_e19ba788 function;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>safe_output()</code><br><small style="color:var(--muted)">scripts/verif/index.php</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>safe_output() node in scripts/verif/index.php.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>Script verif</code><br><small style="color:var(--muted)">scripts/verif/index.php</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Script verif node in scripts/verif/index.php.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>Infrastructure partagée</code><br><small style="color:var(--muted)">scripts/verif/index.php</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Infrastructure partagée node in scripts/verif/index.php.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>scripts/verif/index.php</code></td><td>3 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: contains x1, implemented by x1. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 8. Documentation ====== -->
+<h2 id="documentation">8. Documentation</h2>
+<p>Documentation groups implementation around instructions, pour, les, agents, mostly in AGENTS.md, README.md. This section covers 2 nodes and 1 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Documentation (2 nodes, 1 edges)
+    agents_e7052aeb("Instructions pour les agents<br/><small>AGENTS.md</small>")
+    readme_f78a71af("README<br/><small>README.md</small>")
+    agents_e7052aeb -->|references| readme_f78a71af
+    class agents_e7052aeb concept;
+    class readme_f78a71af concept;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>Instructions pour les agents</code><br><small style="color:var(--muted)">AGENTS.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing Instructions pour les agents.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>README</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing README.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>AGENTS.md</code></td><td>1 nodes</td></tr>
+<tr><td><code>README.md</code></td><td>1 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: references x1. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<h2 id="hyperedges">Group Relationships (Hyperedges)</h2>
+<div class="grid">
+
+  <div class="card">
+    <h4>Flux d&#x27;authentification</h4>
+    <p><code>participate_in</code> — 6 participants</p>
+    <ul>
+      <li><code>pages_connexion_index</code></li>
+      <li><code>pages_inscription_index</code></li>
+      <li><code>pages_reset_password_index</code></li>
+      <li><code>scripts_deconnexion_index</code></li>
+      <li><code>custom_table_lic_compte</code></li>
+      <li>... and 1 more</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Cycle de vie d&#x27;une liste</h4>
+    <p><code>participate_in</code> — 8 participants</p>
+    <ul>
+      <li><code>pages_listes_index</code></li>
+      <li><code>pages_modif_listes_index</code></li>
+      <li><code>pages_idees_index</code></li>
+      <li><code>pages_modif_idees_index</code></li>
+      <li><code>pages_print_liste_index</code></li>
+      <li>... and 3 more</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Notifications</h4>
+    <p><code>participate_in</code> — 5 participants</p>
+    <ul>
+      <li><code>js_notifications</code></li>
+      <li><code>widgets_notif_toast_index</code></li>
+      <li><code>scripts_mark_notif_read_index</code></li>
+      <li><code>scripts_mail_index</code></li>
+      <li><code>custom_table_lic_notif</code></li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Infrastructure partagée (session, PDO, helpers)</h4>
+    <p><code>participate_in</code> — 19 participants</p>
+    <ul>
+      <li><code>custom_infra_shared</code></li>
+      <li><code>index</code></li>
+      <li><code>pages_accessibilite_index</code></li>
+      <li><code>pages_admin_index</code></li>
+      <li><code>pages_cgu_index</code></li>
+      <li>... and 14 more</li>
+    </ul>
+  </div>
+</div>
+<hr>
+<h2 id="stats">Project Statistics</h2>
+
+<div class="grid">
+  <div class="card">
+    <h4>Graph</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><td>Nodes</td><td>51</td></tr>
+      <tr><td>Edges</td><td>193</td></tr>
+      <tr><td>Hyperedges</td><td>4</td></tr>
+      <tr><td>Communities</td><td>7</td></tr>
+      <tr><td>Documented Sections</td><td>7</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Edge Confidence</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><td>EXTRACTED</td><td>193</td></tr>
+      <tr><td>INFERRED</td><td>0</td></tr>
+      <tr><td>AMBIGUOUS</td><td>0</td></tr>
+    </table>
+  </div>
+</div>
+
+<div style="text-align:center; padding:40px 0; color: var(--muted); font-size:0.9rem;">
+  <p>Liste-d-idee-cadeaux — Architecture Documentation</p>
+  <p>Generated: 2026-10-23 22:43 UTC · graphify callflow-html</p>
+</div>
+
+</div><!-- .container -->
+
+<script>
+(function () {
+  const mermaidConfig = {
+    startOnLoad: false,
+    theme: 'dark',
+    securityLevel: 'loose',
+    flowchart: { htmlLabels: true, useMaxWidth: true },
+    themeVariables: {
+      primaryColor: '#1e293b',
+      primaryTextColor: '#e2e8f0',
+      primaryBorderColor: '#38bdf8',
+      secondaryColor: '#0f172a',
+      tertiaryColor: '#334155',
+      lineColor: '#64748b',
+      textColor: '#e2e8f0',
+    }
+  };
+
+  mermaid.initialize(mermaidConfig);
+
+  function clamp(value, min, max) {
+    return Math.min(max, Math.max(min, value));
+  }
+
+  function enhanceMermaidDiagrams() {
+    document.querySelectorAll('.mermaid').forEach((container) => {
+      if (container.dataset.zoomReady === 'true') return;
+      const svg = container.querySelector('svg');
+      if (!svg) return;
+
+      container.dataset.zoomReady = 'true';
+      container.classList.add('is-enhanced');
+
+      const viewport = document.createElement('div');
+      viewport.className = 'mermaid-viewport';
+      svg.parentNode.insertBefore(viewport, svg);
+      viewport.appendChild(svg);
+
+      const toolbar = document.createElement('div');
+      toolbar.className = 'mermaid-toolbar';
+      toolbar.innerHTML = [
+        '<button type="button" data-action="zoom-out" title="Zoom out">-</button>',
+        '<span class="zoom-level" data-role="level">100%</span>',
+        '<button type="button" data-action="zoom-in" title="Zoom in">+</button>',
+        '<button type="button" data-action="fit" title="Fit width">Fit</button>',
+        '<button type="button" data-action="reset" title="Reset view">Reset</button>'
+      ].join('');
+      container.insertBefore(toolbar, viewport);
+
+      const state = { scale: 1, x: 0, y: 0, dragging: false, startX: 0, startY: 0, originX: 0, originY: 0 };
+      const level = toolbar.querySelector('[data-role="level"]');
+
+      function applyTransform() {
+        svg.style.transform = `translate(${state.x}px, ${state.y}px) scale(${state.scale})`;
+        level.textContent = `${Math.round(state.scale * 100)}%`;
+      }
+
+      function zoomBy(delta) {
+        state.scale = clamp(state.scale + delta, 0.25, 3);
+        applyTransform();
+      }
+
+      function reset() {
+        state.scale = 1;
+        state.x = 0;
+        state.y = 0;
+        applyTransform();
+      }
+
+      function fitWidth() {
+        const rawWidth = svg.viewBox && svg.viewBox.baseVal && svg.viewBox.baseVal.width
+          ? svg.viewBox.baseVal.width
+          : svg.getBoundingClientRect().width / state.scale;
+        if (!rawWidth) {
+          reset();
+          return;
+        }
+        state.scale = clamp((viewport.clientWidth - 48) / rawWidth, 0.25, 1.4);
+        state.x = 0;
+        state.y = 0;
+        applyTransform();
+      }
+
+      toolbar.addEventListener('click', (event) => {
+        const button = event.target.closest('button[data-action]');
+        if (!button) return;
+        const action = button.dataset.action;
+        if (action === 'zoom-in') zoomBy(0.15);
+        if (action === 'zoom-out') zoomBy(-0.15);
+        if (action === 'fit') fitWidth();
+        if (action === 'reset') reset();
+      });
+
+      viewport.addEventListener('wheel', (event) => {
+        if (!event.ctrlKey && !event.metaKey) return;
+        event.preventDefault();
+        zoomBy(event.deltaY < 0 ? 0.1 : -0.1);
+      }, { passive: false });
+
+      viewport.addEventListener('pointerdown', (event) => {
+        if (event.button !== 0) return;
+        state.dragging = true;
+        state.startX = event.clientX;
+        state.startY = event.clientY;
+        state.originX = state.x;
+        state.originY = state.y;
+        viewport.classList.add('is-dragging');
+        viewport.setPointerCapture(event.pointerId);
+      });
+
+      viewport.addEventListener('pointermove', (event) => {
+        if (!state.dragging) return;
+        state.x = state.originX + event.clientX - state.startX;
+        state.y = state.originY + event.clientY - state.startY;
+        applyTransform();
+      });
+
+      function endDrag(event) {
+        if (!state.dragging) return;
+        state.dragging = false;
+        viewport.classList.remove('is-dragging');
+        if (viewport.hasPointerCapture(event.pointerId)) {
+          viewport.releasePointerCapture(event.pointerId);
+        }
+      }
+
+      viewport.addEventListener('pointerup', endDrag);
+      viewport.addEventListener('pointercancel', endDrag);
+      applyTransform();
+    });
+  }
+
+  function renderMermaid() {
+    const result = mermaid.run
+      ? mermaid.run({ querySelector: '.mermaid' })
+      : Promise.resolve();
+    Promise.resolve(result)
+      .then(enhanceMermaidDiagrams)
+      .catch((error) => {
+        console.error('Mermaid render failed:', error);
+        enhanceMermaidDiagrams();
+      });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderMermaid);
+  } else {
+    renderMermaid();
+  }
+})();
+</script>
+
+</body>
+</html>

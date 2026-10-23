@@ -476,6 +476,3 @@ composer.lock
 
 ##### Playwright
 .playwright-mcp/
-
-##### Graphify
-graphify-out/
