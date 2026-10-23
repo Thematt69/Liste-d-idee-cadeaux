@@ -1,0 +1,8 @@
+.github/
+.git/
+.playwright-mcp/
+.vscode/
+css/bootstrap-icons/fonts
+**/*.min.css
+**/*.min.js
+**/*.min.ts
