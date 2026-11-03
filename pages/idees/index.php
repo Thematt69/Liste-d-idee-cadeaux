@@ -10,33 +10,45 @@ if (!isset($_SESSION['id_compte'])) {
 }
 
 // Validate required GET parameter
-if (!isset($_GET['liste']) || empty($_GET['liste'])) {
+if (!isset($_GET['liste']) || !is_string($_GET['liste']) || $_GET['liste'] === '') {
     header('Location: https://family.matthieudevilliers.fr/pages/listes/');
     exit();
 }
 
 if (isset($_POST['AchatFrom'])) {
-    $sql1 = 'SELECT buy_from
-            FROM lic_idee
-            WHERE id = ?';
+    if (!is_string($_POST['AchatFrom']) || !ctype_digit($_POST['AchatFrom'])
+        || (isset($_POST['reservation']) && $_POST['reservation'] !== '1')) {
+        http_response_code(400);
+        exit();
+    }
 
-    $response1 = $bdd->prepare($sql1);
-    $response1->execute(array($_POST['AchatFrom']));
-    $donnee1 = $response1->fetch();
-
-    $buyFrom = $donnee1['buy_from'] == $_SESSION['id_compte'] ? NULL : $_SESSION['id_compte'];
-
-    $response1->closeCursor();
-
-    // Modification de la réservation
+    $reserver = isset($_POST['reservation']);
     $sql = 'UPDATE lic_idee
-            SET buy_from = ?
-            WHERE id = ?';
+            INNER JOIN lic_liste ON lic_liste.id = lic_idee.id_liste
+            INNER JOIN lic_autorisation ON lic_autorisation.id_liste = lic_liste.id
+            INNER JOIN lic_compte ON lic_compte.id = lic_autorisation.id_compte
+            SET lic_idee.buy_from = ?
+            WHERE lic_idee.id = ? AND lic_idee.deleted_to IS NULL
+              AND lic_liste.lien_partage = ? AND lic_liste.deleted_to IS NULL
+              AND lic_compte.id = ? AND lic_compte.deleted_to IS NULL
+              AND lic_autorisation.type = "lecteur"
+              AND COALESCE(lic_idee.is_buy, 0) = 0
+              AND ' . ($reserver ? 'lic_idee.buy_from IS NULL' : 'lic_idee.buy_from = ?');
+
+    $params = array($reserver ? $_SESSION['id_compte'] : null, $_POST['AchatFrom'], $_GET['liste'], $_SESSION['id_compte']);
+    if (!$reserver) {
+        $params[] = $_SESSION['id_compte'];
+    }
 
     $response = $bdd->prepare($sql);
-    $response->execute(array($buyFrom, htmlentities($_POST['AchatFrom'])));
-
+    $response->execute($params);
+    $modificationEffectuee = $response->rowCount() === 1;
     $response->closeCursor();
+
+    if (!$modificationEffectuee) {
+        http_response_code(409);
+        exit('Cette réservation ne peut pas être modifiée. Rechargez la liste et vérifiez vos droits.');
+    }
 }
 
 $sql = 'SELECT id, nom, partage
@@ -47,6 +59,12 @@ $response = $bdd->prepare($sql);
 $response->execute(array($_GET['liste']));
 $donnee = $response->fetch();
 
+if (!$donnee) {
+    $response->closeCursor();
+    header('Location: https://family.matthieudevilliers.fr/pages/erreur/404.php');
+    exit();
+}
+
 $sql1 = 'SELECT type
         FROM lic_autorisation
         WHERE id_liste = ? AND id_compte = ?';
@@ -55,7 +73,7 @@ $response1 = $bdd->prepare($sql1);
 $response1->execute(array($donnee['id'], $_SESSION['id_compte']));
 $donnee1 = $response1->fetch();
 
-if ($donnee['partage'] == 'public' && $donnee1['type'] == null) {
+if ($donnee['partage'] == 'public' && !$donnee1) {
     $sql2 = 'INSERT INTO lic_autorisation (id_compte, id_liste, type)
             VALUES (?, ?, "lecteur")';
 
@@ -327,7 +345,7 @@ $response1->closeCursor();
                                                                 <form action="" method="post" class="d-flex justify-content-center">
                                                                     <input name='AchatFrom' value="<?php echo $donnees['id']; ?>" type='hidden'>
                                                                     <div class="form-check form-switch">
-                                                                        <input name="AchatFrom" value="<?php echo $donnees['id']; ?>" class="form-check-input" id="reservation-<?php echo (int) $donnees['id']; ?>" type="checkbox" onchange="this.form.submit()" <?php if ($donnees['buy_from'] == $_SESSION['id_compte']) echo 'checked'; ?>>
+                                                                        <input name="reservation" value="1" class="form-check-input" id="reservation-<?php echo (int) $donnees['id']; ?>" type="checkbox" onchange="this.form.submit()" <?php if ($donnees['buy_from'] == $_SESSION['id_compte']) echo 'checked'; ?>>
                                                                         <label class="form-check-label" for="reservation-<?php echo (int) $donnees['id']; ?>">Réserver<span class="visually-hidden"> <?php echo safe_output($donnees['nom']); ?></span></label>
                                                                         <noscript><button class="btn btn-sm btn-outline-primary ms-2" type="submit">Enregistrer</button></noscript>
                                                                     </div>
