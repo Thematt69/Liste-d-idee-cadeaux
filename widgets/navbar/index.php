@@ -52,7 +52,10 @@
                                 <a class="nav-link<?php echo $isCurrent('/pages/compte/') ? ' active' : ''; ?>" href="https://family.matthieudevilliers.fr/pages/compte/" <?php echo $isCurrent('/pages/compte/') ? ' aria-current="page"' : ''; ?>>Mon compte</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="https://family.matthieudevilliers.fr/scripts/deconnexion/">Déconnexion</a>
+                                <form action="https://family.matthieudevilliers.fr/scripts/deconnexion/" method="post" class="m-0">
+                                    <?php csrf_field(); ?>
+                                    <button type="submit" class="nav-link border-0 bg-transparent">Déconnexion</button>
+                                </form>
                             </li>
                         <?php
                         } else {

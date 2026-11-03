@@ -44,5 +44,5 @@ Le [suivi de remédiation P0](docs/security/plan-remediation.md) distingue les c
 ### Notes pour les développeurs
 
 - **Credentials:** Les identifiants de base de données et les clés API restent en dur dans le code (architecture existante)
-- **CSRF :** jeton de session vérifié pour les POST via le bootstrap partagé, champs de formulaires et en-tête AJAX ; la déconnexion en GET reste à corriger
+- **CSRF :** jeton de session vérifié pour les POST, champs de formulaires et en-tête AJAX ; déconnexion par formulaire POST avec contrôle du jeton, destruction de session et expiration du cookie
 - **Tests locaux :** voir [AGENTS.md](AGENTS.md) et la [politique opérationnelle](docs/security/politique-agents.md) ; isoler SQL et mail avant d'exécuter l'application

@@ -8,14 +8,14 @@ L'utilisateur a demandé l'implémentation du plan puis le passage aux incrémen
 
 | Incrément du plan P0 | Référence locale / statut | Validation restant nécessaire |
 | --- | --- | --- |
-| 0 — Purge et secrets (R7, R8) | Purge abandonnée sur demande explicite : SQL de purge, mode CLI et nettoyages de connexions retirés localement. Ancienne route neutralisée. Secrets R8 encore dans le code ; état déployé inconnu. | Faire retirer les anciennes tâches/lanceurs externes, vérifier le déploiement du retrait et traiter la rotation des secrets séparément. |
+| 0 — Purge et secrets (R7, R8) | Purge abandonnée sur demande explicite : ancien répertoire `scripts/clean/`, mode CLI et nettoyages de connexions retirés du dépôt. Secrets R8 encore dans le code ; état déployé inconnu. | Faire retirer les anciennes tâches/lanceurs externes, vérifier le déploiement du retrait et traiter la rotation des secrets séparément. |
 | 1 — Profil (R1) | Correctif présent : `ee92747`. | Deux comptes, deux branches, collision, compte supprimé et formats historiques sur base fictive. |
 | 2 — Mutations de listes (R2) | Correctif présent : `4afd4b8`. | Matrice des rôles, IDs croisés et échecs intermédiaires. |
 | 3 — Réservations (R3) | Correctif présent : `ffb0f73`. | Deux connexions SQL concurrentes, idées supprimées et réservations existantes. |
 | 4 — Droits et homonymes d'idées (R4, R6) | Correctif présent : `77b27bb`. | Rôles, parents supprimés, idées homonymes et interruption d'une opération multiple. |
 | 5 — Récupération (R5) | Correctif présent : `6e79c0e` ; migration additive préparée dans `tools/migrations/001_password_reset_tokens.sql`. | Application de la migration non établie ; mail fictif, échec d'envoi, expiration, usage unique et comptes historiques à vérifier. |
 | 6 — Création et partage (R9) | Correctif présent : `e9aa23f`. | Concurrence, taille/contraintes réelles des colonnes, transaction et liens historiques. |
-| 7 — CSRF, sessions et sorties (R10, R11) | Correctifs présents : `7779142`, `e4be3d8`, `764483d`. | Tests négatifs CSRF/AJAX, cookies émis et affichages. La déconnexion reste en GET ; la résolution du compte actif et du rôle admin avant chaque action reste à vérifier. |
+| 7 — CSRF, sessions et sorties (R10, R11) | Correctifs présents : `7779142`, `e4be3d8`, `764483d` ; déconnexion POST avec jeton, destruction de session et expiration de cookie préparée localement. | Tests CSRF/AJAX et cookies réels sur l'hébergement ; affichages. La résolution du compte actif et du rôle admin avant chaque action reste à vérifier. |
 | 8 — Gouvernance, CI, déploiement | CI syntaxique présente : `a3608b2` ; politique, suivi, harmonisation des consignes et filtres de publication préparés localement dans le présent incrément. | Exécution CI hors production, protections GitHub, FTPS, sauvegardes et retour arrière LWS non vérifiés. |
 
 Le serveur déclaré par l'utilisateur est MariaDB `10.11.19` ; PHP déclaré est `8.2.35`, avec `utf8mb4` et `utf8mb4_unicode_ci`. Ces informations ne remplacent pas le contrôle des moteurs de tables, contraintes, index et réglages SQL effectifs. La configuration Docker/base locale a été explicitement mise en pause dans l'échange.
@@ -63,6 +63,14 @@ Cette étape conservait les critères et instructions SQL historiques. La nouvel
 
 ## Décision du 3 novembre 2026 — Abandon complet de la purge
 
-L'utilisateur a demandé de retirer complètement le principe de purge. Les requêtes physiques de l'ancien script et son mode CLI ont été supprimés, ainsi que les nettoyages de l'historique de connexion à l'authentification et dans l'administration. La route historique est un fichier inerte sans inclusion ni SQL ; aucun lanceur de remplacement n'est prévu. La [règle de conservation](conservation-donnees.md) remplace les procédures précédentes.
+L'utilisateur a demandé de retirer complètement le principe de purge. Les requêtes physiques de l'ancien script et son mode CLI ont été supprimés, ainsi que les nettoyages de l'historique de connexion à l'authentification et dans l'administration. Un fichier inerte avait été préparé, puis le répertoire `scripts/clean/` a été retiré du dépôt au commit `11e3fa1` ; aucun lanceur de remplacement n'est prévu. La [règle de conservation](conservation-donnees.md) remplace les procédures précédentes.
 
 Les tâches cron et lanceurs externes doivent être retirés lors d'une intervention d'hébergement autorisée. L'état distant reste inconnu ; aucune donnée existante n'est supprimée ou restaurée par ce correctif.
+
+## Complément du 3 novembre 2026 — Déconnexion en POST avec CSRF
+
+La navigation soumet un formulaire POST contenant le jeton CSRF. Le script de déconnexion impose HTTPS, refuse les autres méthodes avec HTTP 405 et les jetons invalides avec HTTP 403. Après validation, il vide les données de session, expire le cookie avec ses attributs existants, détruit la session serveur et redirige vers la connexion avec HTTP 303 suivi de `exit()`.
+
+Les trois helpers CSRF existants ont été déplacés sans changement de comportement dans `scripts/csrf/index.php`, inclus par le bootstrap Web et la déconnexion. Ce parcours fonctionne sans bootstrap SQL et ne requiert aucune connexion à la base.
+
+Validation locale : syntaxe des quatre fichiers PHP concernés, `git diff --check`, rendu du formulaire et tests sur fixtures temporaires avec sessions fictives et HTTPS simulé. Les méthodes interdites, jetons absents/invalides/tableaux/d'une autre session, requêtes sans HTTPS, succès par formulaire ou en-tête, destruction serveur, expiration du cookie et rejeu ont été contrôlés. Aucun accès SQL, mail, navigateur de production ou déploiement n'a été utilisé. Les cookies émis par l'hébergement et l'intégration navigateur réelle restent à vérifier.

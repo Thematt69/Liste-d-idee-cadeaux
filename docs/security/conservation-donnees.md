@@ -12,13 +12,13 @@ Les opérations métier de retrait d'autorisations et d'invalidation des jetons 
 
 - Retrait des requêtes de purge de comptes, listes, idées, notifications et connexions de `scripts/clean/index.php`.
 - Retrait de `cleanup_old_connexions()`, de son appel après authentification, de l'action POST administrateur et du bouton de nettoyage.
-- Retrait du mode CLI autorisé et de sa procédure. Le fichier de l'ancienne route ne contient plus de SQL ni d'inclusion : HTTP 410, CLI en échec avec code 1. La règle Apache du répertoire peut refuser l'URL en 403 avant PHP.
-- Conservation de ce fichier inerte pour écraser également une ancienne copie lors d'un futur déploiement. Les ressources internes et le graphe historique ne sont pas des mécanismes exécutables de maintenance.
+- Retrait du mode CLI autorisé et de sa procédure. Un fichier inerte avait d'abord été préparé ; le répertoire `scripts/clean/` a ensuite été supprimé du dépôt au commit `11e3fa1`.
+- Les ressources internes et le graphe historique décrivent l'état antérieur et ne sont pas des mécanismes exécutables de maintenance.
 
 ## Déploiement et vérification
 
 Faire supprimer les anciennes tâches cron et les lanceurs externes par le responsable de l'hébergement lors d'une intervention autorisée ; ne pas les remplacer par une autre purge. La présence et le contenu de ces tâches ne sont pas connus depuis le dépôt local.
 
-Vérifier syntaxe PHP, absence des anciens appels/fonctions et de SQL dans l'ancienne route. Tester cette route sur une copie temporaire isolée, y compris avec l'ancien contexte CLI fourni, pour confirmer qu'aucune requête n'est exécutée. Aucun accès aux données réelles n'est nécessaire.
+Vérifier l'absence des anciens fichiers, appels et fonctions dans le code déployé. Faire confirmer le retrait de toute ancienne copie de `scripts/clean/` sur l'hébergement ; l'état distant ne peut pas être déduit de la suppression locale. Les tests HTTP 410/CLI de l'historique concernaient le fichier inerte avant sa suppression. Aucun accès aux données réelles n'est nécessaire à cette vérification.
 
 Cette modification du code ne restaure pas les enregistrements supprimés auparavant. Une éventuelle restauration ou une future évolution de la conservation doit faire l'objet d'une décision et d'une procédure distinctes.

@@ -14,7 +14,7 @@
 ## Ordre proposé
 
 | Ordre | Ticket | Priorité | Taille | Dépendances principales |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | 0 | [T0 — Restauration](#t0--sauvegarde-et-restauration-isolée) | P0 | M | Accès et capacités d’hébergement |
 | 1 | [T1 — Profil](#t1--cibler-le-profil-par-id-de-session) | P0 | S | Deux comptes de test ; T0 avant déploiement |
 | 2 | [T2 — Permissions de listes](#t2--protéger-les-écritures-de-liste) | P0 | M | Matrice de droits ; T0 avant déploiement |
@@ -84,7 +84,7 @@
 
 **Décision du 3 novembre 2026 :** purge complètement abandonnée sur demande de l'utilisateur. Après une première préparation de confinement, les requêtes de purge et le mode CLI ont été retirés, ainsi que le nettoyage automatique et administrateur de l'historique de connexion. Voir la [règle de conservation](../security/conservation-donnees.md) et le [suivi](../security/plan-remediation.md#décision-du-3-novembre-2026--abandon-complet-de-la-purge). La proposition initiale de maintenance ci-dessous est remplacée par cette décision.
 
-- **Description / fichiers actualisés :** retirer tout traitement de purge de [clean](../../scripts/clean/index.php), du bootstrap, de la connexion et de l'administration. **P0 · S/M.**
+- **Description / fichiers actualisés :** retrait de l'ancien répertoire `scripts/clean/` et des nettoyages du bootstrap, de la connexion et de l'administration. **P0 · S/M.**
 - **Dépendances :** faire supprimer les anciens cron/lanceurs lors d'une intervention d'hébergement autorisée ; aucun remplacement CLI.
 - **Acceptation / tests :** ancienne route sans SQL ni inclusion, appels de nettoyage absents et bouton retiré ; aucun contexte HTTP ou CLI ne permet une purge. Vérifier syntaxe et déploiement sans toucher aux données.
 
@@ -101,6 +101,8 @@
 - **Acceptation / tests :** attributs de cookie observés corrects, session régénérée aux transitions appropriées, accès admin direct fonctionnel selon rôle, révocation et compte supprimé pris en compte.
 
 ### T10 — Ajouter une protection CSRF
+
+**Suivi du 3 novembre 2026 :** déconnexion passée en POST avec le jeton existant ; GET et autres méthodes refusés, contrôle CSRF avant destruction de la session et expiration du cookie. Les helpers sont partagés sans accès SQL dans `scripts/csrf/index.php`. Le parcours et le formulaire ont été vérifiés sur fixtures avec sessions fictives et HTTPS simulé ; validation navigateur/hébergement restante. Voir le [suivi](../security/plan-remediation.md#complément-du-3-novembre-2026--déconnexion-en-post-avec-csrf).
 
 - **Description / fichiers :** protéger les formulaires et [endpoint de notification](../../scripts/mark-notif-read/index.php) ; migrer la déconnexion vers POST. **P1 · M.**
 - **Dépendances :** T9 et inventaire des actions modifiant l’état.
