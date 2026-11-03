@@ -1,5 +1,5 @@
 <?php
-function envoiMail(String $to, String $subject, String $message)
+function envoiMail(String $to, String $subject, String $message, bool $copieWebmaster = true)
 {
     // Pour envoyer un mail HTML, l'en-tête Content-type doit être défini
     $headers[] = 'MIME-Version: 1.0';
@@ -7,7 +7,9 @@ function envoiMail(String $to, String $subject, String $message)
     $headers[] = 'Reply-To: Matthieu Devilliers <webmaster@matthieudevilliers.fr>';
     $headers[] = 'From: Service Client <webmaster@matthieudevilliers.fr>';
     // NOTE - Enlever avant commercialisation
-    $headers[] = 'Bcc: Matthieu Devilliers <webmaster@matthieudevilliers.fr>';
+    if ($copieWebmaster) {
+        $headers[] = 'Bcc: Matthieu Devilliers <webmaster@matthieudevilliers.fr>';
+    }
     $headers[] = 'X-Mailer: PHP/' . phpversion();
 
     // Envoi du mail
