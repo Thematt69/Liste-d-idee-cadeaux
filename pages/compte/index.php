@@ -28,25 +28,35 @@ if (isset($_POST['Mail'])) {
 
         $response->closeCursor();
 
-        if (password_verify($_POST['MDP'], $donnee['motdepasse'])) {
+        if ($donnee && (password_verify($_POST['MDP'], $donnee['motdepasse']) || password_verify(htmlentities($_POST['MDP']), $donnee['motdepasse']))) {
             $prenom = htmlentities($_POST['Prénom']);
             $nom = htmlentities($_POST['Nom']);
             $motDePasse = password_hash(htmlentities($_POST['NewMDP']), PASSWORD_DEFAULT);
             $mail = htmlentities($_POST['Mail']);
 
-            $sql = 'UPDATE lic_compte
-            SET prenom = ?, nom = ?, motdepasse = ?, mail = ?
-            WHERE mail = ?';
-
-            $response = $bdd->prepare($sql);
-            $response->execute(array($prenom, $nom, $motDePasse, $mail, $mail));
-
-            // Regenerate session ID on password change for security
-            session_regenerate_id(true);
-
-            $info = 'Vos informations ont bien été modifiées.';
-
+            $response = $bdd->prepare('SELECT id FROM lic_compte WHERE mail = ? AND id != ? AND deleted_to IS NULL');
+            $response->execute(array($mail, $_SESSION['id_compte']));
+            $mailExistant = $response->fetch();
             $response->closeCursor();
+
+            if ($mailExistant) {
+                $alert = 'Cette adresse mail est déjà utilisée.';
+            } else {
+
+                $sql = 'UPDATE lic_compte
+                SET prenom = ?, nom = ?, motdepasse = ?, mail = ?
+                WHERE id = ? AND deleted_to IS NULL';
+
+                $response = $bdd->prepare($sql);
+                $response->execute(array($prenom, $nom, $motDePasse, $mail, $_SESSION['id_compte']));
+
+                // Regenerate session ID on password change for security
+                session_regenerate_id(true);
+
+                $info = 'Vos informations ont bien été modifiées.';
+
+                $response->closeCursor();
+            }
         } else {
             $alert = 'Mot de passe incorrect !';
         }
@@ -62,21 +72,31 @@ if (isset($_POST['Mail'])) {
 
         $response->closeCursor();
 
-        if (password_verify($_POST['MDP'], $donnee['motdepasse'])) {
+        if ($donnee && (password_verify($_POST['MDP'], $donnee['motdepasse']) || password_verify(htmlentities($_POST['MDP']), $donnee['motdepasse']))) {
             $prenom = htmlentities($_POST['Prénom']);
             $nom = htmlentities($_POST['Nom']);
             $mail = htmlentities($_POST['Mail']);
 
-            $sql = 'UPDATE lic_compte
-            SET prenom = ?, nom = ?, mail = ?
-            WHERE mail = ?';
-
-            $response = $bdd->prepare($sql);
-            $response->execute(array($prenom, $nom, $mail, $mail));
-
-            $info = 'Vos informations ont bien été modifiées.';
-
+            $response = $bdd->prepare('SELECT id FROM lic_compte WHERE mail = ? AND id != ? AND deleted_to IS NULL');
+            $response->execute(array($mail, $_SESSION['id_compte']));
+            $mailExistant = $response->fetch();
             $response->closeCursor();
+
+            if ($mailExistant) {
+                $alert = 'Cette adresse mail est déjà utilisée.';
+            } else {
+
+                $sql = 'UPDATE lic_compte
+                SET prenom = ?, nom = ?, mail = ?
+                WHERE id = ? AND deleted_to IS NULL';
+
+                $response = $bdd->prepare($sql);
+                $response->execute(array($prenom, $nom, $mail, $_SESSION['id_compte']));
+
+                $info = 'Vos informations ont bien été modifiées.';
+
+                $response->closeCursor();
+            }
         } else {
             $alert = 'Mot de passe incorrect !';
         }
