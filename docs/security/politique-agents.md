@@ -29,7 +29,7 @@ Les instructions propres à un outil complètent le socle commun. Elles ne doive
 - Avant `php -S` ou tout test de page, vérifier la configuration SQL, le transport mail, les redirections et les appels externes. Le bootstrap actuel contient encore des accès réels ; une adresse locale de serveur PHP ne suffit pas à isoler l'application.
 - Utiliser une base fictive dédiée, un destinataire ou transport mail de test et HTTPS local ou un proxy TLS. La mise en place Docker locale reste en pause ; ne pas en déduire qu'une base isolée est disponible.
 - Préserver la redirection HTTPS et les attributs de cookies. Ne pas ajouter de contournement local dans le code partagé.
-- Avant un script `tools/`, une commande SQL ou Graphify, lire son point d'entrée et sa configuration pour identifier lecture, écriture, suppression, processus lancés et accès réseau. Ne pas exécuter la purge pour vérifier son accès.
+- Avant un script `tools/`, une commande SQL ou Graphify, lire son point d'entrée et sa configuration pour identifier lecture, écriture, suppression, processus lancés et accès réseau. La [décision de conservation](conservation-donnees.md) interdit de réintroduire un mécanisme de purge.
 - Consulter d'abord le graphe local existant quand il est pertinent. Vérifier son ancienneté ; si la CLI échoue, poursuivre avec les fichiers existants et les sources ciblées. Une installation, reconstruction, export ou transmission doit être comprise et couverte par la demande.
 - Un `dry-run` d'outil distant reste susceptible de se connecter et d'utiliser des identifiants ; il n'est pas un contrôle local sans effet réseau.
 

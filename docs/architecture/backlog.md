@@ -22,7 +22,7 @@
 | 4 | [T4 — Édition des idées](#t4--restreindre-lédition-des-idées) | P0 | S | Matrice de droits |
 | 5 | [T5 — ID d’idée](#t5--remplacer-le-ciblage-par-nom) | P0 | S | Jeux de noms identiques |
 | 6 | [T6 — Récupération du mot de passe](#t6--réparer-la-récupération-du-mot-de-passe) | P0 | L | T0, schéma additif, courrier de test |
-| 7 | [T7 — Purge](#t7--contrôler-la-purge-physique) | P0 | S/M | Protections et conservation à déterminer |
+| 7 | [T7 — Retrait de la purge](#t7--contrôler-la-purge-physique) | P0 | S/M | Purge abandonnée ; vérifier retrait et anciens cron |
 | 8 | [T8 — Déploiement](#t8--sécuriser-le-déploiement) | P0 | M/L | T0 et capacités LWS |
 | 9 | [T9 — Session](#t9--initialiser-correctement-la-session) | P1 | M | Tests auth et administration |
 | 10 | [T10 — CSRF](#t10--ajouter-une-protection-csrf) | P1 | M | T9 |
@@ -82,9 +82,11 @@
 
 ### T7 — Contrôler la purge physique
 
-- **Description / fichiers :** déterminer les protections externes de [clean](../../scripts/clean/index.php#L1), puis retirer l’accès HTTP ou le soumettre à une exécution strictement contrôlée. **P0 · S/M.**
-- **Dépendances :** décision sur la conservation ; sauvegarde et restauration testées avant exécution de purge.
-- **Acceptation / tests :** accès anonyme et non autorisé refusés en environnement isolé ; limites de dates et contraintes relationnelles vérifiées ; aucune purge accidentelle.
+**Décision du 3 novembre 2026 :** purge complètement abandonnée sur demande de l'utilisateur. Après une première préparation de confinement, les requêtes de purge et le mode CLI ont été retirés, ainsi que le nettoyage automatique et administrateur de l'historique de connexion. Voir la [règle de conservation](../security/conservation-donnees.md) et le [suivi](../security/plan-remediation.md#décision-du-3-novembre-2026--abandon-complet-de-la-purge). La proposition initiale de maintenance ci-dessous est remplacée par cette décision.
+
+- **Description / fichiers actualisés :** retirer tout traitement de purge de [clean](../../scripts/clean/index.php), du bootstrap, de la connexion et de l'administration. **P0 · S/M.**
+- **Dépendances :** faire supprimer les anciens cron/lanceurs lors d'une intervention d'hébergement autorisée ; aucun remplacement CLI.
+- **Acceptation / tests :** ancienne route sans SQL ni inclusion, appels de nettoyage absents et bouton retiré ; aucun contexte HTTP ou CLI ne permet une purge. Vérifier syntaxe et déploiement sans toucher aux données.
 
 ### T8 — Sécuriser le déploiement
 

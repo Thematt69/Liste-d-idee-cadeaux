@@ -70,3 +70,23 @@ Renseigner les réponses dans une nouvelle entrée ; ne pas transformer une reco
 **Vérification :** YAML du workflow et frontmatter des trois consignes PHP/sécurité validés avec le parseur YAML de Prettier déjà installé ; 13 cas de fichiers internes exclus et les 51 fichiers applicatifs suivis conservés par les motifs glob contrôlés avec minimatch ; 114 liens locaux et ancres vérifiés ; `git diff --check` sans erreur. Relecture indépendante du diff sans blocage identifié. Aucun fichier PHP modifié. La CLI Graphify a de nouveau échoué au lancement ; aucune reconstruction ni installation n'a été tentée. Aucun test applicatif/SQL, exécution GitHub Actions, transfert FTP, purge, migration ou envoi de mail n'a été exécuté.
 
 **État :** préparation locale de l'incrément 8, validation CI et infrastructure restantes. La purge, les secrets et les tests isolés restent prioritaires et non clôturés. Retour arrière : patch ciblé des consignes/workflow ; toute opération sur des données ou accès réels exige sa procédure propre.
+
+## 3 novembre 2026 — Confinement de la purge, R7
+
+**Étape historique remplacée par l'abandon complet de la purge consigné dans l'entrée suivante.**
+
+**Autorisation et état initial :** demande de passer au correctif suivant selon le plan P0 ; HEAD `764483d`. Les changements de gouvernance de l'incrément 8 étaient déjà dans l'index et sont préservés. L'entrée de `scripts/clean/index.php` chargeait session et bootstrap SQL sans garde d'accès ; aucun inventaire distant des protections ou cron n'a été effectué.
+
+**Correctif alors préparé :** refus de tout SAPI autre que `cli` avant inclusion et SQL ; règle Apache `Require all denied`. Le script ne chargeait plus le bootstrap Web et ne se connectait plus automatiquement. Un mode CLI exigeait une constante booléenne et le PDO `$bdd` fourni par un lanceur privé. Ces critères, instructions SQL et procédure CLI ont ensuite été retirés selon la [décision de conservation](../security/conservation-donnees.md).
+
+**Vérifications :** `php -l` réussi ; sur copie temporaire isolée, sept refus HTTP 403 sans cache, six refus CLI avec code de sortie 1 et une entrée CLI autorisée simulée avec un PDO sans connexion interrompant avant la première requête. Aucun SQL ni script applicatif partagé exécuté. Les 41 liens locaux/ancres des documents concernés sont valides ; `git diff --check` sans erreur et diff relu. Apache, tâches planifiées, déploiement et fonctionnement SQL de la maintenance non vérifiés.
+
+**État et préservation :** confinement préparé localement uniquement ; aucun changement distant, purge ou donnée modifiée. Les anciens appels HTTP et appels CLI directs doivent être inventoriés avant déploiement, puis remplacés seulement selon une procédure de maintenance autorisée. Les secrets R8 restent à traiter séparément. Un retour arrière éventuel doit conserver un refus HTTP côté serveur avant rétablissement de l'ancien code.
+
+## 3 novembre 2026 — Abandon complet de la purge
+
+**Décision explicite :** « Retire le principe de purge complètement ». Cette demande remplace le confinement avec possibilité de maintenance CLI proposé à l'étape précédente.
+
+**Changements locaux :** retrait de tout le SQL de purge, de son autorisation CLI, du helper de nettoyage de l'historique, de son appel à la connexion, du traitement POST et du bouton administrateur. L'ancienne route est un fichier inerte qui retourne HTTP 410 ou quitte en CLI avec code 1, sans inclusion ni SQL ; la règle Apache de refus est conservée. Les références spécifiques au nettoyage dans l'extracteur Graphify sont retirées sans exécuter l'outil. La procédure de maintenance est remplacée par la [règle de conservation](../security/conservation-donnees.md) ; AGENTS, README, politique, suivi et backlog sont alignés.
+
+**Validation :** `php -l` réussi sur les quatre fichiers PHP modifiés ; syntaxe Python compilée sans exécuter l'extracteur ; anciens appels/fonction/autorisation absents du code actif. Sur une copie temporaire isolée, six cas HTTP retournent 410 et deux cas CLI quittent avec code 1, y compris avec l'ancien contexte autorisé, sans SQL. Les 146 liens locaux/ancres sont valides ; `git diff --check` sans erreur. Aucune donnée réelle ni tâche distante n'est modifiée ; les anciens cron/lanceurs doivent être supprimés par le responsable lors d'une intervention autorisée. Aucun lanceur de remplacement n'est à créer.

@@ -1,5 +1,7 @@
 # Plan de migration progressive PHP
 
+**Décision du 3 novembre 2026 :** la purge physique est abandonnée sur demande de l'utilisateur. Les anciennes étapes de confinement/maintenance doivent désormais aboutir au retrait des mécanismes et des tâches externes, selon la [règle de conservation](../security/conservation-donnees.md). Les propositions initiales ci-dessous restent historiques.
+
 **Proposition du 3 novembre 2026**, issue de l’[audit](audit.md) de `develop` au commit `614eb9c`. Le plan n’est pas encore validé. L’[architecture cible](architecture-cible.md) décrit les couches ; le [backlog](backlog.md) détaille les tickets ; l’[historique](historique.md) suit les décisions.
 
 ## Règles

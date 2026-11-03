@@ -36,6 +36,7 @@ Ces règles s'appliquent à tout le dépôt. Garder `AGENTS.md` comme socle comm
 
 ## Sécurité et intégrations
 
+- La purge physique des données métier et des historiques est abandonnée. Ne pas réintroduire de nettoyage automatique ou manuel par ancienneté ou nombre d'enregistrements ; suivre la [décision de conservation](docs/security/conservation-donnees.md).
 - `scripts/verif/index.php` contient des identifiants sensibles en dur. Ne jamais les recopier dans les instructions, les sorties ou d'autres fichiers; ne pas modifier ce mécanisme sans besoin explicite.
 - `scripts/mail/index.php` envoie les courriels via `mail()` et ajoute actuellement le webmaster en copie cachée. En tenir compte lors de toute modification des courriels.
 - Consulter [README.md](README.md) pour les informations de projet déjà documentées; éviter de les recopier ici.

@@ -38,6 +38,7 @@ Le [suivi de remédiation P0](docs/security/plan-remediation.md) distingue les c
 - Les mots de passe sont hashés avec `password_hash()` (bcrypt par défaut)
 - Les requêtes SQL utilisent des requêtes préparées (protection contre les injections SQL)
 - Les suppressions sont "soft" (champ `deleted_to`)
+- Les données et historiques sont conservés sans purge automatique ou manuelle ; voir la [décision de conservation](docs/security/conservation-donnees.md)
 - HTTPS est requis pour toutes les connexions
 
 ### Notes pour les développeurs

@@ -16,16 +16,6 @@ if (!isset($_SESSION['id_compte'])) {
 $alert = false;
 $info = false;
 
-// Nettoyage de l'historique de connexion
-if (isset($_POST['cleanup_connexions'])) {
-    try {
-        cleanup_old_connexions($bdd);
-        $info = 'Historique de connexion nettoyé avec succès ! Les connexions de plus d\'un an et au-delà des 10 dernières par utilisateur ont été supprimées.';
-    } catch (Exception $e) {
-        $alert = 'Erreur lors du nettoyage : ' . htmlspecialchars($e->getMessage());
-    }
-}
-
 if (isset($_POST['Comptes'])) {
     if ($_POST['Comptes'][0] == 'tous' && count($_POST['Comptes']) > 1) {
         $alert = 'Vous ne pouvez pas sélectionner "Tous les comptes" et d\'autres comptes !';
@@ -182,24 +172,6 @@ if (isset($_POST['Comptes'])) {
                                     </div>
                                 </div>
                             </form>
-                        </div>
-                    </div>
-                    <h2 class="h4 text-center mt-4 mb-3">Maintenance</h2>
-                    <div class="card">
-                        <div class="card-body">
-                            <h5>Nettoyage de l'historique de connexion</h5>
-                            <p class="text-body-secondary small">
-                                Supprime les connexions de plus d'un an et conserve seulement les 10 dernières par utilisateur.
-                            </p>
-                            <form action="" method="post" class="d-inline">
-                                <?php csrf_field(); ?>
-                                <button type="submit" name="cleanup_connexions" value="1" class="btn btn-warning">
-                                    🧹 Nettoyer l'historique
-                                </button>
-                            </form>
-                            <p class="text-body-secondary small mt-2">
-                                ⚠️ Cette opération ne peut pas être annulée
-                            </p>
                         </div>
                     </div>
                 </div>

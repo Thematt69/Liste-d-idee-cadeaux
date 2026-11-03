@@ -34,7 +34,7 @@ PATH_RULES = [
     ("pages/listes", "lists"), ("pages/idees", "lists"), ("pages/modif-listes", "lists"),
     ("pages/modif-idees", "lists"), ("pages/print-liste", "lists"),
     ("js/notifications.js", "notify"), ("scripts/mail", "notify"), ("scripts/mark-notif-read", "notify"),
-    ("widgets/notif-toast", "notify"), ("pages/admin", "admin"), ("scripts/clean", "admin"),
+    ("widgets/notif-toast", "notify"), ("pages/admin", "admin"),
     ("pages/accessibilite", "public"), ("pages/cgu", "public"), ("pages/mentions-legales", "public"),
     ("pages/plan-site", "public"), ("pages/erreur", "public"), ("widgets/import", "public"),
     ("widgets/navbar", "public"), ("widgets/footer", "public"), ("images", "public"),
@@ -418,8 +418,6 @@ def fixed_partition(graph):
     assigned = {}
     for node_id, data in graph.nodes(data=True):
         domain = ID_RULES.get(node_id)
-        if domain is None and data.get("label") == "cleanup_old_connexions()":
-            domain = "admin"
         if domain is None and data.get("file_type") == "route":
             domain = path_domain(data.get("label", ""))
         if domain is None and data.get("source_file"):

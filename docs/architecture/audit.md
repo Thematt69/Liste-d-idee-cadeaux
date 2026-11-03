@@ -4,6 +4,8 @@
 
 ## Périmètre et niveau de preuve
 
+**Décision ultérieure du 3 novembre 2026 :** l'utilisateur a demandé l'abandon complet de la purge. Son code et les nettoyages de l'historique de connexion sont retirés localement ; la [règle de conservation](../security/conservation-donnees.md) remplace les recommandations de maintenance de l'audit initial conservées ci-dessous.
+
 **Complément du 3 novembre 2026 — correctifs locaux :** les constats ci-dessous concernent la référence initiale `614eb9c` et sont conservés. Le [suivi de remédiation P0](../security/plan-remediation.md) référence les correctifs locaux présents jusqu'à `764483d` et la préparation de l'incrément 8. Leur présence ne prouve ni migration appliquée, ni tests fonctionnels/SQL réussis, ni déploiement ; le confinement de la purge et le traitement des secrets restent non clôturés.
 
 Un **constat confirmé** est observé dans le code. Une **hypothèse** dépend de l’exécution, des données ou de protections externes. Une **information manquante** ne peut pas être déduite du dépôt ; une **recommandation** est une proposition non encore validée.
