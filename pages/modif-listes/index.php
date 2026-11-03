@@ -181,72 +181,80 @@ if (isset($_POST['cancel'])) {
     exit();
 } elseif (isset($_POST['Nom'])) {
 
+    if (!isset($_POST['Partage']) || !in_array($_POST['Partage'], array('prive', 'limite', 'public'), true)) {
+        http_response_code(400);
+        exit();
+    }
+
+    $coProprietaire = $_POST['Co-propriétaire'] ?? null;
+    if ($coProprietaire !== null && (!is_string($coProprietaire) || !ctype_digit($coProprietaire))) {
+        http_response_code(400);
+        exit();
+    }
+
     // Création de la liste
     $sql = 'INSERT INTO lic_liste (nom, partage, lien_partage)
             VALUES (?,?,?)';
 
-    // Lien random de partage
-    $str = rand();
-    $rand = md5($str);
+    // 128 bits aléatoires, encodés sur 32 caractères pour rester compatibles avec les anciens liens.
+    $rand = bin2hex(random_bytes(16));
 
-    $response = $bdd->prepare($sql);
-    $response->execute(array(htmlentities($_POST['Nom']), htmlentities($_POST['Partage']), htmlentities($rand)));
+    $bdd->beginTransaction();
+    try {
+        $response = $bdd->prepare($sql);
+        $response->execute(array(htmlentities($_POST['Nom']), $_POST['Partage'], $rand));
+        $listeCreeeId = $bdd->lastInsertId();
+        $response->closeCursor();
 
-    $response->closeCursor();
-
-    //Récupération de l'id le plus récent
-    $sql = 'SELECT id FROM lic_liste WHERE deleted_to IS NULL ORDER BY created_to DESC LIMIT 1';
-
-    $response = $bdd->prepare($sql);
-    $response->execute();
-
-    $donnee = $response->fetch();
-
-    // Création de l'autorisation 'propriétaire'
-    $sql1 = 'INSERT INTO lic_autorisation (id_compte, id_liste, `type`)
-            VALUES (?,?,"proprietaire")';
-
-    $response1 = $bdd->prepare($sql1);
-    $response1->execute(array($_SESSION['id_compte'], $donnee['id']));
-
-    $response1->closeCursor();
-
-    if (isset($_POST['Co-propriétaire'])) {
-        // Création de l'autorisation 'propriétaire' au co-propriétaire
-        $sql1 = 'INSERT INTO lic_autorisation (id_compte, id_liste, `type`)
-            VALUES (?,?,"proprietaire")';
-
-        $response1 = $bdd->prepare($sql1);
-        $response1->execute(array($_POST['Co-propriétaire'], $donnee['id']));
-
-        $response1->closeCursor();
-    }
-
-    if (htmlentities($_POST['Partage']) != 'prive') {
-        // Récupération des id des comptes admin
-        $sql1 = 'SELECT id 
-                FROM lic_compte
-                WHERE fonction = "admin"';
-
-        $response1 = $bdd->prepare($sql1);
-        $response1->execute();
-
-        while ($donnee1 = $response1->fetch()) {
-            // Si le compte admin parcouru est différent de celui actuel
-            if ($donnee1['id'] != $_SESSION['id_compte']) {
-                // Ajout des autorisations pour les admins
-                $sql2 = 'INSERT INTO lic_autorisation (id_compte, id_liste, type)
-                        VALUES (?, ?, "moderateur")';
-
-                $response2 = $bdd->prepare($sql2);
-                $response2->execute(array($donnee1['id'], $donnee['id']));
-                $response2->closeCursor();
-            }
+        if ($listeCreeeId === '0' || $listeCreeeId === '') {
+            throw new RuntimeException('Impossible de récupérer l’identifiant de la liste créée.');
         }
 
+        // Création de l'autorisation propriétaire pour le compte courant.
+        $sql1 = 'INSERT INTO lic_autorisation (id_compte, id_liste, `type`)
+                VALUES (?, ?, "proprietaire")';
+        $response1 = $bdd->prepare($sql1);
+        $response1->execute(array($_SESSION['id_compte'], $listeCreeeId));
         $response1->closeCursor();
+
+        if ($coProprietaire !== null) {
+            $sql1 = 'INSERT INTO lic_autorisation (id_compte, id_liste, `type`)
+                    SELECT id, ?, "proprietaire"
+                    FROM lic_compte
+                    WHERE id = ? AND id != ? AND deleted_to IS NULL';
+            $response1 = $bdd->prepare($sql1);
+            $response1->execute(array($listeCreeeId, $coProprietaire, $_SESSION['id_compte']));
+            if ($response1->rowCount() !== 1) {
+                $response1->closeCursor();
+                throw new RuntimeException('Le co-propriétaire sélectionné n’est pas un compte actif valide.');
+            }
+            $response1->closeCursor();
+        }
+
+        if ($_POST['Partage'] !== 'prive') {
+            $sql1 = 'SELECT id
+                    FROM lic_compte
+                    WHERE fonction = "admin" AND deleted_to IS NULL AND id != ?';
+            $response1 = $bdd->prepare($sql1);
+            $response1->execute(array($_SESSION['id_compte']));
+
+            $sql2 = 'INSERT INTO lic_autorisation (id_compte, id_liste, type)
+                    VALUES (?, ?, "moderateur")';
+            $response2 = $bdd->prepare($sql2);
+            while ($donnee1 = $response1->fetch()) {
+                $response2->execute(array($donnee1['id'], $listeCreeeId));
+            }
+            $response2->closeCursor();
+            $response1->closeCursor();
+        }
+
+        $bdd->commit();
+    } catch (Throwable $e) {
+        if ($bdd->inTransaction()) {
+            $bdd->rollBack();
+        }
+        throw $e;
     }
-    $response->closeCursor();
 
     header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $rand);
     exit();
