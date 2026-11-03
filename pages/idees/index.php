@@ -246,14 +246,12 @@ $response1->closeCursor();
                                                     <td class="idea-cell-wide">
                                                         <?php
                                                         $ideaUrl = trim($donnees['lien'] ?? '');
-                                                        $urlParts = $ideaUrl !== '' ? parse_url($ideaUrl) : false;
-                                                        $isWebUrl = is_array($urlParts)
-                                                            && isset($urlParts['scheme'], $urlParts['host'])
-                                                            && in_array(strtolower($urlParts['scheme']), array('http', 'https'), true);
-                                                        if ($isWebUrl) {
+                                                        $safeIdeaUrl = validated_http_url($ideaUrl);
+                                                        $urlParts = $safeIdeaUrl !== null ? parse_url($safeIdeaUrl) : false;
+                                                        if (is_array($urlParts)) {
                                                             $domain = preg_replace('/^www\./i', '', $urlParts['host']);
                                                         ?>
-                                                            <a class="idea-link" href="<?php echo safe_output($ideaUrl); ?>" title="<?php echo safe_output($ideaUrl); ?>" target="_blank" rel="noopener noreferrer">
+                                                            <a class="idea-link" href="<?php echo safe_output($safeIdeaUrl); ?>" title="<?php echo safe_output($safeIdeaUrl); ?>" target="_blank" rel="noopener noreferrer">
                                                                 <?php echo safe_output($domain); ?><i class="bi bi-box-arrow-up-right ms-1" aria-hidden="true"></i><span class="visually-hidden"> : lien externe pour <?php echo safe_output($donnees['nom'] ?: 'cette idée'); ?> (nouvelle fenêtre)</span>
                                                             </a>
                                                         <?php

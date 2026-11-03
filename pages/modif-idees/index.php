@@ -5,6 +5,15 @@ include('../../scripts/session/index.php');
 include('../../scripts/verif/index.php');
 include('../../scripts/mail/index.php');
 
+if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && isset($_POST['Nom'])) {
+    $lienIdea = $_POST['Lien'] ?? '';
+    if (!is_string($lienIdea) || ($lienIdea !== '' && !is_safe_http_url($lienIdea))) {
+        http_response_code(400);
+        exit('Le lien doit être une URL HTTP ou HTTPS valide.');
+    }
+    $lienIdea = trim($lienIdea);
+}
+
 if (!isset($_SESSION['id_compte'])) {
     header('Location: https://family.matthieudevilliers.fr/pages/connexion/');
     exit();
@@ -158,7 +167,7 @@ if (isset($_POST['delete'])) {
                         buy_from = CASE WHEN ? = 1 THEN NULL ELSE buy_from END
                     WHERE id = ? AND deleted_to IS NULL';
             $response = $bdd->prepare($sql);
-            $response->execute(array(htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($_POST['Lien']), $isBuy, htmlentities($_POST['Prix']), $isBuy, $_POST['save']));
+            $response->execute(array(htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($lienIdea), $isBuy, htmlentities($_POST['Prix']), $isBuy, $_POST['save']));
             $response->closeCursor();
             $bdd->commit();
         } catch (Throwable $e) {
@@ -224,7 +233,7 @@ if (isset($_POST['delete'])) {
                   AND lic_autorisation.type = "moderateur"';
 
         $response = $bdd->prepare($sql);
-        $response->execute(array(htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($_POST['Lien']), $reserver, $_SESSION['id_compte'], $reserver, $_SESSION['id_compte'], htmlentities($_POST['Prix']), $_POST['save'], $_SESSION['id_compte']));
+        $response->execute(array(htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($lienIdea), $reserver, $_SESSION['id_compte'], $reserver, $_SESSION['id_compte'], htmlentities($_POST['Prix']), $_POST['save'], $_SESSION['id_compte']));
 
         $response->closeCursor();
 
@@ -275,7 +284,7 @@ if (isset($_POST['delete'])) {
         $donnee1 = $response1->fetch();
 
         $response = $bdd->prepare($sql);
-        $response->execute(array($donnee1['id'], htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($_POST['Lien']), $_POST['Achat'] ?? 0, htmlentities($_POST['Prix'])));
+        $response->execute(array($donnee1['id'], htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($lienIdea), $_POST['Achat'] ?? 0, htmlentities($_POST['Prix'])));
 
         $response1->closeCursor();
 
@@ -302,7 +311,7 @@ if (isset($_POST['delete'])) {
         }
 
         $response = $bdd->prepare($sql);
-        $response->execute(array($donnee1['id'], htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($_POST['Lien']), $buyFrom, htmlentities($_POST['Prix'])));
+        $response->execute(array($donnee1['id'], htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($lienIdea), $buyFrom, htmlentities($_POST['Prix'])));
 
         $response1->closeCursor();
 

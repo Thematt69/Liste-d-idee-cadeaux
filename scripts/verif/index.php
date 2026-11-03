@@ -47,7 +47,36 @@ function safe_output($str)
     // First decode any HTML entities stored in DB (legacy data like "Id&eacute;e")
     $decoded = html_entity_decode((string)$str, ENT_QUOTES | ENT_HTML5, 'UTF-8');
     // Then escape for HTML output
-    return htmlspecialchars($decoded, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    return htmlspecialchars($decoded, ENT_QUOTES | ENT_HTML5 | ENT_SUBSTITUTE, 'UTF-8');
+}
+
+/// Accept only absolute HTTP(S) URLs without embedded credentials.
+function is_safe_http_url($url)
+{
+    if (!is_string($url) || trim($url) === '') {
+        return false;
+    }
+
+    $url = trim($url);
+    $parts = parse_url($url);
+
+    return is_array($parts)
+        && isset($parts['scheme'], $parts['host'])
+        && in_array(strtolower($parts['scheme']), array('http', 'https'), true)
+        && !isset($parts['user'])
+        && !isset($parts['pass'])
+        && filter_var($url, FILTER_VALIDATE_URL) !== false;
+}
+
+/// Decode legacy HTML-escaped URLs before validating them for link rendering.
+function validated_http_url($url)
+{
+    if (!is_string($url)) {
+        return null;
+    }
+
+    $decoded = html_entity_decode($url, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    return is_safe_http_url($decoded) ? $decoded : null;
 }
 
 /// Helper: cleanup old connexions (called on login and from admin panel)
