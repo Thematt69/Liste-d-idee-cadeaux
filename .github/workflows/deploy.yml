@@ -4,15 +4,35 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
+  validate:
+    name: Validate PHP syntax
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5.0.1
+      - name: Lint PHP files with production PHP version
+        run: |
+          docker run --rm \
+            -v "${GITHUB_WORKSPACE}:/workspace" \
+            -w /workspace \
+            php:8.2.35-cli \
+            sh -c "find . -type f -name '*.php' -not -path './.git/*' -print0 | xargs -0 -r -n 1 php -l"
+
   deploy:
     name: Deploy web
+    needs: validate
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v5.0.1
         with:
