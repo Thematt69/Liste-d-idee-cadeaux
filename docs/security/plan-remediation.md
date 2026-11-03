@@ -4,6 +4,8 @@
 
 ## État observé et preuves
 
+**Revue du 4 novembre 2026 :** le [bilan du backlog](verification-backlog-2026-11-04.md) complète cet état avec les preuves, corrections et validations restantes de T0 à T12. Il ne conclut pas à une clôture globale. Les reliquats locaux T1/T4 et les écritures de listes T2/T11 ont été corrigés et font partie d'un test reproductible sans service réel.
+
 L'utilisateur a demandé l'implémentation du plan puis le passage aux incréments suivants. Les commits ci-dessous attestent de correctifs présents dans le dépôt local. Ils ne prouvent ni leur déploiement, ni le passage de tests fonctionnels ou SQL. Les validations syntaxiques rapportées dans les échanges restent distinctes de ces tests.
 
 | Incrément du plan P0 | Référence locale / statut | Validation restant nécessaire |
@@ -84,3 +86,11 @@ Un compte absent/supprimé ou un ID de session invalide vide les données de ses
 Validation locale sous PHP CLI 8.5.11 : syntaxe des cinq fichiers PHP concernés et scénarios sur fixtures temporaires, sessions fictives, HTTPS simulé et PDO sans connexion. Accès admin direct, rôle en cache obsolète, promotion/révocation, compte supprimé/inexistant, ID malformé, erreur de lecture sans action protégée, inscription réussie/échec de lecture et connexion avec hachages actuels/historiques ont été vérifiés. Les fixtures n'incorporent pas la configuration PDO réelle et interdisent les écritures administrateur et les mails inattendus.
 
 La vérification s'applique à chaque requête passant par le bootstrap ; elle ne garantit pas qu'un rôle ne puisse changer pendant une requête déjà en cours. Aucun accès à MariaDB, mail réel ou déploiement n'a été effectué. Les tests sur le moteur isolé et l'observation des cookies réellement émis restent nécessaires avant validation d'hébergement.
+
+## Complément du 4 novembre 2026 — Vérification précédente et T11
+
+La demande de poursuivre le backlog avec vérification des tâches précédentes a mis en évidence des reliquats : résultat d'UPDATE de profil non contrôlé, création d'idée modérateur avec réservation non initialisée, droit de modérateur ajouté à un copropriétaire administrateur, transitions de visibilité et suppression de liste sans transaction. Ces points sont corrigés localement. Les propriétaires sont revalidés sous verrou pour les écritures multiples ; les droits existants sont conservés lors de l'attribution aux administrateurs, et les écritures sont annulées en cas d'exception.
+
+Le test `tools/tests/security_regressions.py` passe 53 scénarios de contrôleurs et les contrôles CSRF/HTML/URL avec PDO factice, sans connexion SQL ou mail. Les scénarios de session et d'authentification de T9 ont été rejoués ; les 29 fichiers PHP passent le lint sous PHP 8.5.11. Le pilote MySQL est disponible, mais Docker n'est pas accessible depuis ce terminal et le précédent export SQL n'est plus disponible au chemin fourni.
+
+Le [bilan](verification-backlog-2026-11-04.md) sépare code vérifié, contrôles simulés et validations distantes/SQL restantes. T0, T6 et T8 ne sont pas déclarés terminés ; les moteurs transactionnels, contraintes et deux connexions MariaDB concurrentes restent à valider avant déploiement. Aucun mécanisme de purge n'est réintroduit.

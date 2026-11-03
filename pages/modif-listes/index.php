@@ -13,10 +13,39 @@ $alert = false;
 $info = false;
 $listeId = null;
 
+// Conserver tout droit existant, notamment celui d'un administrateur copropriétaire.
+$ajouterAdministrateurs = static function (PDO $bdd, $idListe) {
+    $comptes = $bdd->prepare('SELECT lic_compte.id
+        FROM lic_compte
+        LEFT JOIN lic_autorisation ON lic_autorisation.id_compte = lic_compte.id
+            AND lic_autorisation.id_liste = ?
+        WHERE lic_compte.fonction = "admin" AND lic_compte.deleted_to IS NULL
+          AND lic_autorisation.id IS NULL');
+    $comptes->execute(array($idListe));
+    $autorisation = $bdd->prepare('INSERT INTO lic_autorisation (id_compte, id_liste, type)
+        VALUES (?, ?, "moderateur")');
+    try {
+        while ($compte = $comptes->fetch()) {
+            $autorisation->execute(array($compte['id'], $idListe));
+        }
+    } finally {
+        $autorisation->closeCursor();
+        $comptes->closeCursor();
+    }
+};
+
 // Toute mutation d'une liste existante doit viser la liste affichée et son propriétaire.
 $modificationListe = isset($_POST['share_delete']) || isset($_POST['delete'])
     || (isset($_POST['Nom']) && isset($_POST['save']) && $_POST['save'] !== '')
     || isset($_POST['share']) || isset($_POST['new_droit_auth_id']);
+
+$sqlAuth = 'SELECT lic_liste.id, lic_liste.partage
+            FROM lic_liste
+            INNER JOIN lic_autorisation ON lic_autorisation.id_liste = lic_liste.id
+            INNER JOIN lic_compte ON lic_compte.id = lic_autorisation.id_compte
+            WHERE lic_liste.lien_partage = ? AND lic_liste.deleted_to IS NULL
+              AND lic_compte.id = ? AND lic_compte.deleted_to IS NULL
+              AND lic_autorisation.type = "proprietaire"';
 
 if ($modificationListe) {
     if (!isset($_GET['liste']) || !is_string($_GET['liste']) || $_GET['liste'] === '') {
@@ -24,13 +53,6 @@ if ($modificationListe) {
         exit();
     }
 
-    $sqlAuth = 'SELECT lic_liste.id
-                FROM lic_liste
-                INNER JOIN lic_autorisation ON lic_autorisation.id_liste = lic_liste.id
-                INNER JOIN lic_compte ON lic_compte.id = lic_autorisation.id_compte
-                WHERE lic_liste.lien_partage = ? AND lic_liste.deleted_to IS NULL
-                  AND lic_compte.id = ? AND lic_compte.deleted_to IS NULL
-                  AND lic_autorisation.type = "proprietaire"';
     $responseAuth = $bdd->prepare($sqlAuth);
     $responseAuth->execute(array($_GET['liste'], $_SESSION['id_compte']));
     $listeAutorisee = $responseAuth->fetch();
@@ -69,114 +91,69 @@ if (isset($_POST['cancel'])) {
 
     $response1->closeCursor();
 } elseif (isset($_POST['delete'])) {
+    $bdd->beginTransaction();
+    try {
+        $responseAuth = $bdd->prepare($sqlAuth . ' FOR UPDATE');
+        $responseAuth->execute(array($_GET['liste'], $_SESSION['id_compte']));
+        $listeVerrouillee = $responseAuth->fetch();
+        $responseAuth->closeCursor();
+        if (!$listeVerrouillee || (string) $listeVerrouillee['id'] !== $listeId) {
+            $bdd->rollBack();
+            header('Location: https://family.matthieudevilliers.fr/pages/erreur/403.php');
+            exit();
+        }
 
-    // Suppresion des autorisations
-    $sql1 = 'DELETE FROM lic_autorisation
-            WHERE id_liste = ?';
-
-    $response1 = $bdd->prepare($sql1);
-    $response1->execute(array($_POST['delete']));
-
-    $response1->closeCursor();
-
-    // Suppresion de la liste
-    $sql = 'UPDATE lic_liste
-            SET deleted_to = ?
-            WHERE id = ?';
-
-    $date = new DateTime();
-
-    $response = $bdd->prepare($sql);
-    $response->execute(array($date->format('Y-m-d H:i:s'), $_POST['delete']));
-
-    $response->closeCursor();
-
+        $response = $bdd->prepare('DELETE FROM lic_autorisation WHERE id_liste = ?');
+        $response->execute(array($listeId));
+        $response->closeCursor();
+        $response = $bdd->prepare('UPDATE lic_liste SET deleted_to = ? WHERE id = ? AND deleted_to IS NULL');
+        $response->execute(array((new DateTime())->format('Y-m-d H:i:s'), $listeId));
+        $response->closeCursor();
+        $bdd->commit();
+    } catch (Throwable $e) {
+        if ($bdd->inTransaction()) {
+            $bdd->rollBack();
+        }
+        throw $e;
+    }
     header('Location: https://family.matthieudevilliers.fr/pages/listes/');
     exit();
 } elseif (isset($_POST['Nom']) && isset($_POST['save']) && $_POST['save'] != "") {
-
     if (!isset($_POST['Partage']) || !in_array($_POST['Partage'], array('prive', 'limite', 'public'), true)) {
         http_response_code(400);
         exit();
     }
 
-    $sql = 'SELECT partage
-            FROM lic_liste
-            WHERE id = ? AND deleted_to IS NULL';
+    $bdd->beginTransaction();
+    try {
+        $responseAuth = $bdd->prepare($sqlAuth . ' FOR UPDATE');
+        $responseAuth->execute(array($_GET['liste'], $_SESSION['id_compte']));
+        $listeVerrouillee = $responseAuth->fetch();
+        $responseAuth->closeCursor();
+        if (!$listeVerrouillee || (string) $listeVerrouillee['id'] !== $listeId) {
+            $bdd->rollBack();
+            header('Location: https://family.matthieudevilliers.fr/pages/erreur/403.php');
+            exit();
+        }
 
-    $response1 = $bdd->prepare($sql);
-    $response1->execute(array($_POST['save']));
+        if ($_POST['Partage'] === 'prive' && $listeVerrouillee['partage'] !== 'prive') {
+            $response = $bdd->prepare('DELETE FROM lic_autorisation WHERE id_liste = ? AND type != "proprietaire"');
+            $response->execute(array($listeId));
+            $response->closeCursor();
+        } elseif ($listeVerrouillee['partage'] === 'prive' && $_POST['Partage'] !== 'prive') {
+            $ajouterAdministrateurs($bdd, $listeId);
+        }
 
-    $donnees = $response1->fetch();
-
-    if (!$donnees) {
-        $response1->closeCursor();
-        header('Location: https://family.matthieudevilliers.fr/pages/erreur/403.php');
-        exit();
+        $response = $bdd->prepare('UPDATE lic_liste SET nom = ?, partage = ? WHERE id = ? AND deleted_to IS NULL');
+        $response->execute(array($_POST['Nom'], $_POST['Partage'], $listeId));
+        $response->closeCursor();
+        $bdd->commit();
+    } catch (Throwable $e) {
+        if ($bdd->inTransaction()) {
+            $bdd->rollBack();
+        }
+        throw $e;
     }
-
-    // Modification des autorisations en fonction du partage
-    switch ($_POST['Partage']) {
-        case 'prive':
-            switch ($donnees['partage']) {
-                case 'prive': # Privé -> Privé : Nothing to do
-                    break;
-                case 'limite': # Limité -> Privé
-                case 'public': # Public -> Privé
-                    // Suppresion des autorisations (hors propriétaire)
-                    $sql2 = 'DELETE FROM lic_autorisation
-                            WHERE id_liste = ? AND type != "proprietaire"';
-
-                    $response2 = $bdd->prepare($sql2);
-                    $response2->execute(array($_POST['save']));
-                    $response2->closeCursor();
-                    break;
-            }
-            break;
-        case 'limite':
-            switch ($donnees['partage']) {
-                case 'prive': # Privé -> Limité : Nothing to do
-                    // Ajout des autorisations pour les admins
-                    $sql2 = 'INSERT INTO lic_autorisation (id_compte, id_liste, type)
-                            VALUES ((SELECT id FROM `lic_compte` WHERE fonction = "admin"), ?, "moderateur")';
-
-                    $response2 = $bdd->prepare($sql2);
-                    $response2->execute(array(htmlentities($_POST['save'])));
-                    $response2->closeCursor();
-                    break;
-                case 'limite': # Limité -> Limité : Nothing to do
-                case 'public': # Public -> Limité : Nothing to do
-                    break;
-            }
-            break;
-        case 'public':
-            switch ($donnees['partage']) {
-                case 'prive': # Privé -> Public : Nothing to do
-                    // Ajout des autorisations pour les admins
-                    $sql2 = 'INSERT INTO lic_autorisation (id_compte, id_liste, type)
-                            VALUES ((SELECT id FROM `lic_compte` WHERE fonction = "admin"), ?, "moderateur")';
-
-                    $response2 = $bdd->prepare($sql2);
-                    $response2->execute(array($_POST['save']));
-                    $response2->closeCursor();
-                    break;
-                case 'limite': # Limité -> Public : Nothing to do
-                case 'public': # Public -> Public : Nothing to do
-                    break;
-            }
-    }
-
-    $response1->closeCursor();
-
-    // Modification de la liste
-    $sql = 'UPDATE lic_liste
-            SET nom = ?,partage = ?
-            WHERE id = ?';
-
-    $response = $bdd->prepare($sql);
-    $response->execute(array($_POST['Nom'], $_POST['Partage'], $_POST['save']));
-
-    $response->closeCursor();
     header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $_GET['liste']);
     exit();
 } elseif (isset($_POST['Nom'])) {
@@ -206,7 +183,7 @@ if (isset($_POST['cancel'])) {
         $listeCreeeId = $bdd->lastInsertId();
         $response->closeCursor();
 
-        if ($listeCreeeId === '0' || $listeCreeeId === '') {
+        if (!is_string($listeCreeeId) || !ctype_digit($listeCreeeId) || (int) $listeCreeeId < 1) {
             throw new RuntimeException('Impossible de récupérer l’identifiant de la liste créée.');
         }
 
@@ -232,20 +209,7 @@ if (isset($_POST['cancel'])) {
         }
 
         if ($_POST['Partage'] !== 'prive') {
-            $sql1 = 'SELECT id
-                    FROM lic_compte
-                    WHERE fonction = "admin" AND deleted_to IS NULL AND id != ?';
-            $response1 = $bdd->prepare($sql1);
-            $response1->execute(array($_SESSION['id_compte']));
-
-            $sql2 = 'INSERT INTO lic_autorisation (id_compte, id_liste, type)
-                    VALUES (?, ?, "moderateur")';
-            $response2 = $bdd->prepare($sql2);
-            while ($donnee1 = $response1->fetch()) {
-                $response2->execute(array($donnee1['id'], $listeCreeeId));
-            }
-            $response2->closeCursor();
-            $response1->closeCursor();
+            $ajouterAdministrateurs($bdd, $listeCreeeId);
         }
 
         $bdd->commit();

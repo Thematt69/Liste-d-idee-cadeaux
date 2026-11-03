@@ -4,6 +4,8 @@
 
 ## Lecture et suivi
 
+**Vérification du 4 novembre 2026 :** voir le [bilan ticket par ticket](../security/verification-backlog-2026-11-04.md). Les correctifs locaux sont présents, mais toutes les tâches ne sont pas clôturées : T0/T8 restent à valider côté infrastructure et T6 exige encore migration et tests isolés. Reliquats T1 et T4 corrigés ; T2/T11 complétés par transactions, verrouillage et droits administrateurs sans doublons. Les scénarios avec PDO factice ne remplacent pas les tests MariaDB.
+
 **Suivi du 3 novembre 2026 :** les statuts initiaux ci-dessous sont conservés comme historique de la proposition. Le [suivi P0](../security/plan-remediation.md#état-observé-et-preuves) consigne les correctifs locaux T1 à T6, T9 à T12 et la CI syntaxique déjà présents, ainsi que la préparation de gouvernance/déploiement. Il détaille les validations restantes ; T7 (purge), T0 (restauration), le durcissement distant T8 et la suite de T13 ne sont pas déclarés terminés.
 
 - **Priorités :** P0 critique ; P1 important ; P2 amélioration. **Tailles :** S, M et L sont relatives et ne sont pas des durées.
@@ -45,7 +47,7 @@
 ### T1 — Cibler le profil par ID de session
 
 - **Description :** corriger les deux UPDATE du [profil](../../pages/compte/index.php#L37) pour cibler l’ID de session actif ; traiter la collision de nouvelle adresse et le résultat de l’écriture. **P0 · S.**
-- **Dépendances :** deux comptes synthétiques ; T0 avant déploiement. Première modification proposée, pas encore validée.
+- **Dépendances :** deux comptes synthétiques ; T0 avant déploiement. Correctif local présent, contrôles et limites dans le bilan du 4 novembre 2026.
 - **Acceptation :** A ne peut jamais modifier B en soumettant son adresse ; A peut modifier son propre compte avec le mot de passe requis ; erreurs et collisions ne produisent pas de faux succès.
 - **Tests :** modification légitime, adresse de B, collision, mauvais mot de passe, changement de mot de passe puis connexion, formats historiques et caractères spéciaux, compte supprimé, erreur SQL, `php -l` et `git diff --check`.
 - **Retour arrière :** ancien artefact compatible avec le schéma, mais réintroduisant le défaut ; privilégier un correctif ciblé si possible. Routes et hachages existants restent conservés.
@@ -111,6 +113,8 @@
 - **Acceptation / tests :** jetons absents ou invalides refusés, jeton valide accepté ; session expirée, AJAX et déconnexion testés.
 
 ### T11 — Rendre la création de liste atomique
+
+**Suivi du 4 novembre 2026 :** création déjà transactionnelle avec `lastInsertId()` ; attribution aux administrateurs désormais limitée aux comptes actifs sans droit existant, préservant un copropriétaire administrateur. Suppression et transitions de visibilité sont aussi transactionnelles avec revalidation propriétaire sous verrou et rollback sur exception. Les 53 scénarios du test ciblé incluent T1/T2/T3/T4/T11 ; concurrence et contraintes MariaDB restent à vérifier. Commande : `python tools/tests/security_regressions.py`.
 
 - **Description / fichiers :** employer `lastInsertId()` sur la même connexion et une transaction pour la [liste et ses autorisations](../../pages/modif-listes/index.php#L125). **P1 · M.**
 - **Dépendances :** T0, T2, schéma et moteur réels.

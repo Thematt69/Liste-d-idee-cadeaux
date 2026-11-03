@@ -29,7 +29,7 @@ Ces règles s'appliquent à tout le dépôt. Garder `AGENTS.md` comme socle comm
 
 ## Vérification et développement local
 
-- Aucun gestionnaire de dépendances ni lanceur de tests automatisés n'est présent actuellement.
+- Aucun gestionnaire de dépendances n'est présent. Tests ciblés sans service réel : `python tools/tests/security_regressions.py` (PDO factice ; ne valide pas le moteur SQL ni la concurrence réelle).
 - Avant de livrer un correctif ou de créer un commit autorisé : relire le diff, lancer `php -l chemin/du/fichier.php` pour chaque fichier PHP modifié, `git diff --check` et les tests pertinents sur données fictives isolées.
 - `php -S localhost:8000` n'est utilisable qu'après vérification de l'isolation SQL et mail et avec HTTPS local ou proxy TLS. L'inclusion de vérification redirige le HTTP vers la production. Ne pas contourner cette protection ; ne jamais lancer l'application avec les accès de production pour un test local.
 - `.github/workflows/deploy.yml` déploie par FTP sur la production après un push sur `main`. Traiter toute modification du déploiement comme une modification de production.

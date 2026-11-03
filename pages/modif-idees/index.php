@@ -268,6 +268,12 @@ if (isset($_POST['delete'])) {
     $response2->execute(array($_SESSION['id_compte'], $_GET['liste']));
 
     $donnee2 = $response2->fetch();
+    $response2->closeCursor();
+
+    if (!$donnee2 || !in_array($donnee2['droit'], array('proprietaire', 'moderateur'), true)) {
+        header('Location: https://family.matthieudevilliers.fr/pages/erreur/403.php');
+        exit();
+    }
 
     if ($donnee2['droit'] == "proprietaire") {
         // Création de l'idée par le propriétaire
@@ -306,9 +312,7 @@ if (isset($_POST['delete'])) {
 
         $donnee1 = $response1->fetch();
 
-        if ($_POST['AchatFrom'] == 1) {
-            $buyFrom = $_SESSION['id_compte'];
-        }
+        $buyFrom = ($_POST['AchatFrom'] ?? null) === '1' ? $_SESSION['id_compte'] : null;
 
         $response = $bdd->prepare($sql);
         $response->execute(array($donnee1['id'], htmlentities($_POST['Nom']), htmlentities($_POST['Commentaire']), htmlentities($lienIdea), $buyFrom, htmlentities($_POST['Prix'])));
@@ -320,7 +324,6 @@ if (isset($_POST['delete'])) {
         header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $_GET['liste']);
         exit();
     }
-    $response2->closeCursor();
 }
 
 ?>

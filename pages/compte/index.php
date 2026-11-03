@@ -50,10 +50,12 @@ if (isset($_POST['Mail'])) {
                 $response = $bdd->prepare($sql);
                 $response->execute(array($prenom, $nom, $motDePasse, $mail, $_SESSION['id_compte']));
 
-                // Regenerate session ID on password change for security
-                session_regenerate_id(true);
-
-                $info = 'Vos informations ont bien été modifiées.';
+                if ($response->rowCount() === 1) {
+                    session_regenerate_id(true);
+                    $info = 'Vos informations ont bien été modifiées.';
+                } else {
+                    $alert = 'Aucune modification effectuée. Rechargez votre profil avant de réessayer.';
+                }
 
                 $response->closeCursor();
             }
@@ -93,7 +95,9 @@ if (isset($_POST['Mail'])) {
                 $response = $bdd->prepare($sql);
                 $response->execute(array($prenom, $nom, $mail, $_SESSION['id_compte']));
 
-                $info = 'Vos informations ont bien été modifiées.';
+                $info = $response->rowCount() === 1
+                    ? 'Vos informations ont bien été modifiées.'
+                    : 'Aucune modification effectuée. Rechargez votre profil pour vérifier les informations actuelles.';
 
                 $response->closeCursor();
             }
