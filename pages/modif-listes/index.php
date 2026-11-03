@@ -1,6 +1,6 @@
 <?php
 
-session_start();
+include('../../scripts/session/index.php');
 
 include('../../scripts/verif/index.php');
 
@@ -340,14 +340,14 @@ if (isset($_POST['cancel'])) {
                     if ($alert) {
                     ?>
                         <div class="alert alert-danger fade show" role="alert">
-                            <strong><?php echo $alert; ?></strong>
+                            <strong><?php echo safe_output($alert); ?></strong>
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
                         </div>
                     <?php
                     } elseif ($info) {
                     ?>
                         <div class="alert alert-success fade show" role="alert">
-                            <?php echo $info; ?>
+                            <?php echo safe_output($info); ?>
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
                         </div>
                     <?php
@@ -390,7 +390,7 @@ if (isset($_POST['cancel'])) {
                                     <div class="row g-3">
                                         <div class="col-md-8">
                                             <div class="form-floating">
-                                                <input name="Nom" value="<?php echo $donnees['nom'] ?>" type="text" class="form-control" id="LabelNom" placeholder="Nom de la liste" required>
+                                                <input name="Nom" value="<?php echo safe_output($donnees['nom']) ?>" type="text" class="form-control" id="LabelNom" placeholder="Nom de la liste" required>
                                                 <label for="LabelNom">Nom de la liste</label>
                                             </div>
                                         </div>
@@ -419,7 +419,7 @@ if (isset($_POST['cancel'])) {
 
                                                     while ($compte = $response1->fetch()) {
                                                     ?>
-                                                        <option value="<?php echo ($compte['id']) ?>"><?php echo ($compte['prenom'] . " " . strtoupper($compte['nom']) . " - " . $compte['mail']); ?></option>
+                                                        <option value="<?php echo (int) $compte['id'] ?>"><?php echo safe_output($compte['prenom'] . " " . strtoupper($compte['nom']) . " - " . $compte['mail']); ?></option>
                                                     <?php
                                                     }
 
@@ -431,10 +431,10 @@ if (isset($_POST['cancel'])) {
                                         <?php } ?>
                                         <div class="col-12">
                                             <div class="d-flex flex-wrap justify-content-center gap-2">
-                                                <button type="submit" name="save" value="<?php echo $donnees['id'] ?>" class="btn btn-primary">Enregistrer</button>
-                                                <button type="submit" name="cancel" value="<?php echo $donnees['id'] ?>" class="btn btn-secondary">Annuler</button>
+                                                <button type="submit" name="save" value="<?php echo (int) $donnees['id'] ?>" class="btn btn-primary">Enregistrer</button>
+                                                <button type="submit" name="cancel" value="<?php echo (int) $donnees['id'] ?>" class="btn btn-secondary">Annuler</button>
                                                 <?php if (isset($_GET['liste']) && $donnees != null) { ?>
-                                                    <button type="submit" name="delete" value="<?php echo $donnees['id'] ?>" class="btn btn-danger">Supprimer</button>
+                                                    <button type="submit" name="delete" value="<?php echo (int) $donnees['id'] ?>" class="btn btn-danger">Supprimer</button>
                                                 <?php } ?>
                                             </div>
                                         </div>
@@ -478,7 +478,7 @@ if (isset($_POST['cancel'])) {
                                         <?php csrf_field(); ?>
                                         <div class="input-group">
                                             <input type="email" class="form-control" name="share_email" placeholder="Adresse mail" autocomplete="email" aria-label="Adresse e-mail de la personne à inviter" required>
-                                            <button type="submit" name="share" value="<?php echo $donnees['id'] ?>" class="btn btn-outline-primary">Ajouter</button>
+                                            <button type="submit" name="share" value="<?php echo (int) $donnees['id'] ?>" class="btn btn-outline-primary">Ajouter</button>
                                         </div>
                                     </form>
                                 <?php
@@ -518,7 +518,7 @@ if (isset($_POST['cancel'])) {
                                                 <tr>
                                                     <th scope="row">
                                                         <?php
-                                                        echo ($donnees1['mail']);
+                                                        echo safe_output($donnees1['mail']);
                                                         if ($donnees1['fonction'] == 'admin') {
                                                             echo ('  <span class="badge rounded-pill bg-danger">ADMIN</span>');
                                                         }
@@ -534,7 +534,7 @@ if (isset($_POST['cancel'])) {
                                                                     <option <?php if ($donnees1['droit'] == 'lecteur') echo "selected"; ?> value="lecteur">Lecteur</option>
                                                                 </select>
 
-                                                                <button class="btn btn-outline-secondary" name="new_droit_auth_id" value="<?php echo $donnees1['authId'] ?>" aria-label="Enregistrer le rôle de <?php echo safe_output($donnees1['mail']); ?>" <?php if ($donnees1['fonction'] == 'admin' || $donnees1['droit'] == 'proprietaire') echo "disabled"; ?> type="submit"><i class="bi bi-check-lg" aria-hidden="true"></i></button>
+                                                                <button class="btn btn-outline-secondary" name="new_droit_auth_id" value="<?php echo (int) $donnees1['authId'] ?>" aria-label="Enregistrer le rôle de <?php echo safe_output($donnees1['mail']); ?>" <?php if ($donnees1['fonction'] == 'admin' || $donnees1['droit'] == 'proprietaire') echo "disabled"; ?> type="submit"><i class="bi bi-check-lg" aria-hidden="true"></i></button>
                                                             </div>
                                                         </form>
                                                     </td>
@@ -551,7 +551,7 @@ if (isset($_POST['cancel'])) {
                                                         <td>
                                                             <form action="" method="post">
                                                                 <?php csrf_field(); ?>
-                                                                <button type="submit" name="share_delete" value="<?php echo $donnees1['authId'] ?>" class="btn btn-outline-danger" aria-label="Supprimer l'accès de <?php echo safe_output($donnees1['mail']); ?>" <?php if ($disable) echo ('disabled'); ?>>
+                                                                <button type="submit" name="share_delete" value="<?php echo (int) $donnees1['authId'] ?>" class="btn btn-outline-danger" aria-label="Supprimer l'accès de <?php echo safe_output($donnees1['mail']); ?>" <?php if ($disable) echo ('disabled'); ?>>
                                                                     <i class="bi bi-trash" aria-hidden="true"></i>
                                                                 </button>
                                                             </form>

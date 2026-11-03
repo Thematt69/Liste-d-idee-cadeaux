@@ -1,6 +1,6 @@
 <?php
 
-session_start();
+include('../../scripts/session/index.php');
 
 include('../../scripts/verif/index.php');
 
@@ -110,7 +110,7 @@ if (isset($_POST['Mail'])) {
                     if ($alert) {
                     ?>
                         <div class="alert alert-danger fade show" role="alert">
-                            <strong><?php echo $alert; ?></strong>
+                            <strong><?php echo safe_output($alert); ?></strong>
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
                         </div>
                     <?php

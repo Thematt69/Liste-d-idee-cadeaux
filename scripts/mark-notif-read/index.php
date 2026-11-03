@@ -1,5 +1,5 @@
 <?php
-session_start();
+include('../session/index.php');
 
 // Vérifier HTTPS avant d'inclure verif/index.php pour éviter une redirection en GET
 if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {

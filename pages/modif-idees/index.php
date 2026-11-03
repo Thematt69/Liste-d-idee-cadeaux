@@ -1,6 +1,6 @@
 <?php
 
-session_start();
+include('../../scripts/session/index.php');
 
 include('../../scripts/verif/index.php');
 include('../../scripts/mail/index.php');
@@ -392,25 +392,25 @@ if (isset($_POST['delete'])) {
                                     <div class="row g-3">
                                         <div class="col-md-7">
                                             <div class="form-floating">
-                                                <input name="Nom" type="text" value="<?php echo ($donnees['nom']) ?>" class="form-control" id="LabelNom" autocomplete="off" placeholder="Nom de l'idée" required>
+                                                <input name="Nom" type="text" value="<?php echo safe_output($donnees['nom'] ?? ''); ?>" class="form-control" id="LabelNom" autocomplete="off" placeholder="Nom de l'idée" required>
                                                 <label for="LabelNom">Nom de l'idée *</label>
                                             </div>
                                         </div>
                                         <div class="col-md-5">
                                             <div class="form-floating">
-                                                <input name="Prix" type="text" value="<?php echo ($donnees['price']) ?>" class="form-control" id="LabelPrix" autocomplete="off" placeholder="Prix de l'idée">
+                                                <input name="Prix" type="text" value="<?php echo safe_output($donnees['price'] ?? ''); ?>" class="form-control" id="LabelPrix" autocomplete="off" placeholder="Prix de l'idée">
                                                 <label for="LabelPrix">Prix de l'idée</label>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="form-floating">
-                                                <input name="Commentaire" type="text" value="<?php echo ($donnees['commentaire']) ?>" class="form-control" id="LabelCommentaire" autocomplete="off" placeholder="Commentaire">
+                                                <input name="Commentaire" type="text" value="<?php echo safe_output($donnees['commentaire'] ?? ''); ?>" class="form-control" id="LabelCommentaire" autocomplete="off" placeholder="Commentaire">
                                                 <label for="LabelCommentaire">Commentaire</label>
                                             </div>
                                         </div>
                                         <div class="col-md-7">
                                             <div class="form-floating">
-                                                <input name="Lien" type="url" value="<?php echo ($donnees['lien']) ?>" class="form-control" id="LabelLien" autocomplete="url" placeholder="Lien de l'idée">
+                                                <input name="Lien" type="url" value="<?php echo safe_output($donnees['lien'] ?? ''); ?>" class="form-control" id="LabelLien" autocomplete="url" placeholder="Lien de l'idée">
                                                 <label for="LabelLien">Lien de l'idée</label>
                                             </div>
                                         </div>
@@ -453,14 +453,14 @@ if (isset($_POST['delete'])) {
                                             </div>
                                         </div>
                                         <div class="d-flex flex-wrap justify-content-center gap-2 mt-3">
-                                            <button type="submit" name="save" value="<?php echo $donnees['id'] ?>" class="btn btn-primary">Enregistrer</button>
-                                            <a class="btn btn-secondary" href="https://family.matthieudevilliers.fr/pages/idees/?liste=<?php echo $_GET['liste'] ?? $donnee['partage']; ?>">
+                                            <button type="submit" name="save" value="<?php echo (int) $donnees['id'] ?>" class="btn btn-primary">Enregistrer</button>
+                                            <a class="btn btn-secondary" href="https://family.matthieudevilliers.fr/pages/idees/?liste=<?php echo safe_output(rawurlencode((string) ($_GET['liste'] ?? $donnee['partage']))); ?>">
                                                 Annuler
                                             </a>
                                             <?php
                                             if (isset($_GET['idee']) && $donnees != null && $donnee['droit'] == "proprietaire") {
                                             ?>
-                                                <button type="submit" name="delete" value="<?php echo $donnees['id'] ?>" class="btn btn-danger">Supprimer</button>
+                                                <button type="submit" name="delete" value="<?php echo (int) $donnees['id'] ?>" class="btn btn-danger">Supprimer</button>
                                             <?php
                                             }
                                             ?>

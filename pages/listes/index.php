@@ -1,6 +1,6 @@
 <?php
 
-session_start();
+include('../../scripts/session/index.php');
 
 include('../../scripts/verif/index.php');
 

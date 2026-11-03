@@ -1,6 +1,6 @@
 <?php
 
-session_start();
+include('../../scripts/session/index.php');
 
 include('../../scripts/verif/index.php');
 
@@ -84,19 +84,19 @@ if (!isset($_SESSION['id_compte'])) {
                                                 <td>
                                                     <?php
                                                     if ($donnees['nom'] == null) echo ('//');
-                                                    else echo ($donnees['nom']);
+                                                    else echo safe_output($donnees['nom']);
                                                     ?>
                                                 </td>
                                                 <td style=" max-width: 40rem">
                                                     <?php
                                                     if ($donnees['commentaire'] == null) echo ('//');
-                                                    else echo ($donnees['commentaire']);
+                                                    else echo safe_output($donnees['commentaire']);
                                                     ?>
                                                 </td>
                                                 <td style="min-width: 8rem;">
                                                     <?php
                                                     if ($donnees['price'] == null) echo ('//');
-                                                    else echo ($donnees['price']);
+                                                    else echo safe_output($donnees['price']);
                                                     ?>
                                                 </td>
                                                 <td>
@@ -122,7 +122,7 @@ if (!isset($_SESSION['id_compte'])) {
 
                                                         for ($i = 0; $i < count($proprietaire); $i++) {
                                                             if ($i > 0) echo " et ";
-                                                            echo $proprietaire[$i]['prenom'];
+                                                            echo safe_output($proprietaire[$i]['prenom']);
                                                         }
 
                                                         $response2->closeCursor();
@@ -137,7 +137,9 @@ if (!isset($_SESSION['id_compte'])) {
 
                                                         $donnee1 = $response2->fetch();
 
-                                                        echo 'Réservé par ' . $donnee1['prenom'];
+                                                        if ($donnee1) {
+                                                            echo 'Réservé par ' . safe_output($donnee1['prenom']);
+                                                        }
 
                                                         $response2->closeCursor();
                                                     } else {

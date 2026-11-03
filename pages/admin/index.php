@@ -1,6 +1,6 @@
 <?php
 
-session_start();
+include('../../scripts/session/index.php');
 
 include('../../scripts/verif/index.php');
 include('../../scripts/mail/index.php');
@@ -119,14 +119,14 @@ if (isset($_POST['Comptes'])) {
                     if ($alert) {
                     ?>
                         <div class="alert alert-danger fade show" role="alert">
-                            <strong><?php echo $alert; ?></strong>
+                            <strong><?php echo safe_output($alert); ?></strong>
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
                         </div>
                     <?php
                     } elseif ($info) {
                     ?>
                         <div class="alert alert-success fade show" role="alert">
-                            <?php echo $info; ?>
+                            <?php echo safe_output($info); ?>
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
                         </div>
                     <?php
@@ -160,7 +160,7 @@ if (isset($_POST['Comptes'])) {
 
                                             while ($donnees = $response1->fetch()) {
                                             ?>
-                                                <option value="<?php echo ($donnees['id']) ?>"><?php echo ($donnees['prenom'] . " " . strtoupper($donnees['nom']) . " - " . $donnees['mail']); ?></option>
+                                                <option value="<?php echo (int) $donnees['id'] ?>"><?php echo safe_output($donnees['prenom'] . " " . strtoupper($donnees['nom']) . " - " . $donnees['mail']); ?></option>
                                             <?php
                                             }
 
