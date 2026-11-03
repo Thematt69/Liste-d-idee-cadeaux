@@ -56,3 +56,17 @@ Renseigner les réponses dans une nouvelle entrée ; ne pas transformer une reco
 7. **Infrastructure :** offre et panneau LWS, document root, espace privé, FTPS, version et extensions PHP, SSH, cron, préproduction, sauvegarde et restauration.
 8. **Base :** schéma, moteur, contraintes, index, doublons et état des données historiques.
 9. **Instructions d’agent :** les instructions Copilot ciblées actuelles déconseillent de nouvelles couches de services ; si le plan est validé, prévoir leur adaptation dans un incrément distinct.
+
+## 3 novembre 2026 — Incrément 8, gouvernance et préparation du déploiement
+
+**Autorisation :** l'utilisateur a demandé l'implémentation du plan P0, puis les incréments successifs, et a fourni à nouveau le plan en demandant le correctif suivant. Cette entrée complète les validations initialement en attente ci-dessus. Elle n'autorise pas un commit, push, déploiement, changement de secrets, migration ou action sur la production.
+
+**Référence locale :** `764483d` au début de l'intervention, arbre de travail propre. Les correctifs applicatifs, CSRF, sessions, URL et le lint CI sont présents dans l'historique Git ; le [suivi P0](../security/plan-remediation.md) en donne les références. Le serveur déclaré dans l'échange est MariaDB 10.11.19 avec PHP 8.2.35 ; la mise en place de la base Docker locale est en pause. Aucun état de déploiement ou de migration n'en est déduit.
+
+**Préparation locale :** création de la [politique opérationnelle](../security/politique-agents.md) et du [plan de remédiation](../security/plan-remediation.md), harmonisation d'AGENTS/Copilot/Cline sur la session, HTTPS et les effets d'exécution ; ajout de compléments à l'audit et au backlog sans supprimer les constats historiques. Le README décrit les mécanismes sans prétendre à une couverture systématique.
+
+**Workflow :** filtres de publication des fichiers internes, contrôle de branche `main` pour le job FTP, sérialisation des transferts et retrait de la persistance des identifiants de checkout. Le lint conserve PHP 8.2.35 avec un montage en lecture seule et un délai de dix minutes. La configuration des approbateurs, protections GitHub, FTPS et fichiers déjà publiés reste à vérifier avec le responsable. Le déclenchement automatique sur `main` reste présent.
+
+**Vérification :** YAML du workflow et frontmatter des trois consignes PHP/sécurité validés avec le parseur YAML de Prettier déjà installé ; 13 cas de fichiers internes exclus et les 51 fichiers applicatifs suivis conservés par les motifs glob contrôlés avec minimatch ; 114 liens locaux et ancres vérifiés ; `git diff --check` sans erreur. Relecture indépendante du diff sans blocage identifié. Aucun fichier PHP modifié. La CLI Graphify a de nouveau échoué au lancement ; aucune reconstruction ni installation n'a été tentée. Aucun test applicatif/SQL, exécution GitHub Actions, transfert FTP, purge, migration ou envoi de mail n'a été exécuté.
+
+**État :** préparation locale de l'incrément 8, validation CI et infrastructure restantes. La purge, les secrets et les tests isolés restent prioritaires et non clôturés. Retour arrière : patch ciblé des consignes/workflow ; toute opération sur des données ou accès réels exige sa procédure propre.

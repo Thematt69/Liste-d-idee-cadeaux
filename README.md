@@ -2,6 +2,8 @@
 
 ## Sécurité et Mises à jour
 
+Le [suivi de remédiation P0](docs/security/plan-remediation.md) distingue les correctifs présents dans le dépôt, les tests restant à exécuter et les opérations d'hébergement. Les mécanismes décrits ci-dessous ne constituent pas une validation de la version déployée ni une garantie de couverture de tous les parcours.
+
 ### Version des composants
 
 - **Bootstrap:** v5.3.8
@@ -19,17 +21,17 @@
 
 - `X-Frame-Options: SAMEORIGIN` - Protection contre le clickjacking
 - `X-Content-Type-Options: nosniff` - Prévention du MIME-sniffing
-- `X-XSS-Protection: 1; mode=block` - Protection XSS supplémentaire
+- `Strict-Transport-Security` - Demande au navigateur de privilégier HTTPS
 - `Referrer-Policy: strict-origin-when-cross-origin` - Contrôle des informations de référence
 - `Permissions-Policy` - Restriction des API sensibles
 
 #### Protection contre les attaques
 
-- **XSS (Cross-Site Scripting):** Utilisation systématique de `htmlspecialchars()` avec `ENT_QUOTES` pour l'échappement des sorties
+- **Sorties HTML :** helper `safe_output()` avec échappement des guillemets et prise en charge des entités historiques ; couverture à vérifier par contexte
 - **IP Spoofing:** Priorisation de `REMOTE_ADDR` dans la fonction `getIp()`
 - **Tokens de réinitialisation:** Utilisation de `random_bytes()` au lieu de `md5(rand())`
-- **Validation des entrées:** Vérification des paramètres GET/POST requis
-- **Null checks:** Vérification des résultats de `fetch()` avant utilisation
+- **Validation des entrées :** contrôles GET/POST par parcours ; validation HTTP(S) des liens d'idées
+- **Résultats SQL :** vérifier chaque résultat de `fetch()` avant utilisation ; la présence de contrôles dans certains parcours ne prouve pas leur couverture globale
 
 ### Bonnes pratiques
 
@@ -41,5 +43,5 @@
 ### Notes pour les développeurs
 
 - **Credentials:** Les identifiants de base de données et les clés API restent en dur dans le code (architecture existante)
-- **CSRF:** Protection CSRF basique via validation de session (amélioration recommandée avec tokens)
-- **Tests locaux:** Voir `.github/copilot-instructions.md` pour les instructions de développement local
+- **CSRF :** jeton de session vérifié pour les POST via le bootstrap partagé, champs de formulaires et en-tête AJAX ; la déconnexion en GET reste à corriger
+- **Tests locaux :** voir [AGENTS.md](AGENTS.md) et la [politique opérationnelle](docs/security/politique-agents.md) ; isoler SQL et mail avant d'exécuter l'application

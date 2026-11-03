@@ -12,6 +12,8 @@ Des risques prioritaires touchent notamment le profil, les permissions de listes
 
 ## Documents
 
+**Complément du 3 novembre 2026 après implémentation :** l'état de référence ci-dessus est historique. Des correctifs sont désormais présents jusqu'au commit `764483d`. Le [suivi P0](../security/plan-remediation.md) et la [politique opérationnelle](../security/politique-agents.md) complètent ces documents ; l'[historique](historique.md#3-novembre-2026--incrément-8-gouvernance-et-préparation-du-déploiement) enregistre la nouvelle demande et ses limites.
+
 | Document | Utilité |
 |---|---|
 | [Audit](audit.md) | Périmètre, inventaire, parcours métier, preuves, risques et dette. |

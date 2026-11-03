@@ -11,7 +11,7 @@ This project is a server-rendered PHP monolith. Most work occurs in page files u
 
 ## Required patterns
 
-- Start files with `session_start();` when the page uses the session.
+- Include `scripts/session/index.php` from the correct relative path before the verification bootstrap when the page uses the session; do not add a direct `session_start()` that bypasses its configuration.
 - Include the verification bootstrap from the correct relative path: `include('../../scripts/verif/index.php');` or equivalent.
 - Use the existing `$bdd` PDO instance from `scripts/verif/index.php`.
 - Prefer prepared statements and positional placeholders, for example: `$bdd->prepare($sql); $response->execute(array($p1, $p2));`.

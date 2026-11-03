@@ -4,6 +4,8 @@
 
 ## Lecture et suivi
 
+**Suivi du 3 novembre 2026 :** les statuts initiaux ci-dessous sont conservés comme historique de la proposition. Le [suivi P0](../security/plan-remediation.md#état-observé-et-preuves) consigne les correctifs locaux T1 à T6, T9 à T12 et la CI syntaxique déjà présents, ainsi que la préparation de gouvernance/déploiement. Il détaille les validations restantes ; T7 (purge), T0 (restauration), le durcissement distant T8 et la suite de T13 ne sont pas déclarés terminés.
+
 - **Priorités :** P0 critique ; P1 important ; P2 amélioration. **Tailles :** S, M et L sont relatives et ne sont pas des durées.
 - **Statut initial de tous les tickets :** proposé ; validation et réalisation non enregistrées. Ne pas déduire l’état de production de ce statut.
 - Après chaque décision ou travail, compléter l’[historique](historique.md) avec date, référence, validation, preuves et résultat des tests, puis mettre à jour le ticket concerné sans effacer son historique.

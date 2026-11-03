@@ -18,9 +18,9 @@
 
 ## Local validation rules
 
-- Prefer focused checks such as a PHP local server start or a minimal page-level validation instead of broad project-wide commands.
-- Use `php -S localhost:8000` from the project root for local testing when relevant.
-- If HTTPS enforcement blocks local testing, use a temporary bypass or a local TLS proxy, but do not leave that workaround in the final committed patch.
+- Follow `AGENTS.md` and `docs/security/politique-agents.md` before executing the application, scripts or database operations.
+- Use focused syntax checks first; run page checks only with verified isolated database and mail destinations and synthetic data.
+- Use local HTTPS or a TLS proxy; do not bypass HTTPS enforcement.
 
 ## PHP and SQL rules
 

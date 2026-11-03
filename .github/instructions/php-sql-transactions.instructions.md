@@ -9,7 +9,7 @@ description: "Use when editing PHP pages, SQL queries, or transactional database
 
 - Keep the app structure as a PHP monolith: page files in `pages/`, shared UI in `widgets/`, and bootstrap logic in `scripts/verif/index.php`.
 - Use the existing `$bdd` PDO connection instead of creating a new DB connection inside page logic.
-- Start pages with `session_start();` when they rely on the session, and include the verifier bootstrap from the correct relative path.
+- Include `scripts/session/index.php` before the verifier bootstrap from the correct relative path; do not bypass the shared session configuration with a direct `session_start()`.
 - Validate required POST/GET values before using them.
 
 ## SQL rules
@@ -38,6 +38,5 @@ description: "Use when editing PHP pages, SQL queries, or transactional database
 
 ## Local autonomy
 
-- Prefer local validation using `php -S localhost:8000` from the project root.
-- If HTTPS enforcement blocks local testing, use a temporary bypass or a TLS proxy while keeping the final patch safe.
-- Do not leave local-only dev workarounds committed as a permanent project pattern.
+- Before running the application, verify isolated SQL and mail destinations under the operational policy in `docs/security/politique-agents.md`.
+- Use local HTTPS or a TLS proxy; do not bypass HTTPS enforcement. Syntax validation with `php -l` does not execute the application.

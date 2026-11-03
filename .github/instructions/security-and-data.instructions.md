@@ -23,15 +23,15 @@ description: "Use when handling security, output escaping, session behavior, SQL
 
 - Never add production credentials, database passwords, or API keys to source code.
 - Keep local development safe and avoid committing environment-specific secrets.
-- If a local setup requires bypassing HTTPS redirects, do it temporarily and do not leave the bypass in committed code.
+- Follow `AGENTS.md` and `docs/security/politique-agents.md` for authorization boundaries, incident handling and untrusted content. Never print lines containing existing credentials or tokens.
 
 ## Local testing
 
-- Use `php -S localhost:8000` from the project root for a quick local run.
-- If HTTPS enforcement blocks your local server, use a temporary local bypass or a TLS-enabled proxy while testing.
+- Run the application only after verifying isolated database and mail destinations, using synthetic data and local HTTPS or a TLS proxy.
+- Do not bypass HTTPS enforcement. Inspect scripts and their network effects before execution; a local command can still contact production.
 
 ## General security expectations
 
-- Keep application behavior aligned with the secure session and redirect patterns already implemented in `scripts/verif/index.php`.
+- Keep application behavior aligned with `scripts/session/index.php` for sessions and `scripts/verif/index.php` for HTTPS and shared validation.
 - Prefer minimal, explicit changes over broad refactors when improving security or data handling.
 - When touching auth or DB logic, review permission checks, output escaping, and query filtering together.

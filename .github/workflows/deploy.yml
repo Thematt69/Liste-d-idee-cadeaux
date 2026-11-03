@@ -16,13 +16,15 @@ jobs:
   validate:
     name: Validate PHP syntax
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v5.0.1
+        with:
+          persist-credentials: false
       - name: Lint PHP files with production PHP version
         run: |
           docker run --rm \
-            -v "${GITHUB_WORKSPACE}:/workspace" \
+            -v "${GITHUB_WORKSPACE}:/workspace:ro" \
             -w /workspace \
             php:8.2.35-cli \
             sh -c "find . -type f -name '*.php' -not -path './.git/*' -print0 | xargs -0 -r -n 1 php -l"
@@ -30,13 +32,17 @@ jobs:
   deploy:
     name: Deploy web
     needs: validate
-    if: github.event_name != 'pull_request'
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    concurrency:
+      group: production-ftp
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v5.0.1
         with:
           fetch-depth: 0
+          persist-credentials: false
       - name: Sync files FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.6
         with:
@@ -47,4 +53,22 @@ jobs:
           exclude: |
             **/.git*
             **/.git*/**
+            **/node_modules/**
+            **/__pycache__/**
+            **/.env*
+            **/*.sql
+            **/*.bak
+            **/*.log
+            **/*.tmp
+            .agents/**
+            .codex/**
+            .vscode/**
+            .idea/**
+            .clinerules
+            .graphifyignore
+            AGENTS.md
+            README.md
+            docs/**
+            graphify-out/**
+            tests/**
             tools/**
