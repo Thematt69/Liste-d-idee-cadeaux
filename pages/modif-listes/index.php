@@ -11,6 +11,50 @@ if (!isset($_SESSION['id_compte'])) {
 
 $alert = false;
 $info = false;
+$listeId = null;
+
+// Toute mutation d'une liste existante doit viser la liste affichée et son propriétaire.
+$modificationListe = isset($_POST['share_delete']) || isset($_POST['delete'])
+    || (isset($_POST['Nom']) && isset($_POST['save']) && $_POST['save'] !== '')
+    || isset($_POST['share']) || isset($_POST['new_droit_auth_id']);
+
+if ($modificationListe) {
+    if (!isset($_GET['liste']) || !is_string($_GET['liste']) || $_GET['liste'] === '') {
+        header('Location: https://family.matthieudevilliers.fr/pages/erreur/403.php');
+        exit();
+    }
+
+    $sqlAuth = 'SELECT lic_liste.id
+                FROM lic_liste
+                INNER JOIN lic_autorisation ON lic_autorisation.id_liste = lic_liste.id
+                INNER JOIN lic_compte ON lic_compte.id = lic_autorisation.id_compte
+                WHERE lic_liste.lien_partage = ? AND lic_liste.deleted_to IS NULL
+                  AND lic_compte.id = ? AND lic_compte.deleted_to IS NULL
+                  AND lic_autorisation.type = "proprietaire"';
+    $responseAuth = $bdd->prepare($sqlAuth);
+    $responseAuth->execute(array($_GET['liste'], $_SESSION['id_compte']));
+    $listeAutorisee = $responseAuth->fetch();
+    $responseAuth->closeCursor();
+
+    if (!$listeAutorisee) {
+        header('Location: https://family.matthieudevilliers.fr/pages/erreur/403.php');
+        exit();
+    }
+
+    $listeId = (string) $listeAutorisee['id'];
+    foreach (array('share_delete', 'new_droit_auth_id') as $champAutorisation) {
+        if (isset($_POST[$champAutorisation]) && (!is_string($_POST[$champAutorisation]) || !ctype_digit($_POST[$champAutorisation]))) {
+            http_response_code(400);
+            exit();
+        }
+    }
+    foreach (array('delete', 'save', 'share') as $champListe) {
+        if (isset($_POST[$champListe]) && (!is_scalar($_POST[$champListe]) || (string) $_POST[$champListe] !== $listeId)) {
+            header('Location: https://family.matthieudevilliers.fr/pages/erreur/403.php');
+            exit();
+        }
+    }
+}
 
 if (isset($_POST['cancel'])) {
     header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $_GET['liste']);
@@ -18,10 +62,10 @@ if (isset($_POST['cancel'])) {
 } elseif (isset($_POST['share_delete'])) {
     // Suppresion de l'autorisation
     $sql1 = 'DELETE FROM lic_autorisation
-            WHERE id = ?';
+            WHERE id = ? AND id_liste = ? AND type != "proprietaire" AND id_compte != ?';
 
     $response1 = $bdd->prepare($sql1);
-    $response1->execute(array($_POST['share_delete']));
+    $response1->execute(array($_POST['share_delete'], $listeId, $_SESSION['id_compte']));
 
     $response1->closeCursor();
 } elseif (isset($_POST['delete'])) {
@@ -49,16 +93,27 @@ if (isset($_POST['cancel'])) {
 
     header('Location: https://family.matthieudevilliers.fr/pages/listes/');
     exit();
-} elseif (isset($_POST['Nom']) && $_POST['save'] != "") {
+} elseif (isset($_POST['Nom']) && isset($_POST['save']) && $_POST['save'] != "") {
+
+    if (!isset($_POST['Partage']) || !in_array($_POST['Partage'], array('prive', 'limite', 'public'), true)) {
+        http_response_code(400);
+        exit();
+    }
 
     $sql = 'SELECT partage
             FROM lic_liste
-            WHERE id = ?';
+            WHERE id = ? AND deleted_to IS NULL';
 
     $response1 = $bdd->prepare($sql);
     $response1->execute(array($_POST['save']));
 
     $donnees = $response1->fetch();
+
+    if (!$donnees) {
+        $response1->closeCursor();
+        header('Location: https://family.matthieudevilliers.fr/pages/erreur/403.php');
+        exit();
+    }
 
     // Modification des autorisations en fonction du partage
     switch ($_POST['Partage']) {
@@ -77,6 +132,7 @@ if (isset($_POST['cancel'])) {
                     $response2->closeCursor();
                     break;
             }
+            break;
         case 'limite':
             switch ($donnees['partage']) {
                 case 'prive': # Privé -> Limité : Nothing to do
@@ -92,6 +148,7 @@ if (isset($_POST['cancel'])) {
                 case 'public': # Public -> Limité : Nothing to do
                     break;
             }
+            break;
         case 'public':
             switch ($donnees['partage']) {
                 case 'prive': # Privé -> Public : Nothing to do
@@ -194,6 +251,10 @@ if (isset($_POST['cancel'])) {
     header('Location: https://family.matthieudevilliers.fr/pages/idees/?liste=' . $rand);
     exit();
 } elseif (isset($_POST['share'])) {
+    if (!isset($_POST['share_email']) || !is_string($_POST['share_email']) || !filter_var($_POST['share_email'], FILTER_VALIDATE_EMAIL)) {
+        http_response_code(400);
+        exit();
+    }
     $sql1 = 'SELECT id
             FROM lic_compte
             WHERE mail = ? AND deleted_to IS NULL';
@@ -229,13 +290,19 @@ if (isset($_POST['cancel'])) {
     }
     $response1->closeCursor();
 } elseif (isset($_POST['new_droit_auth_id'])) {
+    if (!isset($_POST['new_droit']) || !in_array($_POST['new_droit'], array('lecteur', 'moderateur'), true)) {
+        http_response_code(400);
+        exit();
+    }
     // Modification de l'autorisation
     $sql = 'UPDATE lic_autorisation
-            SET type = ?
-            WHERE id = ?';
+            INNER JOIN lic_compte ON lic_compte.id = lic_autorisation.id_compte
+            SET lic_autorisation.type = ?
+            WHERE lic_autorisation.id = ? AND lic_autorisation.id_liste = ?
+              AND lic_autorisation.type != "proprietaire" AND COALESCE(lic_compte.fonction, "") != "admin"';
 
     $response = $bdd->prepare($sql);
-    $response->execute(array(htmlentities($_POST['new_droit']), htmlentities($_POST['new_droit_auth_id'])));
+    $response->execute(array($_POST['new_droit'], $_POST['new_droit_auth_id'], $listeId));
 
     $response->closeCursor();
     header('Location: https://family.matthieudevilliers.fr/pages/modif-listes/?liste=' . $_GET['liste']);
@@ -471,9 +538,11 @@ if (isset($_POST['cancel'])) {
                                                         }
                                                     ?>
                                                         <td>
-                                                            <button type="submit" name="share_delete" value="<?php echo $donnees1['authId'] ?>" class="btn btn-outline-danger" aria-label="Supprimer l'accès de <?php echo safe_output($donnees1['mail']); ?>" <?php if ($disable) echo ('disabled'); ?>>
-                                                                <i class="bi bi-trash" aria-hidden="true"></i>
-                                                            </button>
+                                                            <form action="" method="post">
+                                                                <button type="submit" name="share_delete" value="<?php echo $donnees1['authId'] ?>" class="btn btn-outline-danger" aria-label="Supprimer l'accès de <?php echo safe_output($donnees1['mail']); ?>" <?php if ($disable) echo ('disabled'); ?>>
+                                                                    <i class="bi bi-trash" aria-hidden="true"></i>
+                                                                </button>
+                                                            </form>
                                                         </td>
                                                     <?php
                                                     }
