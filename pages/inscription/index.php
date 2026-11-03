@@ -60,10 +60,15 @@ if (isset($_POST['Mail'])) {
         $response2 = $bdd->prepare($sql2);
         $response2->execute(array($mail));
         $donnee2 = $response2->fetch();
-
-        $_SESSION['id_compte'] = $donnee2['id'];
-
         $response2->closeCursor();
+
+        if (!$donnee2) {
+            http_response_code(500);
+            exit('Impossible de finaliser la création du compte.');
+        }
+
+        session_regenerate_id(true);
+        $_SESSION['id_compte'] = $donnee2['id'];
 
         $sql3 = 'INSERT INTO lic_connexion (id_compte, adresse_ip_v4)
                     VALUES (?, ?)';

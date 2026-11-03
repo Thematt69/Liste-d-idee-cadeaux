@@ -19,6 +19,15 @@ try {
     die('Erreur : ' . $e->getMessage());
 }
 
+require_once __DIR__ . '/../auth/index.php';
+try {
+    refresh_session_account($bdd);
+} catch (Throwable $e) {
+    error_log('Impossible de vérifier le compte de la session.');
+    http_response_code(503);
+    exit('Service temporairement indisponible.');
+}
+
 /// Helper: decode stored HTML entities, escape for HTML output.
 function safe_output($str)
 {

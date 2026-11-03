@@ -96,6 +96,8 @@
 
 ### T9 — Initialiser correctement la session
 
+**Suivi du 3 novembre 2026 :** configuration des cookies déjà présente ; compte actif et rôle désormais relus depuis `lic_compte` dans le bootstrap avant les actions des pages. Le rôle mémorisé est écarté, un compte absent/supprimé ou un ID invalide invalide la session, et une erreur de vérification interrompt la requête en 503. Le widget ne fait plus de SQL. L'accueil utilise les inclusions partagées correctes ; l'inscription vérifie le résultat SQL puis régénère l'ID de session. Scénarios d'accès admin direct, révocation, suppression, erreur et authentification vérifiés avec PDO factice et HTTPS simulé ; validation MariaDB et cookies d'hébergement restante. Voir le [suivi](../security/plan-remediation.md#complément-du-3-novembre-2026--compte-actif-et-rôle-courant-t9).
+
 - **Description / fichiers :** configurer la session avant démarrage ; résoudre le compte actif et le rôle sans dépendre de [navbar](../../widgets/navbar/index.php#L26). **P1 · M.**
 - **Dépendances :** tests d’authentification et administration.
 - **Acceptation / tests :** attributs de cookie observés corrects, session régénérée aux transitions appropriées, accès admin direct fonctionnel selon rôle, révocation et compte supprimé pris en compte.

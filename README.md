@@ -16,6 +16,7 @@ Le [suivi de remédiation P0](docs/security/plan-remediation.md) distingue les c
 - Cookies sécurisés avec `httponly`, `secure`, et `SameSite=Strict`
 - Mode strict pour les sessions
 - Régénération des IDs de session lors du changement de mot de passe
+- Vérification du compte actif et rechargement du rôle avant les actions via le bootstrap partagé ; régénération de session après connexion et inscription
 
 #### En-têtes de sécurité HTTP (.htaccess)
 

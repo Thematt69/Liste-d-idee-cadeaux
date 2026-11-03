@@ -24,20 +24,7 @@
                         };
 
                         if (isset($_SESSION['id_compte'])) {
-                            if (!isset($_SESSION['fonction'])) {
-                                $sqlreq4 = 'SELECT fonction
-                                    FROM lic_compte
-                                    WHERE id = ? AND deleted_to IS NULL';
-
-                                $req4 = $bdd->prepare($sqlreq4);
-                                $req4->execute(array($_SESSION['id_compte']));
-                                $donneesreq4 = $req4->fetch();
-
-                                $_SESSION['fonction'] = $donneesreq4['fonction'];
-
-                                $req4->closeCursor();
-                            }
-                            if ($_SESSION['fonction'] == 'admin') {
+                            if (($_SESSION['fonction'] ?? null) === 'admin') {
                         ?>
                                 <li class="nav-item">
                                     <a class="nav-link<?php echo $isCurrent('/pages/admin/') ? ' active' : ''; ?>" href="https://family.matthieudevilliers.fr/pages/admin/" <?php echo $isCurrent('/pages/admin/') ? ' aria-current="page"' : ''; ?>>Panel Admin</a>
