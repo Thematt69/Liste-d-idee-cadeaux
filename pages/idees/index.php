@@ -343,6 +343,7 @@ $response1->closeCursor();
                                                         ?>
                                                             <td>
                                                                 <form action="" method="post" class="d-flex justify-content-center">
+                                                                    <?php csrf_field(); ?>
                                                                     <input name='AchatFrom' value="<?php echo $donnees['id']; ?>" type='hidden'>
                                                                     <div class="form-check form-switch">
                                                                         <input name="reservation" value="1" class="form-check-input" id="reservation-<?php echo (int) $donnees['id']; ?>" type="checkbox" onchange="this.form.submit()" <?php if ($donnees['buy_from'] == $_SESSION['id_compte']) echo 'checked'; ?>>

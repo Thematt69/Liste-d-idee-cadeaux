@@ -137,6 +137,7 @@ if (isset($_POST['Comptes'])) {
                     <div class="card">
                         <div class="card-body">
                             <form action="" method="post">
+                                <?php csrf_field(); ?>
                                 <div class="row g-3">
                                     <div class="col-md-5 mb-3">
                                         <div class="form-floating">
@@ -191,6 +192,7 @@ if (isset($_POST['Comptes'])) {
                                 Supprime les connexions de plus d'un an et conserve seulement les 10 dernières par utilisateur.
                             </p>
                             <form action="" method="post" class="d-inline">
+                                <?php csrf_field(); ?>
                                 <button type="submit" name="cleanup_connexions" value="1" class="btn btn-warning">
                                     🧹 Nettoyer l'historique
                                 </button>

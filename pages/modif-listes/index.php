@@ -386,6 +386,7 @@ if (isset($_POST['cancel'])) {
                         <div class="card">
                             <div class="card-body">
                                 <form action="" method="post">
+                                    <?php csrf_field(); ?>
                                     <div class="row g-3">
                                         <div class="col-md-8">
                                             <div class="form-floating">
@@ -474,6 +475,7 @@ if (isset($_POST['cancel'])) {
                                 if ($donnees['partage'] == 'limite') {
                                 ?>
                                     <form action="" method="post">
+                                        <?php csrf_field(); ?>
                                         <div class="input-group">
                                             <input type="email" class="form-control" name="share_email" placeholder="Adresse mail" autocomplete="email" aria-label="Adresse e-mail de la personne à inviter" required>
                                             <button type="submit" name="share" value="<?php echo $donnees['id'] ?>" class="btn btn-outline-primary">Ajouter</button>
@@ -524,6 +526,7 @@ if (isset($_POST['cancel'])) {
                                                     </th>
                                                     <td>
                                                         <form action="" method="post">
+                                                            <?php csrf_field(); ?>
                                                             <div class="input-group input-group-sm">
                                                                 <select class="form-select" name="new_droit" aria-label="Droit d'accès de <?php echo safe_output($donnees1['mail']); ?>" <?php if ($donnees1['fonction'] == 'admin' || $donnees1['droit'] == 'proprietaire') echo "disabled"; ?>>
                                                                     <option disabled <?php if ($donnees1['droit'] == 'proprietaire') echo "selected"; ?> value="proprietaire">Propriétaire</option>
@@ -547,6 +550,7 @@ if (isset($_POST['cancel'])) {
                                                     ?>
                                                         <td>
                                                             <form action="" method="post">
+                                                                <?php csrf_field(); ?>
                                                                 <button type="submit" name="share_delete" value="<?php echo $donnees1['authId'] ?>" class="btn btn-outline-danger" aria-label="Supprimer l'accès de <?php echo safe_output($donnees1['mail']); ?>" <?php if ($disable) echo ('disabled'); ?>>
                                                                     <i class="bi bi-trash" aria-hidden="true"></i>
                                                                 </button>

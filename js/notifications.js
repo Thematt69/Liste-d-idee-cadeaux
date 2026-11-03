@@ -7,11 +7,18 @@
  * @param {number} notifId - Identifiant numérique de la notification à marquer comme lue.
  */
 function markNotificationAsRead(notifId) {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+    if (!csrfToken) {
+        console.error('Jeton de sécurité absent; notification non modifiée.');
+        return;
+    }
+
     // Envoyer la requête AJAX pour marquer la notification comme lue
     fetch('/scripts/mark-notif-read/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRF-Token': csrfToken,
         },
         body: 'notif_id=' + notifId
     })

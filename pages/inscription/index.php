@@ -114,6 +114,7 @@ if (isset($_POST['Mail'])) {
                     <div class="card">
                         <div class="card-body">
                             <form action="" method="post">
+                                <?php csrf_field(); ?>
                                 <div class="row g-3">
                                     <div class="col-md-6">
                                         <div class="form-floating">

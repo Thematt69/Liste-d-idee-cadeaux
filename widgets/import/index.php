@@ -8,6 +8,7 @@
 <meta name="robots" content="noindex">
 <meta name="reply-to" content="webmaster@matthieudevilliers.fr">
 <meta name="revisit-after" content="30">
+<meta name="csrf-token" content="<?php echo safe_output(csrf_token()); ?>">
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
